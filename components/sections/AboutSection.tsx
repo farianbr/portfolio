@@ -5,9 +5,19 @@ import Image from "next/image";
 import { FiCode } from "react-icons/fi";
 import SkillsGrid from "@/components/ui/SkillsGrid";
 import { useTheme } from "next-themes";
+import { useState, useEffect } from "react";
 
 export default function AboutSection() {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
+  const [statsLoaded, setStatsLoaded] = useState(false);
+  const [streakLoaded, setStreakLoaded] = useState(false);
+  const [chartLoaded, setChartLoaded] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Prevent theme flash: only use resolvedTheme after component mounts
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <section id="about" className="pb-16 md:pb-24">
@@ -121,41 +131,67 @@ export default function AboutSection() {
             <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
               {/* GitHub Stats */}
               <div className="flex flex-wrap items-center justify-center gap-4">
-                <img
-                  src={
-                    theme === "dark"
-                      ? "https://github-readme-stats.vercel.app/api?username=farianbr&show_icons=true&count_private=true&theme=dark&hide_border=true&bg_color=111827&title_color=60a5fa&icon_color=60a5fa&text_color=d1d5db"
-                      : "https://github-readme-stats.vercel.app/api?username=farianbr&show_icons=true&count_private=true&theme=default&hide_border=true&bg_color=ffffff&title_color=3b82f6&icon_color=3b82f6&text_color=374151"
-                  }
-                  alt="GitHub Stats"
-                  className="mx-auto"
-                  loading="lazy"
-                />
+                <div className="relative mx-auto">
+                  {!statsLoaded && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary-600 border-gray-200" />
+                    </div>
+                  )}
+                  <Image
+                    src={
+                      (mounted ? resolvedTheme : 'light') === "light"
+                        ? "https://github-readme-stats.vercel.app/api?username=farianbr&show_icons=true&count_private=true&theme=default&hide_border=true&bg_color=ffffff&title_color=3b82f6&icon_color=3b82f6&text_color=374151"
+                        : "https://github-readme-stats.vercel.app/api?username=farianbr&show_icons=true&count_private=true&theme=dark&hide_border=true&bg_color=111827&title_color=60a5fa&icon_color=60a5fa&text_color=d1d5db"
+                    }
+                    alt="GitHub Stats"
+                    className={`mx-auto transition-opacity duration-200 ${statsLoaded ? "opacity-100" : "opacity-0"}`}
+                    width={400}
+                    height={160}
+                    unoptimized
+                    onLoadingComplete={() => setStatsLoaded(true)}
+                  />
+                </div>
 
-                <img
-                  src={
-                    theme === "dark"
-                      ? "https://github-readme-streak-stats.herokuapp.com/?user=farianbr&theme=dark&hide_border=true&background=111827&ring=60a5fa&fire=60a5fa&currStreakLabel=d1d5db&sideLabels=d1d5db&currStreakNum=d1d5db&sideNums=d1d5db&dates=6b7280"
-                      : "https://github-readme-streak-stats.herokuapp.com/?user=farianbr&theme=default&hide_border=true&background=ffffff&ring=3b82f6&fire=3b82f6&currStreakLabel=374151&sideLabels=374151&currStreakNum=374151&sideNums=374151&dates=6b7280"
-                  }
-                  alt="GitHub Streak"
-                  className="mx-auto"
-                  loading="lazy"
-                />
+                <div className="relative mx-auto">
+                  {!streakLoaded && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary-600 border-gray-200" />
+                    </div>
+                  )}
+                  <Image
+                    src={
+                      (mounted ? resolvedTheme : 'light') === "light"
+                        ? "https://github-readme-streak-stats.herokuapp.com/?user=farianbr&theme=default&hide_border=true&background=ffffff&ring=3b82f6&fire=3b82f6&currStreakLabel=374151&sideLabels=374151&currStreakNum=374151&sideNums=374151&dates=6b7280"
+                        : "https://github-readme-streak-stats.herokuapp.com/?user=farianbr&theme=dark&hide_border=true&background=111827&ring=60a5fa&fire=60a5fa&currStreakLabel=d1d5db&sideLabels=d1d5db&currStreakNum=d1d5db&sideNums=d1d5db&dates=6b7280"
+                    }
+                    alt="GitHub Streak"
+                    className={`mx-auto transition-opacity duration-200 ${streakLoaded ? "opacity-100" : "opacity-0"}`}
+                    width={400}
+                    height={120}
+                    unoptimized
+                    onLoadingComplete={() => setStreakLoaded(true)}
+                  />
+                </div>
               </div>
 
               {/* Contribution Graph */}
               <div className="mt-6 border-t border-gray-200 pt-6 dark:border-gray-700">
-                <img
-                  src={
-                    theme === "dark"
-                      ? "https://ghchart.rshah.org/314a7d/farianbr"
-                      : "https://ghchart.rshah.org/3b82f6/farianbr"
-                  }
-                  alt="GitHub Contribution Chart"
-                  className="mx-auto w-full max-w-4xl"
-                  loading="lazy"
-                />
+                <div className="relative mx-auto w-full max-w-4xl">
+                  {!chartLoaded && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="h-12 w-12 animate-spin rounded-full border-4 border-t-primary-600 border-gray-200" />
+                    </div>
+                  )}
+                  <Image
+                    src={(mounted ? resolvedTheme : 'light') === "light" ? "https://ghchart.rshah.org/3b82f6/farianbr" : "https://ghchart.rshah.org/314a7d/farianbr"}
+                    alt="GitHub Contribution Chart"
+                    className={`mx-auto w-full transition-opacity duration-200 ${chartLoaded ? "opacity-100" : "opacity-0"}`}
+                    width={1200}
+                    height={220}
+                    unoptimized
+                    onLoadingComplete={() => setChartLoaded(true)}
+                  />
+                </div>
               </div>
             </div>
           </motion.div>
