@@ -23,12 +23,6 @@ A modern, production-ready portfolio website built with Next.js 14, TypeScript, 
 - **Content**: [Contentlayer](https://contentlayer.dev/) for MDX
 - **Search**: [Fuse.js](https://fusejs.io/)
 
-## 📦 Installation
-
-### Prerequisites
-
-- Node.js >= 18.17.0
-- npm >= 9.0.0
 
 ---
 

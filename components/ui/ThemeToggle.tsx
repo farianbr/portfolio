@@ -14,7 +14,10 @@ export default function ThemeToggle() {
 
   if (!mounted) {
     return (
-      <div className="h-9 w-9 rounded-lg bg-gray-100 dark:bg-gray-800" />
+
+      <div className="flex items-center justify-center">
+        <div className="h-5 w-5 animate-spin rounded-full border-4 border-gray-200 border-t-transparent dark:border-t-transparent dark:border-gray-700" />
+      </div>
     );
   }
 
@@ -25,9 +28,9 @@ export default function ThemeToggle() {
       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
     >
       {theme === 'dark' ? (
-        <FiSun className="h-5 w-5" />
-      ) : (
         <FiMoon className="h-5 w-5" />
+      ) : (
+        <FiSun className="h-5 w-5" />
       )}
     </button>
   );

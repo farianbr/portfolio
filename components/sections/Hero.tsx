@@ -13,8 +13,9 @@ import {
 import AnimatedBackground from '@/components/ui/AnimatedBackground';
 
 export default function Hero() {
+
   return (
-    <section className="relative min-h-screen overflow-hidden">
+    <section className="relative -top-[72px] min-h-screen overflow-hidden">
       {/* Animated Background */}
       <AnimatedBackground />
 

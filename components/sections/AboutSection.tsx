@@ -7,7 +7,7 @@ import SkillsGrid from "@/components/ui/SkillsGrid";
 
 export default function AboutSection() {
   return (
-    <section id="about" className="py-16 md:py-24">
+    <section id="about" className="pb-16 md:pb-24">
       <div className="container-custom">
         <div className="mx-auto max-w-6xl">
           {/* Header */}
@@ -41,11 +41,11 @@ export default function AboutSection() {
                   <div className="relative">
                     {/* Decorative gradient ring */}
                     <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-primary-600 to-purple-600 opacity-20 blur-lg"></div>
-                    
+
                     {/* Image container */}
                     <div className="relative h-48 w-48 overflow-hidden rounded-full border-4 border-white shadow-xl dark:border-gray-800 sm:h-56 sm:w-56">
                       <Image
-                  src="/images/profile.png"
+                        src="/images/profile.png"
                         alt="Farian Bin Rahman"
                         fill
                         className="object-cover"
@@ -68,18 +68,20 @@ export default function AboutSection() {
                   </div>
 
                   <h3 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
-                    I&apos;m Farian Bin Rahman
+                    Farian Bin Rahman
                   </h3>
 
                   <p className="text-base leading-relaxed text-gray-700 dark:text-gray-300 sm:text-lg">
-                    A passionate <strong>full-stack developer</strong> with a love for creating 
-                    intelligent, modern web experiences that solve real-world problems.
+                    A passionate <strong>full-stack developer</strong> with a
+                    love for creating intelligent, modern web experiences that
+                    solve real-world problems.
                   </p>
 
                   <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400">
-                    I specialize in building scalable web applications using modern
-                    technologies. My approach combines clean architecture, exceptional user
-                    experiences, and performance optimization.
+                    I specialize in building scalable web applications using
+                    modern technologies. My approach combines clean
+                    architecture, exceptional user experiences, and performance
+                    optimization.
                   </p>
 
                   {/* Quick highlights removed per request */}
