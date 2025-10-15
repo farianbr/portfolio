@@ -4,8 +4,11 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { FiCode } from "react-icons/fi";
 import SkillsGrid from "@/components/ui/SkillsGrid";
+import { useTheme } from "next-themes";
 
 export default function AboutSection() {
+  const { theme } = useTheme();
+
   return (
     <section id="about" className="pb-16 md:pb-24">
       <div className="container-custom">
@@ -119,13 +122,22 @@ export default function AboutSection() {
               {/* GitHub Stats */}
               <div className="flex flex-wrap items-center justify-center gap-4">
                 <img
-                  src="https://github-readme-stats.vercel.app/api?username=farianbr&show_icons=true&count_private=true&theme=default&hide_border=true&bg_color=ffffff&title_color=3b82f6&icon_color=3b82f6&text_color=374151"
+                  src={
+                    theme === "dark"
+                      ? "https://github-readme-stats.vercel.app/api?username=farianbr&show_icons=true&count_private=true&theme=dark&hide_border=true&bg_color=111827&title_color=60a5fa&icon_color=60a5fa&text_color=d1d5db"
+                      : "https://github-readme-stats.vercel.app/api?username=farianbr&show_icons=true&count_private=true&theme=default&hide_border=true&bg_color=ffffff&title_color=3b82f6&icon_color=3b82f6&text_color=374151"
+                  }
                   alt="GitHub Stats"
                   className="mx-auto"
                   loading="lazy"
                 />
+
                 <img
-                  src="https://github-readme-streak-stats.herokuapp.com/?user=farianbr&theme=default&hide_border=true&background=ffffff&ring=3b82f6&fire=3b82f6&currStreakLabel=374151&sideLabels=374151&currStreakNum=374151&sideNums=374151&dates=6b7280"
+                  src={
+                    theme === "dark"
+                      ? "https://github-readme-streak-stats.herokuapp.com/?user=farianbr&theme=dark&hide_border=true&background=111827&ring=60a5fa&fire=60a5fa&currStreakLabel=d1d5db&sideLabels=d1d5db&currStreakNum=d1d5db&sideNums=d1d5db&dates=6b7280"
+                      : "https://github-readme-streak-stats.herokuapp.com/?user=farianbr&theme=default&hide_border=true&background=ffffff&ring=3b82f6&fire=3b82f6&currStreakLabel=374151&sideLabels=374151&currStreakNum=374151&sideNums=374151&dates=6b7280"
+                  }
                   alt="GitHub Streak"
                   className="mx-auto"
                   loading="lazy"
@@ -135,7 +147,11 @@ export default function AboutSection() {
               {/* Contribution Graph */}
               <div className="mt-6 border-t border-gray-200 pt-6 dark:border-gray-700">
                 <img
-                  src="https://ghchart.rshah.org/3b82f6/farianbr"
+                  src={
+                    theme === "dark"
+                      ? "https://ghchart.rshah.org/314a7d/farianbr"
+                      : "https://ghchart.rshah.org/3b82f6/farianbr"
+                  }
                   alt="GitHub Contribution Chart"
                   className="mx-auto w-full max-w-4xl"
                   loading="lazy"
