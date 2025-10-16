@@ -47,7 +47,7 @@ export default function ProjectsSection() {
         </motion.div>
 
         {/* Project List - Vertical Layout */}
-        <div className="mx-auto max-w-4xl space-y-10">
+        <div className="mx-auto max-w-5xl space-y-10">
           {publishedProjects.map((project) => (
             <motion.article
               key={project.slug}
@@ -62,14 +62,14 @@ export default function ProjectsSection() {
                 {project.image && (
                   <Link
                     href={`/projects?project=${project.slug}`}
-                    className="relative md:col-span-2 block"
+                    className="relative p-4 md:col-span-2 flex items-center justify-center overflow-hidden"
                   >
-                    <div className="relative aspect-[5/4] overflow-hidden">
+                    <div className="relative w-full max-w-4xl aspect-[5/3]">
                       <Image
-                        src={project.image}
+                        src={project.imageLaptopView || project.image}
                         alt={project.title}
                         fill
-                        className="object-cover transition-transform duration-300 "
+                        className="object-contain transition-transform duration-300 hover:scale-105"
                       />
                     </div>
                   </Link>

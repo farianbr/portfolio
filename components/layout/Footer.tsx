@@ -5,10 +5,10 @@ import { useState, useEffect } from 'react';
 import { FiGithub, FiLinkedin, FiTwitter, FiMail, FiHeart, FiEye } from 'react-icons/fi';
 
 const socialLinks = [
-  { name: 'GitHub', href: 'https://github.com', icon: FiGithub },
+  { name: 'GitHub', href: 'https://github.com/farianbr', icon: FiGithub },
   { name: 'LinkedIn', href: 'https://linkedin.com', icon: FiLinkedin },
   { name: 'Twitter', href: 'https://twitter.com', icon: FiTwitter },
-  { name: 'Email', href: 'mailto:contact@farian.dev', icon: FiMail },
+  { name: 'Email', href: 'mailto:farianrahman1000@gmail.com', icon: FiMail },
 ];
 
 const footerLinks = [

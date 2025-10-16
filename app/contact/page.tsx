@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { FiMail, FiGithub, FiLinkedin, FiTwitter } from 'react-icons/fi';
+import { motion } from "framer-motion";
+import { useState } from "react";
+import { FiMail, FiGithub, FiLinkedin, FiTwitter } from "react-icons/fi";
 
 type ContactFormData = {
   name: string;
@@ -12,13 +13,15 @@ type ContactFormData = {
 
 export default function ContactPage() {
   const [formData, setFormData] = useState<ContactFormData>({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [submitStatus, setSubmitStatus] = useState<
+    "idle" | "success" | "error"
+  >("idle");
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -29,25 +32,25 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitStatus('idle');
+    setSubmitStatus("idle");
 
     setIsSubmitting(true);
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       if (response.ok) {
-        setSubmitStatus('success');
-        setFormData({ name: '', email: '', subject: '', message: '' });
+        setSubmitStatus("success");
+        setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
-        setSubmitStatus('error');
+        setSubmitStatus("error");
       }
     } catch (error) {
-      console.error('Submit error:', error);
-      setSubmitStatus('error');
+      console.error("Submit error:", error);
+      setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
     }
@@ -57,14 +60,22 @@ export default function ContactPage() {
     <div className="container-custom py-16 md:py-24">
       <div className="mx-auto max-w-4xl">
         {/* Header */}
-        <div className="mb-12 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-8 md:mb-12"
+        >
           <h1 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl">
             Get In Touch
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400">
             Have a project in mind? Let&apos;s work together
           </p>
-        </div>
+          <div className="mt-6 flex justify-center">
+            <div className="h-1 w-20 bg-gradient-to-r from-primary-500 to-purple-600 rounded-full"></div>
+          </div>
+        </motion.div>
 
         <div className="grid gap-12 lg:grid-cols-2">
           {/* Contact Form */}
@@ -143,16 +154,16 @@ export default function ContactPage() {
                 disabled={isSubmitting}
                 className="btn-primary w-full disabled:opacity-50"
               >
-                {isSubmitting ? 'Sending...' : 'Send Message'}
+                {isSubmitting ? "Sending..." : "Send Message"}
               </button>
 
-              {submitStatus === 'success' && (
+              {submitStatus === "success" && (
                 <p className="text-center text-sm text-green-600 dark:text-green-400">
                   Message sent successfully! I&apos;ll get back to you soon.
                 </p>
               )}
 
-              {submitStatus === 'error' && (
+              {submitStatus === "error" && (
                 <p className="text-center text-sm text-red-600 dark:text-red-400">
                   Failed to send message. Please try again.
                 </p>
@@ -168,10 +179,10 @@ export default function ContactPage() {
                 <div className="flex items-center gap-3 text-gray-600 dark:text-gray-400">
                   <FiMail className="h-5 w-5" />
                   <a
-                    href="mailto:contact@farian.dev"
+                    href="mailto:farianrahman1000@gmail.com"
                     className="transition-colors hover:text-primary-600 dark:hover:text-primary-400"
                   >
-                    contact@farian.dev
+                    farianrahman1000@gmail.com
                   </a>
                 </div>
               </div>
@@ -181,7 +192,7 @@ export default function ContactPage() {
               <h3 className="mb-4 text-lg font-semibold">Follow Me</h3>
               <div className="flex gap-4">
                 <a
-                  href="https://github.com"
+                  href="https://github.com/farianbr"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="rounded-lg bg-gray-100 p-3 text-gray-600 transition-colors hover:bg-primary-100 hover:text-primary-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-primary-900/20 dark:hover:text-primary-400"

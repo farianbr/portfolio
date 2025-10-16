@@ -58,7 +58,7 @@ export default function PostPage({ params }: PostPageProps) {
 
         {/* Header */}
         <header className="mb-8">
-          <h1 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl">
+          <h1 className="mb-4 text-3xl font-bold tracking-tight text-balance md:text-5xl">
             {post.title}
           </h1>
 

@@ -109,7 +109,7 @@ export default function Hero() {
             className="flex flex-wrap items-center justify-center gap-4"
           >
             <a
-              href="https://github.com/farianbinrahman"
+              href="https://github.com/farianbr"
               target="_blank"
               rel="noopener noreferrer"
               className="group flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-white/50 text-gray-600 backdrop-blur-sm transition-all hover:border-primary-600 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900/50 dark:text-gray-400 dark:hover:border-primary-400 dark:hover:text-primary-400"

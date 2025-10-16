@@ -80,6 +80,12 @@ export const Project = defineDocumentType(() => ({
     image: {
       type: 'string',
     },
+    imageLaptopView: {
+      type: 'string',
+    },
+    imageMultiView: {
+      type: 'string',
+    },
     github: {
       type: 'string',
     },

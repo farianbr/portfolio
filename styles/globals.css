@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    --font-inter: 'Inter', system-ui, sans-serif;
-    --font-jetbrains-mono: 'JetBrains Mono', monospace;
+    --font-inter: "Inter", system-ui, sans-serif;
+    --font-jetbrains-mono: "JetBrains Mono", monospace;
   }
 
   html {
@@ -57,30 +57,122 @@
   }
 }
 
-/* Code blocks */
-pre {
-  @apply p-4 rounded-lg overflow-x-auto my-4 bg-gray-50 dark:bg-gray-900;
-}
-
-code {
-  @apply text-sm font-mono;
-}
 
 /* Prose styles for MDX content */
 .prose {
   @apply max-w-none;
 }
 
+.prose h1 {
+  @apply text-3xl font-bold text-gray-900 dark:text-white mt-8 mb-4 pb-3 border-b border-gray-200 dark:border-gray-800;
+}
+
+.prose h1 {
+  @apply text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mt-6 md:mt-8 mb-3 md:mb-4 pb-2 md:pb-3 border-b border-gray-200 dark:border-gray-800;
+}
+
+.prose h2 {
+  @apply text-xl md:text-2xl font-bold text-gray-900 dark:text-white mt-6 md:mt-8 mb-3 md:mb-4 flex items-center gap-2;
+}
+
+
+
+.prose h3 {
+  @apply text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200 mt-4 md:mt-6 mb-2 md:mb-3;
+}
+
+.prose h4 {
+  @apply text-base md:text-lg font-semibold text-gray-800 dark:text-gray-200 mt-3 md:mt-4 mb-2;
+}
+
+.prose p {
+  @apply text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed mb-3 md:mb-4;
+}
+
+.prose ul {
+  @apply space-y-2 my-3 md:my-4 pl-4 md:pl-6;
+}
+
+.prose li {
+  @apply text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed;
+}
+
+.prose ul > li {
+  @apply relative pl-4 md:pl-6;
+}
+
+.prose ul > li::before {
+  content: "";
+  @apply absolute left-0 top-1/2 w-1 h-1 bg-slate-700 rounded-full translate-x-1/2 -translate-y-1/2;
+}
+
+.prose ol {
+  @apply space-y-2 my-3 md:my-4 list-decimal list-inside;
+}
+
+.prose ol > li {
+  @apply text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed pl-2;
+}
+
+.prose strong {
+  @apply font-semibold text-gray-900 dark:text-white;
+}
+
+.prose em {
+  @apply italic text-gray-700 dark:text-gray-400;
+}
+
+.prose a {
+  @apply cursor-default ;
+}
+
+.prose blockquote {
+  @apply border-l-2 md:border-l-4 border-primary-500 pl-3 md:pl-4 italic text-sm md:text-base text-gray-700 dark:text-gray-400 my-3 md:my-4 bg-primary-50 dark:bg-primary-900/10 py-2 md:py-3 pr-3 md:pr-4 rounded-r-lg;
+}
+
 .prose pre {
-  @apply bg-transparent p-0;
+  @apply bg-gray-900 dark:bg-gray-950 text-gray-100 p-3 md:p-4 rounded-lg overflow-x-auto my-4 md:my-6 border border-gray-800 shadow-inner text-xs md:text-sm;
 }
 
 .prose code {
-  @apply bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm;
+  @apply bg-gray-100 dark:bg-gray-800 text-primary-600 dark:text-primary-400 px-1 md:px-1.5 py-0.5 rounded text-xs md:text-sm font-mono;
 }
 
 .prose pre code {
-  @apply bg-transparent p-0;
+  @apply bg-transparent text-gray-100 p-0 text-xs md:text-sm;
+}
+
+.prose hr {
+  @apply my-6 md:my-8 border-gray-200 dark:border-gray-800;
+}
+
+.prose table {
+  @apply w-full my-4 md:my-6 border-collapse text-sm md:text-base overflow-x-auto block md:table;
+}
+
+.prose th {
+  @apply bg-gray-100 dark:bg-gray-800 text-left p-2 md:p-3 font-semibold text-gray-900 dark:text-white border-b-2 border-primary-500 text-sm md:text-base;
+}
+
+.prose td {
+  @apply p-2 md:p-3 border-b border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 text-sm md:text-base;
+}
+
+.prose img {
+  @apply rounded-lg shadow-md my-4 md:my-6 w-full h-auto;
+}
+
+/* Special styling for feature lists */
+.prose h2:has(+ ul) + ul {
+  @apply grid gap-2 md:gap-3 my-4 md:my-6;
+}
+
+.prose h2:has(+ ul) + ul > li {
+  @apply bg-gradient-to-r from-gray-50 to-transparent dark:from-gray-800/50 dark:to-transparent p-3 md:p-4 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-primary-300 dark:hover:border-primary-700 transition-colors;
+}
+
+.prose h2:has(+ ul) + ul > li::before {
+  @apply top-[1.2em] md:top-[1.4em];
 }
 
 /* Focus visible for accessibility */
