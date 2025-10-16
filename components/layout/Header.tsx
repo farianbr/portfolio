@@ -37,6 +37,7 @@ export default function Header() {
                 alt="logo"
                 fill
                 className="object-cover"
+                priority
               />
           </div>
           <span className="hidden sm:inline">

@@ -53,7 +53,7 @@ export default function PostPage({ params }: PostPageProps) {
           className="mb-8 inline-flex items-center gap-2 text-sm text-gray-600 transition-colors hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400"
         >
           <FiArrowLeft className="h-4 w-4" />
-          Back to Blog
+          View All Posts
         </Link>
 
         {/* Header */}

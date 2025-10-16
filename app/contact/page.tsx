@@ -213,7 +213,7 @@ export default function ContactPage() {
             <div className="card">
               <h3 className="mb-2 font-semibold">Response Time</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                I typically respond within 24-48 hours on weekdays.
+                I typically respond within 24 hours on weekdays.
               </p>
             </div>
           </div>

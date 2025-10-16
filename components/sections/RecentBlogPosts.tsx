@@ -1,28 +1,38 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { format } from 'date-fns';
-import { motion } from 'framer-motion';
-import { allPosts } from '@/.contentlayer/generated';
-import { FiClock, FiArrowRight, FiCalendar, FiChevronRight } from 'react-icons/fi';
-import { useState } from 'react';
+import Link from "next/link";
+import { format } from "date-fns";
+import { motion } from "framer-motion";
+import { allPosts } from "@/.contentlayer/generated";
+import {
+  FiClock,
+  FiCalendar,
+  FiChevronRight,
+} from "react-icons/fi";
+import { useState } from "react";
 
 export default function RecentBlogPosts() {
   const [currentPage, setCurrentPage] = useState(1);
   const postsPerPage = 3;
-  
+
   const publishedPosts = allPosts
     .filter((post: any) => post.published)
-    .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  
+    .sort(
+      (a: any, b: any) =>
+        new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+
   const totalPages = Math.ceil(publishedPosts.length / postsPerPage);
   const startIndex = (currentPage - 1) * postsPerPage;
-  const currentPosts = publishedPosts.slice(startIndex, startIndex + postsPerPage);
+  const currentPosts = publishedPosts.slice(
+    startIndex,
+    startIndex + postsPerPage
+  );
 
   return (
     <section id="blog" className="relative overflow-hidden py-12 md:py-16">
       {/* Background decoration */}
-      
+
       <div className="container-custom relative">
         {/* Header */}
         <motion.div
@@ -38,7 +48,6 @@ export default function RecentBlogPosts() {
           </div>
           <h2 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
             From the Blog
-            
           </h2>
           <p className="mx-auto max-w-2xl text-base text-gray-600 dark:text-gray-400 sm:text-lg">
             Insights, tutorials, and thoughts on web development and technology
@@ -65,7 +74,7 @@ export default function RecentBlogPosts() {
                         <div className="flex items-center gap-1">
                           <FiCalendar className="h-3.5 w-3.5" />
                           <time dateTime={post.date}>
-                            {format(new Date(post.date), 'MMM d, yyyy')}
+                            {format(new Date(post.date), "MMM d, yyyy")}
                           </time>
                         </div>
                         <div className="flex items-center gap-1">
@@ -119,57 +128,40 @@ export default function RecentBlogPosts() {
               className="mt-12 flex items-center justify-center gap-2"
             >
               <button
-                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
                 className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
               >
                 Previous
               </button>
-              
+
               <div className="flex gap-2">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                      currentPage === page
-                        ? 'bg-primary-600 text-white'
-                        : 'border border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800'
-                    }`}
-                  >
-                    {page}
-                  </button>
-                ))}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                        currentPage === page
+                          ? "bg-primary-600 text-white"
+                          : "border border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}
               </div>
 
               <button
-                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
                 disabled={currentPage === totalPages}
                 className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
               >
                 Next
               </button>
-            </motion.div>
-          )}
-
-          {/* View All Button */}
-          {publishedPosts.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className="mt-12 text-center"
-            >
-              <Link
-                href="/blog"
-                className="group relative inline-flex items-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-primary-600 via-purple-600 to-pink-600 p-[2px] transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary-500/50"
-              >
-                <span className="inline-flex items-center gap-2 rounded-[10px] bg-white px-8 py-4 text-base font-semibold text-gray-900 transition-all duration-300 group-hover:bg-transparent group-hover:text-white dark:bg-gray-950 dark:text-white">
-                  View All Articles
-                  <FiArrowRight className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-                </span>
-              </Link>
             </motion.div>
           )}
         </div>

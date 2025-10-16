@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { allProjects } from "@/.contentlayer/generated";
 import Link from "next/link";
 import Image from "next/image";
-import { FiGithub, FiExternalLink, FiArrowRight, FiCode } from "react-icons/fi";
+import { FiGithub, FiExternalLink, FiArrowRight } from "react-icons/fi";
 
 export default function ProjectsSection() {
   const publishedProjects = allProjects
@@ -48,13 +48,13 @@ export default function ProjectsSection() {
 
         {/* Project List - Vertical Layout */}
         <div className="mx-auto max-w-4xl space-y-10">
-          {publishedProjects.map((project, index) => (
+          {publishedProjects.map((project) => (
             <motion.article
               key={project.slug}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, delay: 0.1 * index }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
               className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg transition-all hover:border-primary-300 dark:hover:border-primary-300 dark:hover:border-opacity-15 hover:shadow-xl dark:hover:shadow-xl dark:border-gray-800 dark:bg-gray-900/90"
             >
               <div className="grid gap-6 md:grid-cols-5 w-full">
