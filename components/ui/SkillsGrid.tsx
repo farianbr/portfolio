@@ -105,10 +105,16 @@ export default function SkillsGrid() {
                 transform: 'translate(-50%, -100%)',
                 pointerEvents: 'none',
                 zIndex: 9999,
+                opacity: tooltip.visible ? 1 : 0,
+                transition: 'opacity 200ms ease-in-out',
               }}
             >
-              <div className="whitespace-nowrap rounded bg-gray-900 px-2 py-1 text-xs text-white shadow-lg dark:bg-gray-100 dark:text-gray-900">
+              <div className="animate-in fade-in slide-in-from-bottom-1 duration-200 whitespace-nowrap rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-medium text-white shadow-xl dark:bg-gray-100 dark:text-gray-900">
                 {tooltip.text}
+                <div 
+                  className="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-4 border-transparent border-t-gray-900 dark:border-t-gray-100"
+                  style={{ marginTop: '-1px' }}
+                />
               </div>
             </div>,
             document.body

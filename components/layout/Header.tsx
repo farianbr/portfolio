@@ -4,14 +4,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { FiMenu, FiX, FiCommand } from 'react-icons/fi';
+import { FiMenu, FiX, FiSearch } from 'react-icons/fi';
 import { useCommandPalette } from '@/components/providers/CommandPaletteProvider';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 
 const navigation = [
   { name: 'Home', href: '/' },
-  { name: 'About', href: '#about' },
-  { name: 'Projects', href: '#projects' },
+  { name: 'Projects', href: '/projects' },
   { name: 'Blog', href: '/blog' },
   { name: 'Contact', href: '/contact' },
 ];
@@ -67,15 +66,17 @@ export default function Header() {
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-4">
-          {/* Command Palette Trigger */}
+        <div className="flex items-center gap-3">
+          {/* Command Palette Trigger - Unified (Desktop + Mobile) */}
           <button
             onClick={open}
-            className="hidden items-center gap-2 rounded-lg border border-gray-300 bg-gray-50 px-3 py-1.5 text-sm text-gray-600 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 md:flex"
+            className="flex items-center gap-2 rounded-lg border border-gray-300 bg-gray-50 px-3 py-1.5 text-sm text-gray-600 transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800"
             aria-label="Open command palette"
           >
-            <FiCommand className="h-4 w-4" />
-            <span className="text-xs">Ctrl+K</span>
+            <FiSearch className="h-4 w-4 " />
+            <span className="text-xs hidden sm:inline">Ctrl+K</span>
+            <span className="text-xs sm:hidden">Search</span>
+
           </button>
 
           {/* Theme Toggle */}
@@ -119,16 +120,6 @@ export default function Header() {
                 </Link>
               );
             })}
-            <button
-              onClick={() => {
-                open();
-                setMobileMenuOpen(false);
-              }}
-              className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-base font-medium text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-            >
-              <FiCommand className="h-5 w-5" />
-              Search (Ctrl+K)
-            </button>
           </div>
         </div>
       )}

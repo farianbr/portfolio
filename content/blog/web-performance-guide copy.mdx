@@ -1,0 +1,60 @@
+---
+title: "Optimizing Web Performance: A Practical Guide"
+description: "Learn practical techniques to improve your web application's performance, from image optimization to code splitting."
+date: 2025-01-05
+published: true
+tags:
+  - Performance
+  - Web Development
+  - Optimization
+image: /images/project-subscription-manager.png
+---
+
+# Optimizing Web Performance: A Practical Guide
+
+Web performance is crucial for user experience and SEO. Here's how to make your applications faster.
+
+## Image Optimization
+
+Images often account for most of the downloaded bytes on a web page. Use modern formats and lazy loading:
+
+```typescript
+import Image from 'next/image';
+
+export function OptimizedImage() {
+  return (
+    <Image
+      src="/hero.jpg"
+      alt="Hero image"
+      width={1200}
+      height={600}
+      loading="lazy"
+      placeholder="blur"
+    />
+  );
+}
+```
+
+## Code Splitting
+
+Split your JavaScript bundles to load only what's needed:
+
+```typescript
+import dynamic from 'next/dynamic';
+
+const HeavyComponent = dynamic(() => import('./HeavyComponent'), {
+  loading: () => <p>Loading...</p>,
+});
+```
+
+## Measuring Performance
+
+Use Lighthouse and Core Web Vitals to track your progress:
+
+- **LCP (Largest Contentful Paint)**: < 2.5s
+- **FID (First Input Delay)**: < 100ms
+- **CLS (Cumulative Layout Shift)**: < 0.1
+
+## Conclusion
+
+Small optimizations add up. Continuously monitor and improve your application's performance.

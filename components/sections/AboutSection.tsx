@@ -29,10 +29,22 @@ export default function AboutSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="mb-12 text-center"
+            className="mb-16 text-center"
           >
-            <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-              About Me
+            
+            <h2 className="mb-6 text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+              <span className="relative">
+                About{" "}
+                  Me
+                
+                <motion.div
+                  className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-primary-600 to-purple-600 rounded-full"
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                />
+              </span>
             </h2>
             <p className="text-base text-gray-600 dark:text-gray-400 sm:text-lg">
               Building the future, one line of code at a time
@@ -148,7 +160,7 @@ export default function AboutSection() {
                     width={400}
                     height={160}
                     unoptimized
-                    onLoadingComplete={() => setStatsLoaded(true)}
+                    onLoad={() => setStatsLoaded(true)}
                   />
                 </div>
 
@@ -169,7 +181,7 @@ export default function AboutSection() {
                     width={400}
                     height={120}
                     unoptimized
-                    onLoadingComplete={() => setStreakLoaded(true)}
+                    onLoad={() => setStreakLoaded(true)}
                   />
                 </div>
               </div>
@@ -189,7 +201,7 @@ export default function AboutSection() {
                     width={1200}
                     height={220}
                     unoptimized
-                    onLoadingComplete={() => setChartLoaded(true)}
+                    onLoad={() => setChartLoaded(true)}
                   />
                 </div>
               </div>

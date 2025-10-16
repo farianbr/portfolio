@@ -1,46 +1,174 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useRef, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
-import { FiSearch, FiFileText, FiFolder, FiX } from 'react-icons/fi';
-import Fuse from 'fuse.js';
-import { useCommandPalette } from '@/components/providers/CommandPaletteProvider';
+import { useEffect, useState, useRef, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import {
+  FiSearch,
+  FiX,
+  FiHome,
+  FiCode,
+  FiBookOpen,
+  FiGithub,
+  FiLinkedin,
+  FiTwitter,
+  FiZap,
+  FiUser,
+  FiMail,
+  FiLayout,
+} from "react-icons/fi";
+import Fuse from "fuse.js";
+import { useCommandPalette } from "@/components/providers/CommandPaletteProvider";
+import { allProjects, allPosts } from "@/.contentlayer/generated";
 
 interface SearchItem {
   title: string;
   description: string;
   url: string;
-  type: 'page' | 'project' | 'post';
+  type: "page" | "section" | "project" | "post";
+  category?: string;
 }
 
-const searchItems: SearchItem[] = [
-  { title: 'Home', description: 'Main landing page', url: '/', type: 'page' },
-  { title: 'About', description: 'Learn more about me', url: '#about', type: 'page' },
-  { title: 'Projects', description: 'View my projects', url: '#projects', type: 'page' },
-  { title: 'Blog', description: 'Read my blog posts', url: '/blog', type: 'page' },
-  { title: 'Contact', description: 'Get in touch', url: '/contact', type: 'page' },
-];
+// Build search items dynamically
+const buildSearchItems = (): SearchItem[] => {
+  const items: SearchItem[] = [
+    // Menu Pages
+    {
+      title: "Home",
+      description: "Main landing page",
+      url: "/",
+      type: "page",
+      category: "Menu",
+    },
+    {
+      title: "Projects",
+      description: "View all projects",
+      url: "/projects",
+      type: "page",
+      category: "Menu",
+    },
+    {
+      title: "Blog",
+      description: "Read blog posts",
+      url: "/blog",
+      type: "page",
+      category: "Menu",
+    },
+    {
+      title: "Contact",
+      description: "Get in touch",
+      url: "/contact",
+      type: "page",
+      category: "Menu",
+    },
+
+    // Dashboard Sections (ordered: Hero - About - Projects - Blog)
+    {
+      title: "Hero",
+      description: "Welcome section",
+      url: "/",
+      type: "section",
+      category: "Portfolio",
+    },
+    {
+      title: "About",
+      description: "Learn more about me",
+      url: "/#about",
+      type: "section",
+      category: "Portfolio",
+    },
+    {
+      title: "Projects",
+      description: "Featured projects showcase",
+      url: "/#projects",
+      type: "section",
+      category: "Portfolio",
+    },
+    {
+      title: "Blog",
+      description: "Latest blog posts",
+      url: "/#blog",
+      type: "section",
+      category: "Portfolio",
+    },
+
+    // Social Links
+    {
+      title: "GitHub",
+      description: "View my GitHub profile",
+      url: "https://github.com/farianbr",
+      type: "page",
+      category: "Social",
+    },
+    {
+      title: "LinkedIn",
+      description: "Connect on LinkedIn",
+      url: "https://linkedin.com/in/farianbr",
+      type: "page",
+      category: "Social",
+    },
+    {
+      title: "Twitter",
+      description: "Follow me on Twitter",
+      url: "https://twitter.com/farianbr",
+      type: "page",
+      category: "Social",
+    },
+  ];
+
+  // Add all published projects
+  const publishedProjects = allProjects
+    .filter((project: any) => project.published)
+    .map((project: any) => ({
+      title: project.title,
+      description: project.description || "Project",
+      url: project.url,
+      type: "project" as const,
+      category: "Projects",
+    }));
+
+  // Add all published blog posts
+  const publishedPosts = allPosts
+    .filter((post: any) => post.published)
+    .map((post: any) => ({
+      title: post.title,
+      description: post.description || "Blog post",
+      url: post.url,
+      type: "post" as const,
+      category: "Blog",
+    }));
+
+  return [...items, ...publishedProjects, ...publishedPosts];
+};
 
 export default function CommandPalette() {
   const { isOpen, close, open } = useCommandPalette();
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SearchItem[]>(searchItems);
+  const [query, setQuery] = useState("");
+  const [searchItems, setSearchItems] = useState<SearchItem[]>([]);
+  const [results, setResults] = useState<SearchItem[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
+  const selectedRef = useRef<HTMLDivElement>(null);
+
+  // Build search items on mount
+  useEffect(() => {
+    const items = buildSearchItems();
+    setSearchItems(items);
+    setResults(items);
+  }, []);
 
   const fuse = useMemo(
     () =>
       new Fuse(searchItems, {
-        keys: ['title', 'description'],
+        keys: ["title", "description", "category"],
         threshold: 0.3,
       }),
-    []
+    [searchItems]
   );
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
-      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         if (isOpen) {
           close();
@@ -50,50 +178,77 @@ export default function CommandPalette() {
       }
     };
 
-    document.addEventListener('keydown', down);
-    return () => document.removeEventListener('keydown', down);
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
   }, [isOpen, close, open]);
 
   useEffect(() => {
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
+      setSelectedIndex(0); // Always start with first item selected
     }
   }, [isOpen]);
 
   useEffect(() => {
-    if (query.trim() === '') {
+    if (query.trim() === "") {
       setResults(searchItems);
     } else {
       const fuseResults = fuse.search(query);
       setResults(fuseResults.map((result) => result.item));
     }
     setSelectedIndex(0);
-  }, [query, fuse]);
+  }, [query, fuse, searchItems]);
+
+  // Scroll selected item into view
+  useEffect(() => {
+    if (selectedRef.current) {
+      selectedRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  }, [selectedIndex]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'ArrowDown') {
+    if (e.key === "ArrowDown") {
       e.preventDefault();
-      setSelectedIndex((prev) => (prev + 1) % results.length);
-    } else if (e.key === 'ArrowUp') {
+      setSelectedIndex((prev) => Math.min(prev + 1, results.length - 1));
+    } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setSelectedIndex((prev) => (prev - 1 + results.length) % results.length);
-    } else if (e.key === 'Enter') {
+      setSelectedIndex((prev) => Math.max(prev - 1, 0));
+    } else if (e.key === "Enter") {
       e.preventDefault();
       if (results[selectedIndex]) {
-        router.push(results[selectedIndex].url);
+        const url = results[selectedIndex].url;
+        const isExternal =
+          url.startsWith("http://") || url.startsWith("https://");
+
+        if (isExternal) {
+          window.open(url, "_blank", "noopener,noreferrer");
+        } else {
+          const convertedUrl = url.replace("/projects/", "/projects?project=");
+          router.push(convertedUrl);
+        }
         close();
-        setQuery('');
+        setQuery("");
       }
-    } else if (e.key === 'Escape') {
+    } else if (e.key === "Escape") {
       close();
-      setQuery('');
+      setQuery("");
     }
   };
 
   const handleSelect = (url: string) => {
-    router.push(url);
+    const isExternal = url.startsWith("http://") || url.startsWith("https://");
+
+    if (isExternal) {
+      window.open(url, "_blank", "noopener,noreferrer");
+    } else {
+      const convertedUrl = url.replace("/projects/", "/projects?project=");
+      router.push(convertedUrl);
+    }
     close();
-    setQuery('');
+    setQuery("");
   };
 
   if (!isOpen) return null;
@@ -117,7 +272,8 @@ export default function CommandPalette() {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Search pages, projects, and posts..."
-            className="flex-1 bg-transparent text-gray-900 placeholder-gray-400 outline-none dark:text-white"
+            className="flex-1 bg-transparent text-gray-900 placeholder-gray-400 outline-none focus:outline-none focus:ring-0 border-0 dark:text-white"
+            style={{ outline: "none", boxShadow: "none" }}
           />
           <button
             onClick={close}
@@ -135,41 +291,106 @@ export default function CommandPalette() {
             </div>
           ) : (
             <div>
-              {results.map((item, index) => (
-                <div
-                  key={item.url}
-                >
-                  <div
-                    onClick={() => handleSelect(item.url)}
-                    onMouseEnter={() => setSelectedIndex(index)}
-                    className={`flex w-full items-start gap-3 rounded-lg p-3 text-left transition-colors ${
-                      index === selectedIndex
-                        ? 'bg-primary-50 dark:bg-primary-900/20'
-                        : 'hover:bg-gray-50 dark:hover:bg-gray-800'
-                    }`}
-                  >
-                    <div className="mt-0.5">
-                      {item.type === 'page' && (
-                        <FiFileText className="h-5 w-5 text-gray-400" />
-                      )}
-                      {item.type === 'project' && (
-                        <FiFolder className="h-5 w-5 text-gray-400" />
-                      )}
-                      {item.type === 'post' && (
-                        <FiFileText className="h-5 w-5 text-gray-400" />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-medium text-gray-900 dark:text-white">
-                        {item.title}
+              {/* Group by category */}
+              {["Menu", "Portfolio", "Social", "Projects", "Blog"].map(
+                (category) => {
+                  const categoryItems = results.filter(
+                    (item) => item.category === category
+                  );
+                  if (categoryItems.length === 0) return null;
+
+                  return (
+                    <div key={category} className="mb-3">
+                      <div className="mb-1 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                        {category}
                       </div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">
-                        {item.description}
-                      </div>
+                      {categoryItems.map((item) => {
+                        const globalIndex = results.indexOf(item);
+                        return (
+                          <div
+                            key={item.url}
+                            ref={
+                              globalIndex === selectedIndex ? selectedRef : null
+                            }
+                            onClick={() => handleSelect(item.url)}
+                            onMouseEnter={() => setSelectedIndex(globalIndex)}
+                            className={`flex w-full cursor-pointer items-start gap-3 rounded-lg p-3 text-left transition-colors ${
+                              globalIndex === selectedIndex
+                                ? "bg-primary-50 dark:bg-primary-900/20"
+                                : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                            }`}
+                          >
+                            <div className="mt-0.5">
+                              {item.type === "page" &&
+                                item.category === "Menu" &&
+                                item.title === "Home" && (
+                                  <FiHome className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+                                )}
+                              {item.type === "page" &&
+                                item.category === "Menu" &&
+                                item.title === "Projects" && (
+                                  <FiCode className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+                                )}
+                              {item.type === "page" &&
+                                item.category === "Menu" &&
+                                item.title === "Blog" && (
+                                  <FiBookOpen className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+                                )}
+                              {item.type === "page" &&
+                                item.category === "Menu" &&
+                                item.title === "Contact" && (
+                                  <FiMail className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+                                )}
+                              {item.type === "section" &&
+                                item.title === "Hero" && (
+                                  <FiZap className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                                )}
+                              {item.type === "section" &&
+                                item.title === "About" && (
+                                  <FiUser className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                                )}
+                              {item.type === "section" &&
+                                item.title === "Projects" && (
+                                  <FiLayout className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                                )}
+                              {item.type === "section" &&
+                                item.title === "Blog" && (
+                                  <FiBookOpen className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                                )}
+                              {item.type === "page" &&
+                                item.category === "Social" &&
+                                item.title === "GitHub" && (
+                                  <FiGithub className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+                                )}
+                              {item.type === "page" &&
+                                item.category === "Social" &&
+                                item.title === "LinkedIn" && (
+                                  <FiLinkedin className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                                )}
+                              {item.type === "page" &&
+                                item.category === "Social" &&
+                                item.title === "Twitter" && (
+                                  <FiTwitter className="h-5 w-5 text-sky-500 dark:text-sky-400" />
+                                )}
+                              {item.type === "project" && (
+                                <FiCode className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                              )}
+                              {item.type === "post" && (
+                                <FiBookOpen className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+                              )}
+                            </div>
+                            <div className="flex-1">
+                              <div className="font-medium text-gray-900 dark:text-white">
+                                {item.title}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                  </div>
-                </div>
-              ))}
+                  );
+                }
+              )}
             </div>
           )}
         </div>

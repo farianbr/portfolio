@@ -6,6 +6,7 @@ import { CommandPaletteProvider } from '@/components/providers/CommandPalettePro
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import CommandPalette from '@/components/ui/CommandPalette';
+import ScrollToTop from '@/components/ui/ScrollToTop';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -37,6 +38,13 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Farian Bin Rahman' }],
   creator: 'Farian Bin Rahman',
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/images/profile.png', type: 'image/png' }
+    ],
+    apple: '/images/profile.png',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -72,6 +80,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="alternate icon" href="/images/profile.png" type="image/png" />
+      </head>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}>
         <a href="#main-content" className="skip-to-main">
           Skip to main content
@@ -86,6 +98,7 @@ export default function RootLayout({
               <Footer />
             </div>
             <CommandPalette />
+            <ScrollToTop />
           </CommandPaletteProvider>
         </ThemeProvider>
       </body>
