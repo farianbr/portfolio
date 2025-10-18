@@ -22,33 +22,33 @@ It helps users keep track of their subscriptions, set alerts, and receive email 
 
 ---
 
-## Features
+## Core Features
 
-**Authentication & Authorization** 
+**1. Authentication & Authorization** 
 - User signup with email verification (via SendGrid SMTP). 
 - Secure password hashing with `bcrypt`. 
 - Login sessions using Passport.js.
 
-**Email Notifications**
+**2. Email Notifications**
 
 - Verification email during signup.
 - Subscription renewal alerts (1 day before end date).
 - Background jobs scheduled using `node-cron`.
 
-**Subscriptions Management**
+**3. Subscriptions Management**
 
 - Create, update, delete subscriptions.
 - Track provider, category, amount, payment type, and end date.
 - Toggle alerts on/off for each subscription.
 
-**Frontend (React + TailwindCSS)**
+**4. Frontend (React + TailwindCSS)**
 
 - Responsive, modern UI.
 - Loading skeletons for smooth UX.
 - Toast notifications for success/error states.
 - Dashboard with subscription history and statistics.
 
-**GraphQL Backend**
+**5. GraphQL Backend**
 
 - Apollo Server with Express integration.
 - Modular schema (`typeDefs` + `resolvers`).

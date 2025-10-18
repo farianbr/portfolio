@@ -9,7 +9,6 @@ import {
   FiArrowRight,
   FiChevronLeft,
   FiChevronRight,
-  FiBookOpen,
 } from "react-icons/fi";
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
