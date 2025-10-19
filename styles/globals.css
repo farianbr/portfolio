@@ -165,18 +165,6 @@
   @apply rounded-lg shadow-md my-4 md:my-6 w-full h-auto;
 }
 
-/* Special styling for feature lists */
-.prose h2:has(+ ul) + ul {
-  @apply grid gap-2 md:gap-3 my-4 md:my-6;
-}
-
-.prose h2:has(+ ul) + ul > li {
-  @apply bg-gradient-to-r from-gray-50 to-transparent dark:from-gray-800/50 dark:to-transparent p-3 md:p-4 rounded-lg border border-gray-200 dark:border-gray-800 hover:border-primary-300 dark:hover:border-primary-700 transition-colors;
-}
-
-.prose h2:has(+ ul) + ul > li::before {
-  @apply top-[1.2em] md:top-[1.4em];
-}
 
 /* Focus visible for accessibility */
 *:focus-visible {
