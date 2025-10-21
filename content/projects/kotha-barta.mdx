@@ -1,0 +1,82 @@
+---
+title: "Kotha Barta"
+description: "A full-stack real-time messaging application, featuring group conversations, image sharing, and live updates."
+date: 2024-01-20
+published: true
+tags:
+  - Next.js
+  - TypeScript
+  - Pusher
+  - Prisma
+  - MongoDB
+
+image: "/images/project-subscription-manager.png"
+imageLaptopView: "/images/projects/kotha-barta-laptop.png"
+imageMultiView: "/images/projects/kotha-barta-multidevice.png"
+
+github: https://github.com/farianbr/kotha-barta-app
+demo: https://kotha-barta-app.vercel.app
+---
+
+**Kotha-Barta** (meaning "conversation" in Bengali) is a sophisticated real-time chat application that enables seamless communication between users. The application provides a comprehensive messaging experience with support for one-on-one conversations and group chats, complete with real-time message delivery, read receipts, and presence indicators. 
+
+---
+
+## Core Features
+
+### **Authentication System**
+- Multi-provider authentication (Google, GitHub, and Email/Password)
+- Secure credential-based login with bcrypt password hashing
+- Session management with NextAuth
+- Protected routes with middleware
+
+### **Real-time Messaging**
+- Instant message delivery using Pusher WebSockets
+- Support for text messages and image uploads
+- Message read receipts and seen indicators
+- Typing indicators and online presence status
+
+### **Conversation Management**
+- One-on-one private conversations
+- Group chat creation and management
+- Conversation list with last message preview
+- Active conversation highlighting
+
+### **User Experience**
+- Responsive design for mobile and desktop
+- Beautiful UI with Tailwind CSS
+- Avatar displays (individual and group)
+- Loading states and empty state handlers
+- Toast notifications for user feedback
+- Modal dialogs for confirmations and settings
+
+### **Responsive Navigation**
+- Desktop sidebar navigation
+- Mobile-friendly bottom navigation
+- Real-time active status indicators
+- Quick access to user settings
+
+### **Media Support**
+- Image upload and sharing via Cloudinary
+- Image preview modals
+- Optimized image delivery
+
+### **User Settings**
+- Profile customization
+- Name and image updates
+- Account management
+
+---
+
+## Tech Stack
+
+### **Frontend**
+- Next.js, TypeScript, Tailwind CSS, Headless UI, React Hook Form, React Icons, React Hot Toast, React Select, Zustand
+
+### **Backend**
+- Next.js API Routes, NextAuth.js, Prisma, MongoDB, Pusher, Bcrypt
+
+### **Infrastructure & Tools**
+- Cloudinary - Image hosting and optimization
+- Vercel (deployment ready) - Hosting platform
+- Prisma Studio - Database GUI
