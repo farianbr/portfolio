@@ -34,8 +34,7 @@ export default function AboutSection() {
             
             <h2 className="mb-6 text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
               <span className="relative">
-                About{" "}
-                  Me
+                About Me
                 
                 <motion.div
                   className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-primary-600 to-purple-600 rounded-full"
@@ -97,9 +96,9 @@ export default function AboutSection() {
                   </h3>
 
                   <p className="text-base leading-relaxed text-gray-700 dark:text-gray-300 sm:text-lg">
-                    A passionate <strong>full-stack developer</strong> with a
+                    A passionate full-stack developer with a
                     love for creating intelligent, modern web experiences that
-                    solve real-world problems.
+                    <strong> solve real-world problems.</strong>
                   </p>
 
                   <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400">

@@ -10,12 +10,13 @@ import {
   FiBookOpen,
   FiGithub,
   FiLinkedin,
-  FiTwitter,
   FiZap,
   FiUser,
   FiMail,
   FiLayout,
 } from "react-icons/fi";
+import { FaXTwitter } from "react-icons/fa6";
+
 import Fuse from "fuse.js";
 import { useCommandPalette } from "@/components/providers/CommandPaletteProvider";
 import { allProjects, allPosts } from "@/.contentlayer/generated";
@@ -102,14 +103,14 @@ const buildSearchItems = (): SearchItem[] => {
     {
       title: "LinkedIn",
       description: "Connect on LinkedIn",
-      url: "https://linkedin.com/in/farianbr",
+      url: "https://www.linkedin.com/in/farianb/",
       type: "page",
       category: "Social",
     },
     {
       title: "Twitter",
       description: "Follow me on Twitter",
-      url: "https://twitter.com/farianbr",
+      url: "https://x.com/IamFarian",
       type: "page",
       category: "Social",
     },
@@ -370,7 +371,7 @@ export default function CommandPalette() {
                               {item.type === "page" &&
                                 item.category === "Social" &&
                                 item.title === "Twitter" && (
-                                  <FiTwitter className="h-5 w-5 text-sky-500 dark:text-sky-400" />
+                                  <FaXTwitter className="h-5 w-5 text-sky-500 dark:text-sky-400" />
                                 )}
                               {item.type === "project" && (
                                 <FiCode className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />

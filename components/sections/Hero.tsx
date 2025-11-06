@@ -5,11 +5,11 @@ import { motion } from 'framer-motion';
 import {
   FiGithub,
   FiLinkedin,
-  FiTwitter,
   FiMail,
   FiArrowRight,
   FiDownload,
 } from 'react-icons/fi';
+import { FaXTwitter } from "react-icons/fa6";
 import AnimatedBackground from '@/components/ui/AnimatedBackground';
 
 export default function Hero() {
@@ -56,7 +56,7 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mb-8 text-lg font-medium text-gray-700 dark:text-gray-300 sm:text-xl md:text-2xl"
           >
-            Full-Stack Developer & Designer
+            Full-Stack Developer
           </motion.p>
 
           {/* Description */}
@@ -118,7 +118,7 @@ export default function Hero() {
               <FiGithub className="h-5 w-5 transition-transform group-hover:scale-110" />
             </a>
             <a
-              href="https://linkedin.com/in/farianbinrahman"
+              href="https://www.linkedin.com/in/farianb/"
               target="_blank"
               rel="noopener noreferrer"
               className="group flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-white/50 text-gray-600 backdrop-blur-sm transition-all hover:border-primary-600 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900/50 dark:text-gray-400 dark:hover:border-primary-400 dark:hover:text-primary-400"
@@ -127,16 +127,16 @@ export default function Hero() {
               <FiLinkedin className="h-5 w-5 transition-transform group-hover:scale-110" />
             </a>
             <a
-              href="https://twitter.com/farianbinrahman"
+              href="https://x.com/IamFarian"
               target="_blank"
               rel="noopener noreferrer"
               className="group flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-white/50 text-gray-600 backdrop-blur-sm transition-all hover:border-primary-600 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900/50 dark:text-gray-400 dark:hover:border-primary-400 dark:hover:text-primary-400"
               aria-label="Twitter"
             >
-              <FiTwitter className="h-5 w-5 transition-transform group-hover:scale-110" />
+              <FaXTwitter className="h-5 w-5 transition-transform group-hover:scale-110" />
             </a>
             <a
-              href="mailto:farian@example.com"
+              href="mailto:farianrahman1000@gmail.com"
               className="group flex h-12 w-12 items-center justify-center rounded-full border border-gray-300 bg-white/50 text-gray-600 backdrop-blur-sm transition-all hover:border-primary-600 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900/50 dark:text-gray-400 dark:hover:border-primary-400 dark:hover:text-primary-400"
               aria-label="Email"
             >
