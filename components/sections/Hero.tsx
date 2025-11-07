@@ -14,7 +14,7 @@ import AnimatedBackground from "@/components/ui/AnimatedBackground";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen overflow-hidden pt-20 sm:pt-0 sm:-top-[72px]">
+    <section className="relative min-h-screen overflow-hidden -top-[72px]">
       {/* Animated Background */}
       <AnimatedBackground />
 
@@ -65,9 +65,9 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="mx-auto mb-8 sm:mb-12 max-w-2xl text-sm leading-relaxed text-gray-600 dark:text-gray-400 sm:text-base md:text-lg px-4"
           >
-            I craft beautiful, performant web experiences that solve real
-            problems. Specializing in modern web technologies and user-centered
-            design.
+            Building reliable and maintainable web applications that solve real
+            world problems. Specializing in modern web technologies and
+            user-centered design.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -152,7 +152,7 @@ export default function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.6 }}
-            className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2"
+            className="absolute bottom-12 sm:bottom-8 left-1/2 -translate-x-1/2"
           >
             <Link
               href="#about"
