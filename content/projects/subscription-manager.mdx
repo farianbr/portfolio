@@ -70,15 +70,3 @@ It helps users keep track of their subscriptions, set alerts, and receive email 
 **Database:**
 
 - MongoDB (via Mongoose)
-
----
-
-## Key Takeaways
-
-Here are a few concise takeaways from building Subscription Manager:
-
-- Architecture: Clear GraphQL types + centralized auth/mail simplified development.
-- Reliability: node-cron worked for small scale; use idempotent jobs and external workers when scaling.
-- Data: Use embedded docs for fast reads, separate collections for analytics, and index query fields (userId, endDate).
-- UX: Apollo optimistic updates, skeleton loaders, and toasts made the app feel fast and polished.
-- Security & Ops: Hash passwords, validate inputs server/client-side, and keep config in env vars for predictable deployments.

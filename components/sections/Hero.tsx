@@ -1,19 +1,18 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { motion } from 'framer-motion';
+import Link from "next/link";
+import { motion } from "framer-motion";
 import {
   FiGithub,
   FiLinkedin,
   FiMail,
   FiArrowRight,
   FiDownload,
-} from 'react-icons/fi';
+} from "react-icons/fi";
 import { FaXTwitter } from "react-icons/fa6";
-import AnimatedBackground from '@/components/ui/AnimatedBackground';
+import AnimatedBackground from "@/components/ui/AnimatedBackground";
 
 export default function Hero() {
-
   return (
     <section className="relative -top-[72px] min-h-screen overflow-hidden">
       {/* Animated Background */}
@@ -43,7 +42,7 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
           >
-            Hi, I&apos;m{' '}
+            Hi, I&apos;m{" "}
             <span className="bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent">
               Farian Bin Rahman
             </span>
@@ -66,8 +65,9 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="mx-auto mb-12 max-w-2xl text-base leading-relaxed text-gray-600 dark:text-gray-400 sm:text-lg"
           >
-            I craft beautiful, performant web experiences that solve real problems.
-            Specializing in modern web technologies and user-centered design.
+            I craft beautiful, performant web experiences that solve real
+            problems. Specializing in modern web technologies and user-centered
+            design.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -92,8 +92,9 @@ export default function Hero() {
               Get In Touch
             </Link>
             <a
-              href="/resume.pdf"
-              download
+              href="/resume/Farian_Bin_Rahman_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center text-sm font-medium text-gray-700 transition-colors hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400"
             >
               <FiDownload className="mr-2" />
