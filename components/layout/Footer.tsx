@@ -19,6 +19,21 @@ const footerLinks = [
   { name: "Contact", href: "/contact" },
 ];
 
+// Generate a unique session ID
+function generateSessionId(): string {
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+}
+
+// Get or create session ID
+function getSessionId(): string {
+  const stored = sessionStorage.getItem("sessionId");
+  if (stored) return stored;
+  
+  const newSessionId = generateSessionId();
+  sessionStorage.setItem("sessionId", newSessionId);
+  return newSessionId;
+}
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const [visitorCount, setVisitorCount] = useState<number | null>(null);
@@ -31,20 +46,34 @@ export default function Footer() {
     const trackVisit = async () => {
       try {
         const hasVisited = sessionStorage.getItem("hasVisited");
-        const method = hasVisited ? "GET" : "POST";
-        const response = await fetch("/api/visitors", { method });
-        const data = await response.json();
-        setVisitorCount(data.count);
-        if (!hasVisited) sessionStorage.setItem("hasVisited", "true");
+        const sessionId = getSessionId();
+        const pathname = window.location.pathname;
+        
+        if (hasVisited) {
+          // Just get the count
+          const response = await fetch("/api/visitors");
+          const data = await response.json();
+          setVisitorCount(data.count);
+        } else {
+          // Record new visit
+          const response = await fetch("/api/visitors", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ sessionId, pathname }),
+          });
+          const data = await response.json();
+          setVisitorCount(data.count);
+          sessionStorage.setItem("hasVisited", "true");
+        }
       } catch (error) {
         console.error("Visitor tracking failed:", error);
-        const stored = localStorage.getItem("visitorCount");
-        setVisitorCount(stored ? parseInt(stored, 10) : 0);
+        // Fallback: just show a placeholder
+        setVisitorCount(0);
       }
     };
 
     trackVisit();
-  }, []);
+  }, [isTracking]);
 
   return (
     <footer className="relative overflow-hidden border-t border-gray-200 bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:border-gray-800 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">

@@ -36,6 +36,7 @@ export default function Header() {
                 src="/images/profile.png"
                 alt="logo"
                 fill
+                sizes="40px"
                 className="object-cover"
                 priority
               />

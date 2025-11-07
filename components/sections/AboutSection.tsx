@@ -72,8 +72,8 @@ export default function AboutSection() {
                         src="/images/profile.png"
                         alt="Farian Bin Rahman"
                         fill
+                        sizes="224px"
                         className="object-cover"
-                        priority
                       />
                     </div>
 
@@ -154,6 +154,7 @@ export default function AboutSection() {
                     className={`mx-auto transition-opacity duration-200 ${statsLoaded ? "opacity-100" : "opacity-0"}`}
                     width={400}
                     height={160}
+                    style={{ width: "auto", height: "auto" }}
                     unoptimized
                     onLoad={() => setStatsLoaded(true)}
                   />
@@ -171,6 +172,7 @@ export default function AboutSection() {
                     className={`mx-auto transition-opacity duration-200 ${streakLoaded ? "opacity-100" : "opacity-0"}`}
                     width={400}
                     height={120}
+                    style={{ width: "auto", height: "auto" }}
                     unoptimized
                     onLoad={() => setStreakLoaded(true)}
                   />
@@ -191,6 +193,7 @@ export default function AboutSection() {
                     className={`mx-auto w-full transition-opacity duration-200 ${chartLoaded ? "opacity-100" : "opacity-0"}`}
                     width={1200}
                     height={220}
+                    style={{ width: "auto", height: "auto" }}
                     unoptimized
                     onLoad={() => setChartLoaded(true)}
                   />
