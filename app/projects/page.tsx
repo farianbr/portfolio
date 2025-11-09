@@ -207,7 +207,7 @@ function ProjectsContent() {
                         className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-full border border-gray-200 bg-white/70 backdrop-blur-sm text-gray-700 dark:bg-gray-800/60 dark:border-gray-700 dark:text-gray-200 transition-transform duration-150 hover:translate-y-[-1px] hover:shadow-sm"
                       >
                         <FiGithub className="h-4 w-4" />
-                        <span className="hidden sm:inline">Source</span>
+                        <span>Source</span>
                       </a>
                     )}
 
@@ -220,7 +220,7 @@ function ProjectsContent() {
                         className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-full bg-gradient-to-r from-primary-600 to-purple-600 text-white shadow-sm transition-transform duration-150 hover:translate-y-[-1px] hover:brightness-105"
                       >
                         <FiExternalLink className="h-4 w-4" />
-                        <span className="hidden sm:inline">Live</span>
+                        <span>Live</span>
                       </a>
                     )}
                   </div>

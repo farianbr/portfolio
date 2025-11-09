@@ -97,7 +97,7 @@ export default function Hero() {
               href="/resume/Farian_Bin_Rahman_Resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center text-xs sm:text-sm font-medium text-gray-700 transition-colors hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400"
+              className="inline-flex mt-1 items-center text-xs sm:text-sm font-medium text-gray-700 transition-colors hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400"
             >
               <FiDownload className="mr-2" />
               Download Resume
