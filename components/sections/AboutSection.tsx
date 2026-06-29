@@ -1,207 +1,138 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { FiCode } from "react-icons/fi";
-import SkillsGrid from "@/components/ui/SkillsGrid";
-import { useTheme } from "next-themes";
-import { useState, useEffect } from "react";
+import Image from 'next/image';
+import { useTheme } from 'next-themes';
+import { useState, useEffect } from 'react';
+import SkillsGrid from '@/components/ui/SkillsGrid';
+import Reveal from '@/components/ui/Reveal';
+
+const githubAssets = [
+  { type: 'stats', label: 'GitHub Stats', width: 400, height: 160 },
+  { type: 'streak', label: 'GitHub Streak', width: 400, height: 120 },
+] as const;
 
 export default function AboutSection() {
   const { resolvedTheme } = useTheme();
-  const [statsLoaded, setStatsLoaded] = useState(false);
-  const [streakLoaded, setStreakLoaded] = useState(false);
-  const [chartLoaded, setChartLoaded] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [loaded, setLoaded] = useState<Record<string, boolean>>({});
 
-  // Prevent theme flash: only use resolvedTheme after component mounts
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  const theme = mounted ? resolvedTheme : 'dark';
+  const markLoaded = (key: string) =>
+    setLoaded((prev) => ({ ...prev, [key]: true }));
+
   return (
-    <section id="about" className="pb-16 md:pb-24">
-      <div className="container-custom">
-        <div className="mx-auto max-w-6xl">
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="mb-16 text-center"
-          >
-            
-            <h2 className="mb-6 text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-              <span className="relative">
-                About Me
-                
-                <motion.div
-                  className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-primary-600 to-purple-600 rounded-full"
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.3 }}
+    <section id="about" className="section scroll-mt-24">
+      <div className="container-wide">
+        <Reveal>
+          <p className="eyebrow mb-3">a little about me</p>
+          <h2 className="font-display text-4xl text-ink sm:text-5xl md:text-6xl">
+            The person behind the code
+          </h2>
+        </Reveal>
+
+        {/* Bio */}
+        <Reveal delay={0.05} className="mb-20 mt-12">
+          <div className="grid items-center gap-10 md:grid-cols-5 md:gap-14">
+            {/* Polaroid portrait */}
+            <div className="flex justify-center md:col-span-2">
+              <figure className="-rotate-2 rounded-sm border border-line/10 bg-surface p-3 pb-5 shadow-soft-lg transition-transform duration-500 ease-spring hover:rotate-0">
+                <div className="relative aspect-square w-48 overflow-hidden sm:w-60 md:w-full">
+                  <Image
+                    src="/images/profile.png"
+                    alt="Portrait of Farian Bin Rahman"
+                    fill
+                    sizes="(min-width: 768px) 35vw, 240px"
+                    className="object-cover"
+                  />
+                </div>
+                <figcaption className="hand mt-3 text-center text-xl text-muted">
+                  that&apos;s me — somewhere in Dhaka
+                </figcaption>
+              </figure>
+            </div>
+
+            {/* Bio text */}
+            <div className="space-y-5 md:col-span-3">
+              <h3 className="font-display text-2xl text-ink sm:text-3xl">
+                Hi, I&apos;m Farian.
+              </h3>
+              <p className="font-serif text-lg leading-relaxed text-ink/90 md:text-xl">
+                I&apos;m a full-stack developer who turns ambiguous problems into{' '}
+                <span className="italic text-accent">clear, reliable products.</span>
+              </p>
+              <p className="leading-relaxed text-muted">
+                I build scalable web applications with modern technologies,
+                pairing clean architecture with careful attention to user
+                experience and performance — so the things I ship feel fast,
+                obvious, and durable. When I&apos;m not shipping, I&apos;m
+                usually reading, refactoring something that didn&apos;t need it,
+                or chasing a better cup of coffee.
+              </p>
+            </div>
+          </div>
+        </Reveal>
+
+        {/* Skills */}
+        <Reveal delay={0.05} className="mb-20">
+          <p className="eyebrow mb-7 text-center">things I build with</p>
+          <SkillsGrid />
+        </Reveal>
+
+        {/* GitHub Activity */}
+        <Reveal delay={0.05}>
+          <p className="eyebrow mb-7 text-center">what I&apos;ve been up to</p>
+          <div className="card p-5 sm:p-7">
+            <div className="flex flex-wrap items-center justify-center gap-6">
+              {githubAssets.map((asset) => (
+                <div key={asset.type} className="relative mx-auto">
+                  {!loaded[asset.type] && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="h-8 w-8 animate-spin rounded-full border-2 border-line/20 border-t-accent" />
+                    </div>
+                  )}
+                  <Image
+                    src={`/api/github-stats?type=${asset.type}&theme=${theme}`}
+                    alt={asset.label}
+                    className={`mx-auto transition-opacity duration-300 ${
+                      loaded[asset.type] ? 'opacity-100' : 'opacity-0'
+                    }`}
+                    width={asset.width}
+                    height={asset.height}
+                    style={{ width: 'auto', height: 'auto' }}
+                    unoptimized
+                    onLoad={() => markLoaded(asset.type)}
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 border-t border-line/10 pt-6">
+              <div className="relative mx-auto w-full max-w-4xl">
+                {!loaded.chart && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="h-10 w-10 animate-spin rounded-full border-2 border-line/20 border-t-accent" />
+                  </div>
+                )}
+                <Image
+                  src={`/api/github-stats?type=chart&theme=${theme}`}
+                  alt="GitHub contribution chart"
+                  className={`mx-auto w-full transition-opacity duration-300 ${
+                    loaded.chart ? 'opacity-100' : 'opacity-0'
+                  }`}
+                  width={1200}
+                  height={220}
+                  style={{ width: 'auto', height: 'auto' }}
+                  unoptimized
+                  onLoad={() => markLoaded('chart')}
                 />
-              </span>
-            </h2>
-            <p className="text-base text-gray-600 dark:text-gray-400 sm:text-lg">
-              Building the future, one line of code at a time
-            </p>
-          </motion.div>
-
-          {/* Bio Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mb-16"
-          >
-            <div className="overflow-hidden rounded-3xl border border-gray-200 bg-gradient-to-br from-white to-gray-50 p-8 shadow-lg transition-transform duration-200 hover:scale-[1.02] hover:shadow-xl hover:border-primary-100 dark:border-gray-800 dark:from-gray-900 dark:to-gray-900/50 md:p-12">
-              <div className="grid gap-8 md:grid-cols-5 md:gap-12">
-                {/* Profile Image */}
-                <div className="flex justify-center md:col-span-2">
-                  <div className="relative">
-                    {/* Decorative gradient ring */}
-                    <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-primary-600 to-purple-600 opacity-20 blur-lg"></div>
-
-                    {/* Image container */}
-                    <div className="relative h-48 w-48 overflow-hidden rounded-full border-4 border-white shadow-xl dark:border-gray-800 sm:h-56 sm:w-56">
-                      <Image
-                        src="/images/profile.png"
-                        alt="Farian Bin Rahman"
-                        fill
-                        sizes="224px"
-                        className="object-cover"
-                      />
-                    </div>
-
-                    {/* Floating badge */}
-                    <div className="absolute -bottom-2 -right-2 rounded-full bg-primary-600 p-3 shadow-lg">
-                      <FiCode className="h-6 w-6 text-white" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Bio Text */}
-                <div className="flex flex-col justify-center space-y-4 md:col-span-3">
-                  <div className="inline-flex items-center gap-2 text-sm font-medium text-primary-600 dark:text-primary-400">
-                    <span className="h-px w-8 bg-primary-600"></span>
-                    Nice to meet you
-                  </div>
-
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
-                    Farian Bin Rahman
-                  </h3>
-
-                  <p className="text-base leading-relaxed text-gray-700 dark:text-gray-300 sm:text-lg">
-                    A passionate full-stack developer with a
-                    love for creating intelligent, modern web experiences that
-                    <strong> solve real-world problems.</strong>
-                  </p>
-
-                  <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400">
-                    I specialize in building scalable web applications using
-                    modern technologies. My approach combines clean
-                    architecture, exceptional user experiences, and performance
-                    optimization.
-                  </p>
-
-                  {/* Quick highlights removed per request */}
-                </div>
               </div>
             </div>
-          </motion.div>
-
-          {/* Skills Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="mb-16"
-          >
-            <h3 className="mb-8 text-center text-2xl font-bold sm:text-3xl">
-              Skills & Technologies
-            </h3>
-            <SkillsGrid />
-          </motion.div>
-
-          {/* GitHub Contributions */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            <h3 className="mb-8 text-center text-2xl font-bold sm:text-3xl">
-              GitHub Activity
-            </h3>
-            {/* Combined GitHub Section */}
-            <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
-              {/* GitHub Stats */}
-              <div className="flex flex-wrap items-center justify-center gap-4">
-                <div className="relative mx-auto">
-                  {!statsLoaded && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary-600 border-gray-200" />
-                    </div>
-                  )}
-                  <Image
-                    src={`/api/github-stats?type=stats&theme=${mounted ? resolvedTheme : 'light'}`}
-                    alt="GitHub Stats"
-                    className={`mx-auto transition-opacity duration-200 ${statsLoaded ? "opacity-100" : "opacity-0"}`}
-                    width={400}
-                    height={160}
-                    style={{ width: "auto", height: "auto" }}
-                    unoptimized
-                    onLoad={() => setStatsLoaded(true)}
-                  />
-                </div>
-
-                <div className="relative mx-auto">
-                  {!streakLoaded && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primary-600 border-gray-200" />
-                    </div>
-                  )}
-                  <Image
-                    src={`/api/github-stats?type=streak&theme=${mounted ? resolvedTheme : 'light'}`}
-                    alt="GitHub Streak"
-                    className={`mx-auto transition-opacity duration-200 ${streakLoaded ? "opacity-100" : "opacity-0"}`}
-                    width={400}
-                    height={120}
-                    style={{ width: "auto", height: "auto" }}
-                    unoptimized
-                    onLoad={() => setStreakLoaded(true)}
-                  />
-                </div>
-              </div>
-
-              {/* Contribution Graph */}
-              <div className="mt-6 border-t border-gray-200 pt-6 dark:border-gray-700">
-                <div className="relative mx-auto w-full max-w-4xl">
-                  {!chartLoaded && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="h-12 w-12 animate-spin rounded-full border-4 border-t-primary-600 border-gray-200" />
-                    </div>
-                  )}
-                  <Image
-                    src={`/api/github-stats?type=chart&theme=${mounted ? resolvedTheme : 'light'}`}
-                    alt="GitHub Contribution Chart"
-                    className={`mx-auto w-full transition-opacity duration-200 ${chartLoaded ? "opacity-100" : "opacity-0"}`}
-                    width={1200}
-                    height={220}
-                    style={{ width: "auto", height: "auto" }}
-                    unoptimized
-                    onLoad={() => setChartLoaded(true)}
-                  />
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

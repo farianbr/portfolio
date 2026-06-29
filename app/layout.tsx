@@ -1,19 +1,38 @@
 import '@/styles/globals.css';
-import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import type { Metadata, Viewport } from 'next';
+import { Fraunces, Work_Sans, Caveat, JetBrains_Mono } from 'next/font/google';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import { CommandPaletteProvider } from '@/components/providers/CommandPaletteProvider';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import CommandPalette from '@/components/ui/CommandPalette';
 import ScrollToTop from '@/components/ui/ScrollToTop';
+import { siteConfig, socialLinks } from '@/lib/site.config';
 
-const inter = Inter({
+// Display & headings — a literary serif with character
+const serif = Fraunces({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-serif',
+  display: 'swap',
+  style: ['normal', 'italic'],
+});
+
+// Body & UI — a warm, readable humanist sans
+const sans = Work_Sans({
+  subsets: ['latin'],
+  variable: '--font-sans',
   display: 'swap',
 });
 
+// Handwritten margin notes & chapter markers
+const hand = Caveat({
+  subsets: ['latin'],
+  variable: '--font-hand',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+});
+
+// Code blocks only
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-jetbrains-mono',
@@ -21,23 +40,75 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: {
-    default: 'Farian Bin Rahman - Full-Stack Developer',
-    template: '%s | Farian Bin Rahman',
+    default: `${siteConfig.name} — ${siteConfig.role}`,
+    template: `%s | ${siteConfig.name}`,
   },
-  description:
-    'Full-stack developer passionate about building intelligent, modern web experiences with clean architecture and exceptional user experiences.',
+  description: siteConfig.description,
+  applicationName: `${siteConfig.name} Portfolio`,
   keywords: [
-    'Farian Bin Rahman',
+    siteConfig.name,
     'Full-Stack Developer',
     'Web Developer',
     'React',
     'Next.js',
     'TypeScript',
+    'Node.js',
     'Portfolio',
   ],
-  authors: [{ name: 'Farian Bin Rahman' }],
-  creator: 'Farian Bin Rahman',
+  authors: [{ name: siteConfig.name, url: siteConfig.url }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    locale: siteConfig.locale,
+    url: siteConfig.url,
+    siteName: `${siteConfig.name} — Portfolio`,
+    title: `${siteConfig.name} — ${siteConfig.role}`,
+    description: siteConfig.description,
+    images: [{ url: siteConfig.ogImage, alt: siteConfig.name }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `${siteConfig.name} — ${siteConfig.role}`,
+    description: siteConfig.description,
+    creator: '@IamFarian',
+    images: [siteConfig.ogImage],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f4eee1' },
+    { media: '(prefers-color-scheme: dark)', color: '#1a1612' },
+  ],
+};
+
+// JSON-LD structured data — helps search engines & rich results.
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: siteConfig.name,
+  url: siteConfig.url,
+  jobTitle: siteConfig.role,
+  email: `mailto:${siteConfig.email}`,
+  sameAs: socialLinks
+    .filter((s) => !s.href.startsWith('mailto:'))
+    .map((s) => s.href),
 };
 
 export default function RootLayout({
@@ -46,16 +117,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-      </head>
-      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${serif.variable} ${sans.variable} ${hand.variable} ${jetbrainsMono.variable} font-sans`}
+      >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
         <a href="#main-content" className="skip-to-main">
           Skip to main content
         </a>
         <ThemeProvider>
           <CommandPaletteProvider>
-            <div className="flex min-h-screen flex-col">
+            <div aria-hidden="true" className="paper-grain" />
+            <div className="relative z-[1] flex min-h-screen flex-col">
               <Header />
               <main id="main-content" className="flex-1">
                 {children}

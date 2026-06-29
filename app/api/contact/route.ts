@@ -2,15 +2,43 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+const resend = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MAX = { name: 100, email: 200, subject: 150, message: 5000 } as const;
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, email, subject, message } = body;
+    const { name, email, subject, message, company } = body ?? {};
+
+    // Honeypot: a filled hidden field means a bot. Pretend success, do nothing.
+    if (typeof company === 'string' && company.trim().length > 0) {
+      return NextResponse.json({ message: 'Message received' }, { status: 200 });
+    }
+
+    // Server-side validation — never trust the client.
+    if (
+      typeof name !== 'string' ||
+      typeof email !== 'string' ||
+      typeof subject !== 'string' ||
+      typeof message !== 'string' ||
+      !name.trim() ||
+      !subject.trim() ||
+      message.trim().length < 10 ||
+      !EMAIL_RE.test(email) ||
+      name.length > MAX.name ||
+      email.length > MAX.email ||
+      subject.length > MAX.subject ||
+      message.length > MAX.message
+    ) {
+      return NextResponse.json({ error: 'Invalid input' }, { status: 400 });
+    }
 
     if (!resend) {
-      console.log('Contact form submission:', { name, email, subject, message });
+      console.log('Contact form submission:', { name, email, subject });
       return NextResponse.json({ message: 'Message received' }, { status: 200 });
     }
 
@@ -24,10 +52,16 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error('Email error:', error);
-      return NextResponse.json({ error: 'Failed to send message' }, { status: 500 });
+      return NextResponse.json(
+        { error: 'Failed to send message' },
+        { status: 500 }
+      );
     }
 
-    return NextResponse.json({ message: 'Message sent successfully' }, { status: 200 });
+    return NextResponse.json(
+      { message: 'Message sent successfully' },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Error:', error);
     return NextResponse.json({ error: 'Something went wrong' }, { status: 500 });

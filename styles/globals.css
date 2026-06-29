@@ -4,174 +4,298 @@
 
 @layer base {
   :root {
-    --font-inter: "Inter", system-ui, sans-serif;
-    --font-jetbrains-mono: "JetBrains Mono", monospace;
+    /* Daylight — warm paper journal */
+    --bg: 244 238 225; /* cream paper #F4EEE1 */
+    --bg-2: 236 228 210; /* deeper paper for cards / insets */
+    --fg: 38 33 27; /* warm ink #26211B */
+    --muted: 122 110 95; /* faded pencil #7A6E5F */
+    --line: 38 33 27; /* ruled lines = ink at low alpha */
+    --accent: 169 67 43; /* terracotta / brick red #A9432B (AA on cream) */
+    --thread: 99 120 110; /* muted sage thread, used sparingly */
+  }
+
+  .dark {
+    /* Night writing — warm dark paper */
+    --bg: 26 22 18; /* #1A1612 */
+    --bg-2: 35 30 24; /* #231E18 */
+    --fg: 235 226 209; /* warm paper-white #EBE2D1 */
+    --muted: 154 142 122; /* #9A8E7A */
+    --line: 235 226 209;
+    --accent: 216 124 82; /* warm terracotta #D87C52 */
+    --thread: 138 160 146;
   }
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   body {
-    @apply bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100;
+    @apply bg-canvas text-ink antialiased;
   }
 
-  /* Custom scrollbar */
+  /* Headings read as a journal — serif by default */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif), Georgia, serif;
+    @apply font-normal;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
   ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 9px;
+    height: 9px;
   }
-
   ::-webkit-scrollbar-track {
-    @apply bg-gray-100 dark:bg-gray-900;
+    @apply bg-transparent;
   }
-
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 dark:bg-gray-700 rounded-full;
+    @apply rounded-full bg-ink/25;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-ink/40;
   }
 
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400 dark:bg-gray-600;
+  ::selection {
+    @apply bg-accent/85 text-canvas;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
 @layer components {
   .container-custom {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply mx-auto max-w-6xl px-5 sm:px-6 lg:px-8;
+  }
+  .container-wide {
+    @apply mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-12;
   }
 
+  .section {
+    @apply py-20 md:py-28;
+  }
+
+  /* Handwritten chapter marker / aside */
+  .hand {
+    font-family: var(--font-hand), "Comic Sans MS", cursive;
+  }
+  .eyebrow {
+    @apply hand text-xl leading-none text-accent sm:text-2xl;
+  }
+
+  /* Small printed meta — dates, tags, page numbers */
+  .label {
+    @apply text-[0.72rem] font-medium uppercase tracking-[0.2em] text-muted;
+  }
+
+  /* Big serif display */
+  .font-display {
+    font-family: var(--font-serif), Georgia, serif;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 0.95;
+  }
+
+  /* Buttons — ink stamp + paper outline */
   .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white bg-primary-600 rounded-lg hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors duration-200;
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-7 py-3 text-sm font-medium text-canvas transition-all duration-300 ease-spring hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-canvas;
   }
-
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 text-base font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-800 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink/25 bg-transparent px-7 py-3 text-sm font-medium text-ink transition-all duration-300 ease-spring hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-canvas;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors duration-200 hover:text-accent;
   }
 
+  /* Paper card with a soft, printed shadow */
   .card {
-    @apply bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm hover:shadow-md transition-shadow duration-200;
+    @apply rounded-lg border border-line/15 bg-surface/60 p-6 shadow-soft transition-all duration-300 ease-spring hover:border-accent/40 hover:shadow-soft-lg;
   }
 
+  /* Form fields — ruled, understated */
   .input {
-    @apply w-full px-4 py-2 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors duration-200;
+    @apply w-full rounded-md border border-line/25 bg-surface/50 px-4 py-2.5 text-ink transition-colors duration-200 placeholder:text-muted/60 focus:border-accent/60 focus:outline-none focus:ring-2 focus:ring-accent/20;
+  }
+
+  .hairline {
+    @apply border-line/15;
+  }
+
+  /* Hand-inked underline that draws on hover */
+  .ink-link {
+    @apply relative inline-block text-ink no-underline transition-colors hover:text-accent;
+  }
+  .ink-link::after {
+    content: "";
+    @apply absolute -bottom-0.5 left-0 h-px w-full origin-right scale-x-0 bg-accent transition-transform duration-500 ease-spring;
+  }
+  .ink-link:hover::after {
+    @apply origin-left scale-x-100;
+  }
+
+  /* Outlined "stroke" serif for oversized type */
+  .text-stroke {
+    -webkit-text-stroke: 1px rgb(var(--fg) / 0.4);
+    color: transparent;
+  }
+
+  /* Ruled-notebook background (faint horizontal lines) */
+  .ruled {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 2.1rem,
+      rgb(var(--line) / 0.07) 2.1rem,
+      rgb(var(--line) / 0.07) calc(2.1rem + 1px)
+    );
+  }
+
+  /* Margin rule — the red line down a notebook page */
+  .margin-rule {
+    background-image: linear-gradient(
+      to right,
+      transparent calc(var(--margin, 3.5rem) - 1px),
+      rgb(var(--accent) / 0.28) calc(var(--margin, 3.5rem) - 1px),
+      rgb(var(--accent) / 0.28) var(--margin),
+      transparent var(--margin)
+    );
+  }
+
+  /* Washi-tape strip (decorative) */
+  .tape {
+    @apply relative bg-accent/15;
+    box-shadow: 0 1px 6px rgb(var(--fg) / 0.08);
   }
 }
 
-
-/* Prose styles for MDX content */
+/* ----- Prose styles for MDX content ----- */
 .prose {
   @apply max-w-none;
 }
-
 .prose h1 {
-  @apply text-3xl font-bold text-gray-900 dark:text-white mt-8 mb-4 pb-3 border-b border-gray-200 dark:border-gray-800;
+  @apply mb-4 mt-8 border-b border-line/15 pb-3 text-3xl text-ink md:text-4xl;
+  font-family: var(--font-serif), Georgia, serif;
 }
-
-.prose h1 {
-  @apply text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mt-6 md:mt-8 mb-3 md:mb-4 pb-2 md:pb-3 border-b border-gray-200 dark:border-gray-800;
-}
-
 .prose h2 {
-  @apply text-xl md:text-2xl font-bold text-gray-900 dark:text-white mt-6 md:mt-8 mb-3 md:mb-4 flex items-center gap-2;
+  @apply mb-4 mt-8 text-2xl text-ink md:text-3xl;
+  font-family: var(--font-serif), Georgia, serif;
 }
-
-
-
 .prose h3 {
-  @apply text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-200 mt-4 md:mt-6 mb-2 md:mb-3;
+  @apply mb-3 mt-6 text-xl text-ink/90 md:text-2xl;
+  font-family: var(--font-serif), Georgia, serif;
 }
-
 .prose h4 {
-  @apply text-base md:text-lg font-semibold text-gray-800 dark:text-gray-200 mt-3 md:mt-4 mb-2;
+  @apply mb-2 mt-4 text-lg font-semibold text-ink/90;
 }
-
 .prose p {
-  @apply text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed mb-3 md:mb-4;
+  @apply mb-4 text-[0.97rem] leading-[1.75] text-muted md:text-[1.02rem];
 }
-
 .prose ul {
-  @apply space-y-2 my-3 md:my-4 pl-4 md:pl-6;
+  @apply my-4 space-y-2 pl-1;
 }
-
 .prose li {
-  @apply text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed;
+  @apply text-[0.97rem] leading-[1.75] text-muted md:text-[1.02rem];
 }
-
 .prose ul > li {
-  @apply relative pl-4 md:pl-6;
+  @apply relative pl-5;
 }
-
 .prose ul > li::before {
   content: "";
-  @apply absolute left-0 top-1/2 w-1 h-1 bg-slate-700 rounded-full translate-x-1/2 -translate-y-1/2;
+  @apply absolute left-1 top-[0.7em] h-1.5 w-1.5 rounded-full bg-accent;
 }
-
 .prose ol {
-  @apply space-y-2 my-3 md:my-4 list-decimal list-inside;
+  @apply my-4 list-decimal space-y-2 pl-5;
 }
-
 .prose ol > li {
-  @apply text-sm md:text-base text-gray-700 dark:text-gray-300 leading-relaxed pl-2;
+  @apply pl-1 text-[0.97rem] leading-[1.75] text-muted md:text-[1.02rem];
 }
-
 .prose strong {
-  @apply font-semibold text-gray-900 dark:text-white;
+  @apply font-semibold text-ink;
 }
-
 .prose em {
-  @apply italic text-gray-700 dark:text-gray-400;
+  @apply italic;
 }
-
 .prose a {
-  @apply cursor-default ;
+  @apply font-medium text-accent underline decoration-accent/40 underline-offset-2 transition-colors hover:decoration-accent;
 }
-
 .prose blockquote {
-  @apply border-l-2 md:border-l-4 border-primary-500 pl-3 md:pl-4 italic text-sm md:text-base text-gray-700 dark:text-gray-400 my-3 md:my-4 bg-primary-50 dark:bg-primary-900/10 py-2 md:py-3 pr-3 md:pr-4 rounded-r-lg;
+  @apply my-5 border-l-2 border-accent/60 bg-surface/50 py-3 pl-4 pr-4 font-serif text-lg italic text-muted;
 }
 .prose blockquote > p {
-  @apply  mb-0 md:mb-0;
+  @apply mb-0;
 }
-
 .prose pre {
-  @apply bg-gray-900 dark:bg-gray-950 text-gray-100 p-3 md:p-4 rounded-lg overflow-x-auto my-4 md:my-6 border border-gray-800 shadow-inner text-xs md:text-sm;
+  @apply my-6 overflow-x-auto rounded-lg border border-line/15 bg-ink/[0.05] p-4 text-sm dark:bg-black/30;
 }
-
 .prose code {
-  @apply bg-gray-100 dark:bg-gray-800 text-primary-600 dark:text-primary-400 px-1 md:px-1.5 py-0.5 rounded text-xs md:text-sm font-mono;
+  @apply rounded bg-ink/[0.06] px-1.5 py-0.5 font-mono text-[0.85em] text-accent dark:bg-accent/10;
 }
-
 .prose pre code {
-  @apply bg-transparent text-gray-100 p-0 text-xs md:text-sm;
+  @apply bg-transparent p-0 text-ink/90;
 }
-
 .prose hr {
-  @apply my-6 md:my-8 border-gray-200 dark:border-gray-800;
+  @apply my-8 border-line/15;
 }
-
 .prose table {
-  @apply w-full my-4 md:my-6 border-collapse text-sm md:text-base overflow-x-auto block md:table;
+  @apply my-6 block w-full border-collapse overflow-x-auto text-sm md:table md:text-base;
 }
-
 .prose th {
-  @apply bg-gray-100 dark:bg-gray-800 text-left p-2 md:p-3 font-semibold text-gray-900 dark:text-white border-b-2 border-primary-500 text-sm md:text-base;
+  @apply border-b border-line/20 bg-ink/[0.04] p-3 text-left font-semibold text-ink;
 }
-
 .prose td {
-  @apply p-2 md:p-3 border-b border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 text-sm md:text-base;
+  @apply border-b border-line/10 p-3 text-muted;
 }
-
 .prose img {
-  @apply rounded-lg shadow-md my-4 md:my-6 w-full h-auto;
+  @apply my-6 h-auto w-full rounded-lg border border-line/15;
 }
 
-
-/* Focus visible for accessibility */
+/* Focus visibility for keyboard users */
 *:focus-visible {
-  @apply outline-2 outline-offset-2 outline-primary-500;
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
-/* Skip to main content link */
 .skip-to-main {
-  @apply sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary-600 focus:text-white focus:rounded-lg;
+  @apply sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-canvas;
+}
+
+/* Paper grain overlay (very subtle) */
+.paper-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+}
+.dark .paper-grain {
+  mix-blend-mode: screen;
+  opacity: 0.06;
+}
+
+/* Marquee row: duplicate children inside for a seamless loop */
+.marquee {
+  display: flex;
+  width: max-content;
+  flex-wrap: nowrap;
 }

@@ -30,33 +30,25 @@ export default function RecentBlogPosts() {
   );
 
   return (
-    <section id="blog" className="relative overflow-hidden py-12 md:py-16">
-      {/* Background decoration */}
-
-      <div className="container-custom relative">
+    <section id="blog" className="section scroll-mt-24">
+      <div className="container-wide relative">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mb-12 text-center"
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-12"
         >
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary-200 bg-primary-50 px-4 py-2 text-sm font-medium text-primary-700 dark:border-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
-            <FiClock className="h-4 w-4" />
-            Latest Articles
-          </div>
-          <h2 className="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-            From the Blog
+          <p className="eyebrow mb-3">straight from the notebook</p>
+          <h2 className="font-display text-4xl text-ink sm:text-5xl md:text-6xl">
+            Writing &amp; notes
           </h2>
-          <p className="mx-auto max-w-2xl text-base text-gray-600 dark:text-gray-400 sm:text-lg">
-            Insights, tutorials, and thoughts on web development and technology
-          </p>
         </motion.div>
 
         {/* Blog List */}
         <div className="mx-auto max-w-4xl">
-          <div className="divide-y divide-gray-200 dark:divide-gray-800">
+          <div className="divide-y divide-line/10 border-y border-line/10">
             {currentPosts.map((post, index) => (
               <motion.article
                 key={post.slug}
@@ -64,43 +56,40 @@ export default function RecentBlogPosts() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: 0.05 * index }}
-                className="group py-5 first:pt-0 last:pb-0"
+                className="group"
               >
-                <Link href={post.url} className="block">
-                  <div className="flex items-start justify-between gap-4">
+                <Link href={post.url} className="block py-5 transition-colors hover:bg-accent/[0.03]">
+                  <div className="flex items-start justify-between gap-4 px-1 sm:px-2">
                     <div className="flex-1">
                       {/* Meta Info */}
-                      <div className="mb-1.5 flex flex-wrap items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
-                        <div className="flex items-center gap-1">
-                          <FiCalendar className="h-3.5 w-3.5" />
+                      <div className="mb-1.5 flex flex-wrap items-center gap-4">
+                        <span className="label flex items-center gap-1.5">
+                          <FiCalendar className="h-3 w-3" />
                           <time dateTime={post.date}>
                             {format(new Date(post.date), "MMM d, yyyy")}
                           </time>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <FiClock className="h-3.5 w-3.5" />
-                          <span>{post.readingTime}</span>
-                        </div>
+                        </span>
+                        <span className="label flex items-center gap-1.5">
+                          <FiClock className="h-3 w-3" />
+                          {post.readingTime}
+                        </span>
                       </div>
 
                       {/* Title */}
-                      <h3 className="mb-1.5 text-lg font-bold text-gray-900 transition-colors group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-400 sm:text-xl">
+                      <h3 className="mb-1.5 font-display text-xl text-ink transition-colors group-hover:text-accent sm:text-2xl">
                         {post.title}
                       </h3>
 
                       {/* Description */}
-                      <p className="mb-2 line-clamp-2 text-sm text-gray-600 dark:text-gray-400">
+                      <p className="mb-2 line-clamp-2 text-sm text-muted">
                         {post.description}
                       </p>
 
                       {/* Tags */}
                       {post.tags && post.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5">
+                        <div className="flex flex-wrap gap-x-3 gap-y-1">
                           {post.tags.slice(0, 4).map((tag: any) => (
-                            <span
-                              key={tag}
-                              className="text-xs font-medium text-primary-600 dark:text-primary-400"
-                            >
+                            <span key={tag} className="label !text-accent/80">
                               #{tag}
                             </span>
                           ))}
@@ -110,7 +99,7 @@ export default function RecentBlogPosts() {
 
                     {/* Arrow Icon */}
                     <div className="flex-shrink-0 pt-1">
-                      <FiChevronRight className="h-5 w-5 text-gray-400 transition-all group-hover:translate-x-1 group-hover:text-primary-600 dark:group-hover:text-primary-400" />
+                      <FiChevronRight className="h-5 w-5 text-muted transition-all group-hover:translate-x-1 group-hover:text-accent" />
                     </div>
                   </div>
                 </Link>
@@ -130,9 +119,9 @@ export default function RecentBlogPosts() {
               <button
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+                className="rounded-full border border-line/20 px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-accent/50 disabled:cursor-not-allowed disabled:opacity-40"
               >
-                Previous
+                Prev
               </button>
 
               <div className="flex gap-2">
@@ -141,10 +130,10 @@ export default function RecentBlogPosts() {
                     <button
                       key={page}
                       onClick={() => setCurrentPage(page)}
-                      className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                      className={`rounded-full px-4 py-2 text-sm transition-colors ${
                         currentPage === page
-                          ? "bg-primary-600 text-white"
-                          : "border border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+                          ? "border border-accent/50 bg-accent/10 text-ink"
+                          : "border border-line/20 text-muted hover:border-accent/40 hover:text-ink"
                       }`}
                     >
                       {page}
@@ -158,7 +147,7 @@ export default function RecentBlogPosts() {
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                 }
                 disabled={currentPage === totalPages}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+                className="rounded-full border border-line/20 px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-accent/50 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 Next
               </button>

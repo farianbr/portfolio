@@ -1,179 +1,159 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { motion } from "framer-motion";
-import {
-  FiGithub,
-  FiLinkedin,
-  FiMail,
-  FiArrowRight,
-  FiDownload,
-} from "react-icons/fi";
-import { FaXTwitter } from "react-icons/fa6";
-import AnimatedBackground from "@/components/ui/AnimatedBackground";
+import Link from 'next/link';
+import { motion, useReducedMotion, type Variants } from 'framer-motion';
+import { FiArrowRight } from 'react-icons/fi';
+import { siteConfig, socialLinks } from '@/lib/site.config';
+
+const FACTS = [
+  { k: 'Based in', v: 'Dhaka, Bangladesh' },
+  { k: 'What I do', v: siteConfig.role },
+  { k: 'Currently', v: 'Open to new work', live: true },
+];
 
 export default function Hero() {
+  const reduce = useReducedMotion() ?? false;
+
+  const rise: Variants = {
+    hidden: { opacity: 0, y: reduce ? 0 : 18 },
+    show: (i: number = 0) => ({
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.7, delay: reduce ? 0 : i, ease: [0.22, 1, 0.36, 1] },
+    }),
+  };
+
   return (
-    <section className="relative min-h-screen overflow-hidden -top-[72px]">
-      {/* Animated Background */}
-      <AnimatedBackground />
+    <section
+      aria-labelledby="hero-heading"
+      className="relative flex min-h-[100svh] flex-col overflow-hidden"
+    >
+      {/* faint ink wash, top-right */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-24 -top-24 h-[42vmin] w-[42vmin] rounded-full opacity-[0.06] blur-3xl"
+        style={{ background: 'radial-gradient(circle, rgb(var(--accent)), transparent 70%)' }}
+      />
 
-      {/* Content */}
-      <div className="container-custom relative z-10 flex min-h-screen items-center px-4 sm:px-6">
-        <div className="mx-auto w-full max-w-4xl text-center">
-          {/* Greeting Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-6 sm:mb-8 inline-flex items-center gap-2 rounded-full border border-primary-600/20 bg-primary-50/50 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-medium text-primary-700 backdrop-blur-sm dark:border-primary-400/20 dark:bg-primary-900/20 dark:text-primary-300"
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400 opacity-75"></span>
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-primary-500"></span>
-            </span>
-            Available for new opportunities
-          </motion.div>
+      {/* Main intro — vertically centered */}
+      <div className="container-wide relative flex w-full flex-1 flex-col justify-center pb-12 pt-28">
+        <motion.p
+          custom={0.1}
+          variants={rise}
+          initial="hidden"
+          animate="show"
+          className="hand text-2xl text-accent sm:text-3xl"
+        >
+          hello, I&apos;m
+        </motion.p>
 
-          {/* Main Heading */}
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="mb-4 sm:mb-6 text-3xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl"
-          >
-            Hi, I&apos;m{" "}
-            <span className="bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent">
-              Farian Bin Rahman
-            </span>
-          </motion.h1>
-
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mb-6 sm:mb-8 text-base font-medium text-gray-700 dark:text-gray-300 sm:text-xl md:text-2xl"
-          >
-            Full-Stack Developer
-          </motion.p>
-
-          {/* Description */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="mx-auto mb-8 sm:mb-12 max-w-2xl text-sm leading-relaxed text-gray-600 dark:text-gray-400 sm:text-base md:text-lg px-4"
-          >
-            Building reliable and maintainable web applications that solve real
-            world problems. Specializing in modern web technologies and
-            user-centered design.
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="mb-8 sm:mb-12 flex flex-col items-center justify-center gap-3 sm:gap-4 px-4"
-          >
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
-              <Link
-                href="#projects"
-                className="btn-primary group inline-flex items-center justify-center w-full sm:w-auto text-sm sm:text-base"
-              >
-                View My Work
-                <FiArrowRight className="ml-2 transition-transform group-hover:translate-x-1" />
-              </Link>
-              <Link
-                href="/contact"
-                className="btn-secondary inline-flex items-center justify-center w-full sm:w-auto text-sm sm:text-base"
-              >
-                <FiMail className="mr-2" />
-                Get In Touch
-              </Link>
-            </div>
-            <a
-              href="/resume/Farian_Bin_Rahman_Resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex mt-1 items-center text-xs sm:text-sm font-medium text-gray-700 transition-colors hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400"
+        <motion.h1
+          id="hero-heading"
+          custom={0.2}
+          variants={rise}
+          initial="hidden"
+          animate="show"
+          className="font-display mt-2 text-ink"
+          style={{ fontSize: 'clamp(3rem, 11vw, 8.5rem)', lineHeight: 0.92 }}
+        >
+          Farian{' '}
+          <span className="relative inline-block italic">
+            Bin Rahman
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 320 24"
+              preserveAspectRatio="none"
+              className="absolute -bottom-2 left-0 h-3 w-full text-accent sm:-bottom-3 sm:h-4"
             >
-              <FiDownload className="mr-2" />
-              Download Resume
-            </a>
-          </motion.div>
+              <motion.path
+                d="M3 14 C 70 4, 130 22, 200 12 S 300 6, 317 14"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+                initial={reduce ? undefined : { pathLength: 0 }}
+                animate={reduce ? undefined : { pathLength: 1 }}
+                transition={{ duration: 1, delay: 0.9, ease: 'easeInOut' }}
+              />
+            </svg>
+          </span>
+        </motion.h1>
 
-          {/* Social Links */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 px-4"
-          >
-            <a
-              href="https://github.com/farianbr"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-gray-300 bg-white/50 text-gray-600 backdrop-blur-sm transition-all hover:border-primary-600 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900/50 dark:text-gray-400 dark:hover:border-primary-400 dark:hover:text-primary-400"
-              aria-label="GitHub"
-            >
-              <FiGithub className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:scale-110" />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/farianb/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-gray-300 bg-white/50 text-gray-600 backdrop-blur-sm transition-all hover:border-primary-600 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900/50 dark:text-gray-400 dark:hover:border-primary-400 dark:hover:text-primary-400"
-              aria-label="LinkedIn"
-            >
-              <FiLinkedin className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:scale-110" />
-            </a>
-            <a
-              href="https://x.com/IamFarian"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-gray-300 bg-white/50 text-gray-600 backdrop-blur-sm transition-all hover:border-primary-600 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900/50 dark:text-gray-400 dark:hover:border-primary-400 dark:hover:text-primary-400"
-              aria-label="Twitter"
-            >
-              <FaXTwitter className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:scale-110" />
-            </a>
-            <a
-              href="mailto:farianrahman1000@gmail.com"
-              className="group flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-gray-300 bg-white/50 text-gray-600 backdrop-blur-sm transition-all hover:border-primary-600 hover:text-primary-600 dark:border-gray-700 dark:bg-gray-900/50 dark:text-gray-400 dark:hover:border-primary-400 dark:hover:text-primary-400"
-              aria-label="Email"
-            >
-              <FiMail className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:scale-110" />
-            </a>
-          </motion.div>
+        <motion.p
+          custom={0.4}
+          variants={rise}
+          initial="hidden"
+          animate="show"
+          className="mt-10 max-w-2xl font-serif text-lg leading-relaxed text-muted md:text-xl"
+        >
+          {siteConfig.role} — {siteConfig.tagline}
+        </motion.p>
 
-          {/* Scroll Indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            className="absolute bottom-12 sm:bottom-8 left-1/2 -translate-x-1/2"
+        <motion.div
+          custom={0.55}
+          variants={rise}
+          initial="hidden"
+          animate="show"
+          className="mt-9 flex flex-wrap items-center gap-x-5 gap-y-4"
+        >
+          <Link href="/projects" className="btn-primary group">
+            View work
+            <FiArrowRight className="h-4 w-4 transition-transform duration-300 ease-spring group-hover:translate-x-1" />
+          </Link>
+          <a
+            href={siteConfig.resume}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-secondary"
           >
-            <Link
-              href="#about"
-              className="flex flex-col items-center gap-2 text-xs sm:text-sm text-gray-500 transition-colors hover:text-primary-600 dark:text-gray-500 dark:hover:text-primary-400"
-            >
-              <span className="hidden sm:inline">Scroll to explore</span>
-              <motion.div
-                animate={{ y: [0, 8, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-                className="h-5 w-3 sm:h-6 sm:w-4 rounded-full border-2 border-current"
-              >
-                <motion.div
-                  animate={{ y: [0, 12, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                  className="mx-auto mt-0.5 sm:mt-1 h-1 w-1 sm:h-1.5 sm:w-1.5 rounded-full bg-current"
-                />
-              </motion.div>
-            </Link>
-          </motion.div>
-        </div>
+            Resume
+          </a>
+
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 sm:ml-1">
+            {socialLinks
+              .filter((s) => s.href.startsWith('http'))
+              .map((s) => (
+                <a
+                  key={s.name}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ink-link text-sm font-medium"
+                >
+                  {s.name}
+                </a>
+              ))}
+          </div>
+        </motion.div>
       </div>
+
+      {/* Bottom index card — quick facts */}
+      <motion.div
+        custom={0.8}
+        variants={rise}
+        initial="hidden"
+        animate="show"
+        className="container-wide relative w-full pb-14"
+      >
+        <dl className="grid gap-6 border-t border-line/15 pt-6 sm:grid-cols-3">
+          {FACTS.map((f) => (
+            <div key={f.k}>
+              <dt className="label mb-1.5">{f.k}</dt>
+              <dd className="flex items-center gap-2 font-serif text-base text-ink md:text-lg">
+                {f.live && (
+                  <span className="relative flex h-2 w-2">
+                    {!reduce && (
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
+                    )}
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
+                  </span>
+                )}
+                {f.v}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </motion.div>
     </section>
   );
 }

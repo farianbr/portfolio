@@ -3,7 +3,6 @@
 import { useEffect, useState, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
-  FiSearch,
   FiX,
   FiHome,
   FiCode,
@@ -14,6 +13,7 @@ import {
   FiUser,
   FiMail,
   FiLayout,
+  FiSearch,
 } from "react-icons/fi";
 import { FaXTwitter } from "react-icons/fa6";
 
@@ -260,25 +260,28 @@ export default function CommandPalette() {
       onClick={close}
     >
       <div
-        className="w-full max-w-2xl overflow-hidden rounded-xl border border-gray-200 bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-900"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Command palette"
+        className="w-full max-w-2xl overflow-hidden rounded-xl border border-line/15 bg-canvas/95 shadow-soft-lg backdrop-blur-xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input */}
-        <div className="flex items-center border-b border-gray-200 p-4 dark:border-gray-800">
-          <FiSearch className="mr-3 h-5 w-5 text-gray-400" />
+        <div className="flex items-center border-b border-line/10 p-4">
+          <FiSearch className="mr-3 h-4 w-4 text-accent" />
           <input
             ref={inputRef}
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Search pages, projects, and posts..."
-            className="flex-1 bg-transparent text-gray-900 placeholder-gray-400 outline-none focus:outline-none focus:ring-0 border-0 dark:text-white"
+            placeholder="Search projects, posts, pages…"
+            className="flex-1 border-0 bg-transparent text-sm text-ink placeholder-muted/60 outline-none focus:outline-none focus:ring-0"
             style={{ outline: "none", boxShadow: "none" }}
           />
           <button
             onClick={close}
-            className="ml-2 rounded-lg p-1 text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="ml-2 rounded-md p-1 text-muted hover:text-accent"
           >
             <FiX className="h-5 w-5" />
           </button>
@@ -287,9 +290,7 @@ export default function CommandPalette() {
         {/* Results */}
         <div className="max-h-96 overflow-y-auto p-2">
           {results.length === 0 ? (
-            <div className="py-8 text-center text-gray-500">
-              No results found
-            </div>
+            <div className="label py-8 text-center">No results found</div>
           ) : (
             <div>
               {/* Group by category */}
@@ -302,7 +303,7 @@ export default function CommandPalette() {
 
                   return (
                     <div key={category} className="mb-3">
-                      <div className="mb-1 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                      <div className="label mb-1 px-3 py-1">
                         {category}
                       </div>
                       {categoryItems.map((item) => {
@@ -315,73 +316,73 @@ export default function CommandPalette() {
                             }
                             onClick={() => handleSelect(item.url)}
                             onMouseEnter={() => setSelectedIndex(globalIndex)}
-                            className={`flex w-full cursor-pointer items-start gap-3 rounded-lg p-3 text-left transition-colors ${
+                            className={`flex w-full cursor-pointer items-start gap-3 rounded-md p-3 text-left transition-colors ${
                               globalIndex === selectedIndex
-                                ? "bg-primary-50 dark:bg-primary-900/20"
-                                : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                                ? "bg-accent/10"
+                                : "hover:bg-accent/[0.04]"
                             }`}
                           >
                             <div className="mt-0.5">
                               {item.type === "page" &&
                                 item.category === "Menu" &&
                                 item.title === "Home" && (
-                                  <FiHome className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+                                  <FiHome className="h-5 w-5 text-accent" />
                                 )}
                               {item.type === "page" &&
                                 item.category === "Menu" &&
                                 item.title === "Projects" && (
-                                  <FiCode className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+                                  <FiCode className="h-5 w-5 text-accent" />
                                 )}
                               {item.type === "page" &&
                                 item.category === "Menu" &&
                                 item.title === "Blog" && (
-                                  <FiBookOpen className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+                                  <FiBookOpen className="h-5 w-5 text-accent" />
                                 )}
                               {item.type === "page" &&
                                 item.category === "Menu" &&
                                 item.title === "Contact" && (
-                                  <FiMail className="h-5 w-5 text-primary-600 dark:text-primary-400" />
+                                  <FiMail className="h-5 w-5 text-accent" />
                                 )}
                               {item.type === "section" &&
                                 item.title === "Hero" && (
-                                  <FiZap className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                                  <FiZap className="h-5 w-5 text-muted" />
                                 )}
                               {item.type === "section" &&
                                 item.title === "About" && (
-                                  <FiUser className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                                  <FiUser className="h-5 w-5 text-muted" />
                                 )}
                               {item.type === "section" &&
                                 item.title === "Projects" && (
-                                  <FiLayout className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                                  <FiLayout className="h-5 w-5 text-muted" />
                                 )}
                               {item.type === "section" &&
                                 item.title === "Blog" && (
-                                  <FiBookOpen className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                                  <FiBookOpen className="h-5 w-5 text-muted" />
                                 )}
                               {item.type === "page" &&
                                 item.category === "Social" &&
                                 item.title === "GitHub" && (
-                                  <FiGithub className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+                                  <FiGithub className="h-5 w-5 text-ink" />
                                 )}
                               {item.type === "page" &&
                                 item.category === "Social" &&
                                 item.title === "LinkedIn" && (
-                                  <FiLinkedin className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                                  <FiLinkedin className="h-5 w-5 text-muted" />
                                 )}
                               {item.type === "page" &&
                                 item.category === "Social" &&
                                 item.title === "Twitter" && (
-                                  <FaXTwitter className="h-5 w-5 text-sky-500 dark:text-sky-400" />
+                                  <FaXTwitter className="h-5 w-5 text-muted" />
                                 )}
                               {item.type === "project" && (
-                                <FiCode className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                                <FiCode className="h-5 w-5 text-accent/80" />
                               )}
                               {item.type === "post" && (
-                                <FiBookOpen className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+                                <FiBookOpen className="h-5 w-5 text-muted" />
                               )}
                             </div>
                             <div className="flex-1">
-                              <div className="font-medium text-gray-900 dark:text-white">
+                              <div className="text-sm font-medium text-ink">
                                 {item.title}
                               </div>
                             </div>
@@ -397,10 +398,10 @@ export default function CommandPalette() {
         </div>
 
         {/* Footer */}
-        <div className="border-t border-gray-200 px-4 py-2 text-xs text-gray-500 dark:border-gray-800">
+        <div className="label border-t border-line/10 px-4 py-2.5">
           <div className="flex items-center justify-between">
-            <span>Navigate with ↑↓, select with ↵</span>
-            <span>Close with ESC</span>
+            <span>↑↓ navigate · ↵ select</span>
+            <span>esc close</span>
           </div>
         </div>
       </div>

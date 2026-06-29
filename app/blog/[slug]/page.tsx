@@ -50,37 +50,34 @@ export default function PostPage({ params }: PostPageProps) {
         {/* Back Button */}
         <Link
           href="/blog"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-gray-600 transition-colors hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400"
+          className="btn-ghost mb-8"
         >
           <FiArrowLeft className="h-4 w-4" />
-          View All Posts
+          All posts
         </Link>
 
         {/* Header */}
-        <header className="mb-8">
-          <h1 className="mb-4 text-3xl font-bold tracking-tight text-balance md:text-5xl">
+        <header className="mb-8 border-b border-line/15 pb-8">
+          <h1 className="mb-4 text-balance font-display text-4xl text-ink md:text-5xl">
             {post.title}
           </h1>
 
-          <div className="mb-6 flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-            <time dateTime={post.date}>
+          <div className="mb-6 flex flex-wrap items-center gap-4">
+            <time dateTime={post.date} className="label">
               {format(new Date(post.date), 'MMMM d, yyyy')}
             </time>
-            <span className="flex items-center gap-1">
-              <FiClock className="h-4 w-4" />
+            <span className="label flex items-center gap-1.5">
+              <FiClock className="h-3 w-3" />
               {post.readingTime}
             </span>
           </div>
 
           {/* Tags */}
           {post.tags && post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-x-4 gap-y-1.5">
               {post.tags.map((tag: any) => (
-                <span
-                  key={tag}
-                  className="rounded-full bg-primary-100 px-3 py-1 text-sm font-medium text-primary-700 dark:bg-primary-900/30 dark:text-primary-300"
-                >
-                  {tag}
+                <span key={tag} className="label !text-accent/80">
+                  #{tag}
                 </span>
               ))}
             </div>

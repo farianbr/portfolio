@@ -26,20 +26,20 @@ export async function GET(request: NextRequest) {
     case 'stats':
       imageUrl =
         theme === 'light'
-          ? `https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&count_private=true&theme=default&hide_border=true&bg_color=ffffff&title_color=3b82f6&icon_color=3b82f6&text_color=374151`
-          : `https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&count_private=true&theme=dark&hide_border=true&bg_color=111827&title_color=60a5fa&icon_color=60a5fa&text_color=d1d5db`;
+          ? `https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&count_private=true&theme=default&hide_border=true&bg_color=00000000&title_color=a9432b&icon_color=a9432b&text_color=7a6e5f`
+          : `https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&count_private=true&theme=dark&hide_border=true&bg_color=00000000&title_color=d87c52&icon_color=d87c52&text_color=ebe2d1`;
       break;
     case 'streak':
       imageUrl =
         theme === 'light'
-          ? `https://github-readme-streak-stats.herokuapp.com/?user=${username}&theme=default&hide_border=true&background=ffffff&ring=3b82f6&fire=3b82f6&currStreakLabel=374151&sideLabels=374151&currStreakNum=374151&sideNums=374151&dates=6b7280`
-          : `https://github-readme-streak-stats.herokuapp.com/?user=${username}&theme=dark&hide_border=true&background=111827&ring=60a5fa&fire=60a5fa&currStreakLabel=d1d5db&sideLabels=d1d5db&currStreakNum=d1d5db&sideNums=d1d5db&dates=6b7280`;
+          ? `https://github-readme-streak-stats.herokuapp.com/?user=${username}&theme=default&hide_border=true&background=00000000&ring=a9432b&fire=a9432b&currStreakLabel=7a6e5f&sideLabels=7a6e5f&currStreakNum=26211b&sideNums=26211b&dates=7a6e5f`
+          : `https://github-readme-streak-stats.herokuapp.com/?user=${username}&theme=dark&hide_border=true&background=00000000&ring=d87c52&fire=d87c52&currStreakLabel=ebe2d1&sideLabels=ebe2d1&currStreakNum=ebe2d1&sideNums=ebe2d1&dates=9a8e7a`;
       break;
     case 'chart':
       imageUrl =
         theme === 'light'
-          ? `https://ghchart.rshah.org/3b82f6/${username}`
-          : `https://ghchart.rshah.org/314a7d/${username}`;
+          ? `https://ghchart.rshah.org/a9432b/${username}`
+          : `https://ghchart.rshah.org/d87c52/${username}`;
       break;
     default:
       return NextResponse.json({ error: 'Invalid type parameter' }, { status: 400 });

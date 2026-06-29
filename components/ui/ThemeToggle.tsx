@@ -13,18 +13,13 @@ export default function ThemeToggle() {
   }, []);
 
   if (!mounted) {
-    return (
-
-      <div className="flex items-center justify-center">
-        <div className="h-5 w-5 animate-spin rounded-full border-4 border-gray-200 border-t-transparent dark:border-t-transparent dark:border-gray-700" />
-      </div>
-    );
+    return <div className="h-9 w-9" aria-hidden="true" />;
   }
 
   return (
     <button
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+      className="flex h-9 w-9 items-center justify-center rounded-full border border-line/15 text-muted transition-colors hover:border-line/30 hover:text-ink"
       aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
     >
       {theme === 'dark' ? (

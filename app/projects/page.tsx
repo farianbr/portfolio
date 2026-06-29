@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { allProjects } from "@/.contentlayer/generated";
 import Image from "next/image";
@@ -10,11 +10,9 @@ import {
   FiGithub,
   FiExternalLink,
   FiCalendar,
-  FiTag,
   FiChevronDown,
 } from "react-icons/fi";
 import { useMDXComponent } from "next-contentlayer2/hooks";
-import { useRouter } from "next/navigation";
 
 function ProjectsContent() {
   const searchParams = useSearchParams();
@@ -29,7 +27,6 @@ function ProjectsContent() {
         new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
-  // Find project by slug or default to first
   const initialProject = projectSlug
     ? publishedProjects.find((p) => p.slug === projectSlug) ||
       publishedProjects[0]
@@ -38,56 +35,68 @@ function ProjectsContent() {
   const [selectedProject, setSelectedProject] = useState(initialProject);
   const [isProjectListOpen, setIsProjectListOpen] = useState(false);
 
-  // Update selected project when query parameter changes
   useEffect(() => {
     if (projectSlug) {
       const project = publishedProjects.find((p) => p.slug === projectSlug);
-      if (project) {
-        setSelectedProject(project);
-      }
+      if (project) setSelectedProject(project);
     }
   }, [projectSlug, publishedProjects]);
 
   const handleOnClickProject = (project: any) => {
     navigate(`/projects?project=${project.slug}`);
     setSelectedProject(project);
-    setIsProjectListOpen(false); // Close dropdown on mobile
+    setIsProjectListOpen(false);
   };
 
   const MDXContent = useMDXComponent(selectedProject?.body.code || "");
 
+  const listItemClass = (active: boolean) =>
+    `w-full rounded-lg border p-3 text-left transition-colors ${
+      active
+        ? "border-accent/50 bg-accent/10"
+        : "border-line/15 bg-surface/40 hover:border-accent/30"
+    }`;
+
+  const listTitleClass = (active: boolean) =>
+    `mb-1 line-clamp-2 font-display text-base ${
+      active ? "text-accent" : "text-ink"
+    }`;
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
-      <div className="container-custom pb-12 pt-6 md:pt-8 md:pb-16">
-        <div className="flex flex-col gap-6 lg:flex-row">
-          {/* Left Side - Compact Project List (Desktop) / Expandable Dropdown (Mobile) */}
+    <div className="min-h-screen">
+      <div className="container-wide pb-12 pt-12 md:pb-16 md:pt-16">
+        <div className="mb-10">
+          <p className="eyebrow mb-3">the full collection</p>
+          <h1 className="font-display text-4xl text-ink md:text-6xl">
+            Projects
+          </h1>
+        </div>
+
+        <div className="flex flex-col gap-8 lg:flex-row">
+          {/* Left — project index */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: -16 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="lg:w-64"
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="lg:w-64 lg:flex-shrink-0"
           >
-            {/* Mobile Dropdown Toggle */}
+            {/* Mobile dropdown */}
             <div className="lg:hidden">
               <button
                 onClick={() => setIsProjectListOpen(!isProjectListOpen)}
-                className="w-full rounded-lg border border-gray-200 bg-white p-4 text-left shadow-sm transition-all dark:border-gray-800 dark:bg-gray-900/50"
+                className="card flex w-full items-center justify-between p-4 text-left"
+                aria-expanded={isProjectListOpen}
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-sm font-bold text-gray-900 dark:text-white line-clamp-1">
-                      {selectedProject?.title}
-                    </h3>
-                  </div>
-                  <FiChevronDown
-                    className={`ml-2 h-5 w-5 text-gray-500 transition-transform flex-shrink-0 ${
-                      isProjectListOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </div>
+                <span className="line-clamp-1 font-display text-lg text-ink">
+                  {selectedProject?.title}
+                </span>
+                <FiChevronDown
+                  className={`ml-2 h-5 w-5 flex-shrink-0 text-accent transition-transform ${
+                    isProjectListOpen ? "rotate-180" : ""
+                  }`}
+                />
               </button>
 
-              {/* Mobile Dropdown List */}
               <AnimatePresence>
                 {isProjectListOpen && (
                   <motion.div
@@ -95,192 +104,159 @@ function ProjectsContent() {
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.2 }}
-                    className="mt-2 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900"
+                    className="card mt-2 overflow-hidden p-0"
                   >
-                    <div className="max-h-[60vh] overflow-y-auto p-2">
-                      <div className="mb-2 px-2 py-1 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                        All Projects ({publishedProjects.length})
-                      </div>
-                      {publishedProjects.map((project) => (
-                        <button
-                          key={project.slug}
-                          onClick={() => handleOnClickProject(project)}
-                          className={`w-full rounded-lg border p-3 text-left transition-all mb-2 ${
-                            selectedProject?.slug === project.slug
-                              ? "border-primary-400 bg-primary-50 shadow-sm dark:border-primary-600 dark:bg-primary-900/20"
-                              : "border-gray-200 bg-white hover:border-primary-200 dark:border-gray-800 dark:bg-gray-900/50 dark:hover:border-primary-800"
-                          }`}
-                        >
-                          <h3
-                            className={`mb-1 text-sm font-semibold line-clamp-2 ${
-                              selectedProject?.slug === project.slug
-                                ? "text-primary-700 dark:text-primary-400"
-                                : "text-gray-900 dark:text-white"
-                            }`}
+                    <div className="max-h-[60vh] space-y-2 overflow-y-auto p-2">
+                      <p className="eyebrow px-2 py-1">all {publishedProjects.length}</p>
+                      {publishedProjects.map((project) => {
+                        const active = selectedProject?.slug === project.slug;
+                        return (
+                          <button
+                            key={project.slug}
+                            onClick={() => handleOnClickProject(project)}
+                            className={listItemClass(active)}
                           >
-                            {project.title}
-                          </h3>
-                          <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {format(new Date(project.date), "MMM yyyy")}
-                          </p>
-                        </button>
-                      ))}
+                            <h3 className={listTitleClass(active)}>
+                              {project.title}
+                            </h3>
+                            <p className="label">
+                              {format(new Date(project.date), "MMM yyyy")}
+                            </p>
+                          </button>
+                        );
+                      })}
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            {/* Desktop List - Always Visible */}
-            <div className="hidden lg:block space-y-2">
-              <div className="mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Projects ({publishedProjects.length})
-              </div>
-
-              {publishedProjects.map((project, index) => (
-                <motion.button
-                  key={project.slug}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.05 * index }}
-                  onClick={() => handleOnClickProject(project)}
-                  className={`group w-full rounded-lg border p-3 text-left transition-all ${
-                    selectedProject?.slug === project.slug
-                      ? "border-primary-400 bg-primary-50 shadow-sm dark:border-primary-600 dark:bg-primary-900/20"
-                      : "border-gray-200 bg-white hover:border-primary-200 dark:border-gray-800 dark:bg-gray-900/50 dark:hover:border-primary-800"
-                  }`}
-                >
-                  <h3
-                    className={`mb-1 text-sm font-semibold line-clamp-2 ${
-                      selectedProject?.slug === project.slug
-                        ? "text-primary-700 dark:text-primary-400"
-                        : "text-gray-900 dark:text-white"
-                    }`}
+            {/* Desktop list */}
+            <div className="hidden space-y-2 lg:sticky lg:top-24 lg:block">
+              <p className="eyebrow mb-4">all {publishedProjects.length}</p>
+              {publishedProjects.map((project, index) => {
+                const active = selectedProject?.slug === project.slug;
+                return (
+                  <motion.button
+                    key={project.slug}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: 0.04 * index }}
+                    onClick={() => handleOnClickProject(project)}
+                    className={listItemClass(active)}
                   >
-                    {project.title}
-                  </h3>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    {format(new Date(project.date), "MMM yyyy")}
-                  </p>
-                </motion.button>
-              ))}
+                    <h3 className={listTitleClass(active)}>{project.title}</h3>
+                    <p className="label">
+                      {format(new Date(project.date), "MMM yyyy")}
+                    </p>
+                  </motion.button>
+                );
+              })}
             </div>
           </motion.div>
 
-          {/* Right Side - Project Detail */}
+          {/* Right — detail */}
           <motion.main
             key={selectedProject?.slug}
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 16 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="flex-1"
+            className="min-w-0 flex-1"
           >
-            <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg dark:border-gray-800 dark:bg-gray-900">
-              {/* Project Header */}
-              <div className="border-b border-gray-200 p-4 md:p-6 lg:p-8 dark:border-gray-800">
-                <div className="mb-3 md:mb-4 flex flex-wrap items-center gap-2 md:gap-4 text-xs md:text-sm text-gray-500 dark:text-gray-400">
-                  <div className="flex items-center gap-1.5">
-                    <FiCalendar className="h-3.5 w-3.5 md:h-4 md:w-4" />
+            <article className="card overflow-hidden p-0">
+              {/* Header */}
+              <div className="border-b border-line/10 p-5 md:p-7 lg:p-8">
+                <div className="mb-4 flex flex-wrap items-center gap-4">
+                  <span className="label flex items-center gap-1.5">
+                    <FiCalendar className="h-3 w-3" />
                     <time dateTime={selectedProject?.date}>
                       {format(
                         new Date(selectedProject?.date || new Date()),
                         "MMMM d, yyyy"
                       )}
                     </time>
-                  </div>
+                  </span>
                 </div>
 
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
-                  {/* Title */}
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white md:text-3xl lg:text-4xl">
+                <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                  <h2 className="font-display text-3xl text-ink md:text-4xl">
                     {selectedProject?.title}
                   </h2>
 
-                  {/* Action Buttons */}
-                  <div className="flex items-center gap-2 flex-wrap">
+                  <div className="flex flex-wrap items-center gap-2">
                     {selectedProject?.github && (
                       <a
                         href={selectedProject.github}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="View source on GitHub"
-                        className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-full border border-gray-200 bg-white/70 backdrop-blur-sm text-gray-700 dark:bg-gray-800/60 dark:border-gray-700 dark:text-gray-200 transition-transform duration-150 hover:translate-y-[-1px] hover:shadow-sm"
+                        className="btn-secondary !px-4 !py-2"
                       >
                         <FiGithub className="h-4 w-4" />
-                        <span>Source</span>
+                        Source
                       </a>
                     )}
-
                     {selectedProject?.demo && (
                       <a
                         href={selectedProject.demo}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Open live demo"
-                        className="inline-flex items-center gap-2 px-3 py-1.5 text-sm rounded-full bg-gradient-to-r from-primary-600 to-purple-600 text-white shadow-sm transition-transform duration-150 hover:translate-y-[-1px] hover:brightness-105"
+                        className="btn-primary !px-4 !py-2"
                       >
                         <FiExternalLink className="h-4 w-4" />
-                        <span>Live</span>
+                        Live
                       </a>
                     )}
                   </div>
                 </div>
 
-                {/* Tags */}
                 {selectedProject?.tags && selectedProject.tags.length > 0 && (
-                  <div className="flex flex-wrap items-center gap-2">
-                    <FiTag className="h-3.5 w-3.5 md:h-4 md:w-4 text-gray-400 flex-shrink-0" />
+                  <div className="flex flex-wrap gap-x-3 gap-y-1.5">
                     {selectedProject.tags.map((tag: any) => (
-                      <span
-                        key={tag}
-                        className="rounded-full border border-primary-200 bg-primary-50 px-2 md:px-3 py-0.5 md:py-1 text-xs md:text-sm font-medium text-primary-700 dark:border-primary-800 dark:bg-primary-900/30 dark:text-primary-300"
-                      >
-                        {tag}
+                      <span key={tag} className="label !text-accent/80">
+                        #{tag}
                       </span>
                     ))}
                   </div>
                 )}
               </div>
 
-              {/* Project Content (MDX) */}
-              <div className="bg-gradient-to-b from-transparent via-gray-50/30 to-transparent dark:via-gray-800/10 p-4 md:p-6 lg:p-8 dark:border-gray-800">
-                {/* Project Image */}
+              {/* Content */}
+              <div className="p-5 md:p-7 lg:p-8">
                 {selectedProject?.image && (
-                  <div className="relative mb-6 md:mb-8 lg:mb-10 aspect-[16/9] overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 shadow-lg">
+                  <div className="relative mb-8 aspect-[16/9] overflow-hidden rounded-lg border border-line/10 bg-canvas">
                     <Image
                       src={
                         selectedProject.imageMultiView || selectedProject.image
                       }
                       alt={selectedProject.title}
                       fill
-                      className="object-contain p-2 transition-transform duration-500"
+                      sizes="(min-width: 1024px) 60vw, 100vw"
+                      className="object-contain p-2"
                       priority
                     />
                   </div>
                 )}
 
-                {/* MDX Content with better styling */}
                 <div className="prose max-w-none">
                   <MDXContent />
                 </div>
 
-                {/* Additional Info Section */}
-                <div className="mt-8 md:mt-12 grid gap-4 md:gap-6 pt-6 md:pt-8 border-t border-gray-200 dark:border-gray-800 sm:grid-cols-2">
-                  {/* GitHub Stats or Additional Info */}
-                  <div className="rounded-lg bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800/50 dark:to-gray-900/50 p-4 md:p-6 border border-gray-200 dark:border-gray-700">
-                    <h3 className="mb-3 text-base md:text-lg font-semibold text-gray-900 dark:text-white">
-                      Project Links
-                    </h3>
-                    <div className="space-y-2 md:space-y-3">
+                {/* Footer info */}
+                <div className="mt-10 grid gap-4 border-t border-line/10 pt-8 sm:grid-cols-2 md:gap-6">
+                  <div className="rounded-lg border border-line/15 bg-surface/40 p-5">
+                    <h3 className="eyebrow mb-3">find it here</h3>
+                    <div className="space-y-2">
                       {selectedProject?.github && (
                         <a
                           href={selectedProject.github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 text-sm md:text-base text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                          className="flex items-center gap-2 text-sm text-muted transition-colors hover:text-accent"
                         >
-                          <FiGithub className="h-4 w-4 md:h-5 md:w-5 flex-shrink-0" />
-                          <span>Source Code</span>
+                          <FiGithub className="h-4 w-4 flex-shrink-0" />
+                          Source code
                         </a>
                       )}
                       {selectedProject?.demo && (
@@ -288,30 +264,23 @@ function ProjectsContent() {
                           href={selectedProject.demo}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 text-sm md:text-base text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                          className="flex items-center gap-2 text-sm text-muted transition-colors hover:text-accent"
                         >
-                          <FiExternalLink className="h-4 w-4 md:h-5 md:w-5 flex-shrink-0" />
-                          <span>Live Demo</span>
+                          <FiExternalLink className="h-4 w-4 flex-shrink-0" />
+                          Live demo
                         </a>
                       )}
                     </div>
                   </div>
 
-                  {/* Project Info */}
-                  <div className="rounded-lg bg-gradient-to-br from-primary-50 to-purple-50 dark:from-primary-900/20 dark:to-purple-900/20 p-4 md:p-6 border border-primary-200 dark:border-primary-800">
-                    <h3 className="mb-3 text-base md:text-lg font-semibold text-gray-900 dark:text-white">
-                      Technologies
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedProject?.tags &&
-                        selectedProject.tags.map((tag: any) => (
-                          <span
-                            key={tag}
-                            className="rounded-md bg-white dark:bg-gray-900 px-2 md:px-3 py-1 md:py-1.5 text-xs md:text-sm font-medium text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800"
-                          >
-                            {tag}
-                          </span>
-                        ))}
+                  <div className="rounded-lg border border-accent/20 bg-accent/[0.05] p-5">
+                    <h3 className="eyebrow mb-3">built with</h3>
+                    <div className="flex flex-wrap gap-x-3 gap-y-1.5">
+                      {selectedProject?.tags?.map((tag: any) => (
+                        <span key={tag} className="label !text-ink">
+                          {tag}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -328,12 +297,10 @@ export default function ProjectsPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen flex items-center justify-center">
+        <div className="flex min-h-screen items-center justify-center">
           <div className="text-center">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-primary-600 border-r-transparent"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-400">
-              Loading projects...
-            </p>
+            <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-line/20 border-t-accent" />
+            <p className="hand mt-4 text-xl text-muted">loading…</p>
           </div>
         </div>
       }

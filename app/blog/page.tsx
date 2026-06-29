@@ -44,105 +44,87 @@ export default function BlogPage() {
   }, [publishedPosts, currentPage]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900">
-      <div className="container-custom pb-12 pt-6 md:pt-8 md:pb-16">
+    <div className="min-h-screen">
+      <div className="container-wide pb-12 pt-12 md:pt-16 md:pb-16">
         {/* Header Section */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center my-8 md:my-12"
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="mb-10 border-b border-line/15 pb-6"
         >
-          <section className="text-center mb-10">
-            <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              Blog & Insights
-            </h1>
-
-            <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
-              Technical articles, tutorials, and insights on web development,
-              best practices, and the latest technologies I'm exploring.
-            </p>
-
-            <div className="mt-6 flex justify-center">
-              <div className="h-1 w-20 bg-gradient-to-r from-primary-500 to-purple-600 rounded-full"></div>
-            </div>
-          </section>
+          <p className="eyebrow mb-3">things worth writing down</p>
+          <h1 className="font-display text-4xl text-ink md:text-6xl">
+            The journal
+          </h1>
+          <p className="mt-4 max-w-2xl font-serif text-lg leading-relaxed text-muted">
+            Articles, tutorials, and half-formed thoughts on web development,
+            the craft of building, and whatever I&apos;m currently exploring.
+          </p>
         </motion.div>
 
         {/* Sort Controls */}
-        <div className="mx-auto mb-6 md:mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-200 pb-4 dark:border-gray-800">
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            {publishedPosts.length}{" "}
-            {publishedPosts.length === 1 ? "post" : "posts"}
+        <div className="mx-auto mb-8 flex flex-col gap-4 border-b border-line/15 pb-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="label">
+            {String(publishedPosts.length).padStart(2, '0')}{" "}
+            {publishedPosts.length === 1 ? "entry" : "entries"}
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-600 dark:text-gray-400">
-              Sort by:
-            </span>
-            <button
-              onClick={() => setSortBy("date")}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                sortBy === "date"
-                  ? "bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300"
-                  : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-              }`}
-            >
-              Date
-            </button>
-            <button
-              onClick={() => setSortBy("readTime")}
-              className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                sortBy === "readTime"
-                  ? "bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300"
-                  : "text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
-              }`}
-            >
-              Read Time
-            </button>
+            <span className="label">sort:</span>
+            {(["date", "readTime"] as const).map((opt) => (
+              <button
+                key={opt}
+                onClick={() => setSortBy(opt)}
+                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                  sortBy === opt
+                    ? "border border-accent/50 bg-accent/10 text-ink"
+                    : "border border-line/15 text-muted hover:border-accent/40 hover:text-ink"
+                }`}
+              >
+                {opt === "date" ? "Date" : "Read time"}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Posts List - Simple Design */}
+        {/* Posts List */}
         <div className="mx-auto max-w-4xl">
-          <div className="divide-y divide-gray-200 dark:divide-gray-800">
+          <div className="divide-y divide-line/10 border-b border-line/10">
             {paginatedPosts.map((post, index) => (
               <motion.article
                 key={post.slug}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="group py-4 md:py-6 first:pt-0 last:pb-0"
+                className="group"
               >
                 <Link
                   href={post.url}
-                  className="block transition-all hover:pl-2"
+                  className="block py-5 transition-colors hover:bg-accent/[0.03] md:py-6"
                 >
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-3 px-1 sm:px-2">
                     <div className="flex-1">
                       {/* Title */}
-                      <h2 className="mb-2 text-lg md:text-xl font-bold text-gray-900 transition-colors group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-400">
+                      <h2 className="mb-2 font-display text-xl text-ink transition-colors group-hover:text-accent md:text-2xl">
                         {post.title}
                         <FiArrowRight className="ml-2 inline-block opacity-0 transition-all group-hover:translate-x-2 group-hover:opacity-100" />
                       </h2>
 
                       {/* Description */}
-                      <p className="mb-3 text-sm text-gray-600 dark:text-gray-400 md:text-base line-clamp-2">
+                      <p className="mb-3 line-clamp-2 text-sm text-muted md:text-base">
                         {post.description}
                       </p>
 
                       {/* Tags */}
                       {post.tags && post.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-3">
+                        <div className="mb-1 flex flex-wrap gap-x-3 gap-y-1">
                           {post.tags.slice(0, 3).map((tag: any) => (
-                            <span
-                              key={tag}
-                              className="rounded-full bg-gray-100 px-2 md:px-2.5 py-0.5 text-xs font-medium text-gray-700 dark:bg-gray-800 dark:text-gray-300"
-                            >
-                              {tag}
+                            <span key={tag} className="label !text-accent/80">
+                              #{tag}
                             </span>
                           ))}
                           {post.tags.length > 3 && (
-                            <span className="rounded-full bg-gray-100 px-2 md:px-2.5 py-0.5 text-xs font-medium text-gray-500 dark:bg-gray-800 dark:text-gray-400">
+                            <span className="label">
                               +{post.tags.length - 3}
                             </span>
                           )}
@@ -151,17 +133,17 @@ export default function BlogPage() {
                     </div>
 
                     {/* Meta Info */}
-                    <div className="flex flex-wrap items-center gap-3 md:gap-4 text-xs md:text-sm text-gray-500 dark:text-gray-400">
-                      <div className="flex items-center gap-1.5">
-                        <FiCalendar className="h-3.5 w-3.5 md:h-4 md:w-4" />
+                    <div className="flex flex-wrap items-center gap-4">
+                      <span className="label flex items-center gap-1.5">
+                        <FiCalendar className="h-3 w-3" />
                         <time dateTime={post.date}>
                           {format(new Date(post.date), "MMM d, yyyy")}
                         </time>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <FiClock className="h-3.5 w-3.5 md:h-4 md:w-4" />
-                        <span>{post.readingTime}</span>
-                      </div>
+                      </span>
+                      <span className="label flex items-center gap-1.5">
+                        <FiClock className="h-3 w-3" />
+                        {post.readingTime}
+                      </span>
                     </div>
                   </div>
                 </Link>
@@ -176,22 +158,22 @@ export default function BlogPage() {
             <button
               onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
               disabled={currentPage === 1}
-              className="rounded-lg border border-gray-300 p-1.5 md:p-2 text-gray-700 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+              className="rounded-md border border-line/20 p-2 text-muted transition-colors hover:border-accent/50 hover:text-ink disabled:cursor-not-allowed disabled:opacity-40"
               aria-label="Previous page"
             >
               <FiChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
             </button>
 
-            <div className="flex gap-1 md:gap-2 overflow-x-auto max-w-[200px] md:max-w-none">
+            <div className="flex max-w-[200px] gap-1 overflow-x-auto md:max-w-none md:gap-2">
               {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                 (page) => (
                   <button
                     key={page}
                     onClick={() => setCurrentPage(page)}
-                    className={`rounded-lg px-3 md:px-4 py-1.5 md:py-2 text-xs md:text-sm font-medium transition-colors flex-shrink-0 ${
+                    className={`flex-shrink-0 rounded-full px-3 py-1.5 text-sm transition-colors md:px-4 md:py-2 ${
                       currentPage === page
-                        ? "bg-primary-600 text-white"
-                        : "border border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+                        ? "border border-accent/50 bg-accent/10 text-ink"
+                        : "border border-line/20 text-muted hover:border-accent/40 hover:text-ink"
                     }`}
                   >
                     {page}
@@ -205,7 +187,7 @@ export default function BlogPage() {
                 setCurrentPage((prev) => Math.min(totalPages, prev + 1))
               }
               disabled={currentPage === totalPages}
-              className="rounded-lg border border-gray-300 p-1.5 md:p-2 text-gray-700 transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+              className="rounded-md border border-line/20 p-2 text-muted transition-colors hover:border-accent/50 hover:text-ink disabled:cursor-not-allowed disabled:opacity-40"
               aria-label="Next page"
             >
               <FiChevronRight className="h-4 w-4 md:h-5 md:w-5" />
@@ -216,9 +198,7 @@ export default function BlogPage() {
         {/* Empty State */}
         {publishedPosts.length === 0 && (
           <div className="py-12 text-center">
-            <p className="text-gray-600 dark:text-gray-400">
-              No posts found. Check back soon!
-            </p>
+            <p className="text-muted">No entries found. Check back soon.</p>
           </div>
         )}
       </div>
