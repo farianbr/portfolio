@@ -276,7 +276,7 @@ export default function CommandPalette() {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Search projects, posts, pages…"
-            className="flex-1 border-0 bg-transparent text-sm text-ink placeholder-muted/60 outline-none focus:outline-none focus:ring-0"
+            className="flex-1 border-0 bg-transparent text-base text-ink placeholder-muted/60 outline-none focus:outline-none focus:ring-0 md:text-sm"
             style={{ outline: "none", boxShadow: "none" }}
           />
           <button
