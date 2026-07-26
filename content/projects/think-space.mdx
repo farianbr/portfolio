@@ -1,69 +1,89 @@
 ---
 title: "Think Space"
-description: "Think Space is a real-time collaborative whiteboard built for teams to brainstorm visually. Featuring sticky notes, presence mapping, and live synchronization powered by WebSockets."
+tagline: "A real-time collaborative whiteboard — infinite canvas, sticky notes, shapes, connectors and ink, where every edit lands on everyone else's screen the moment it happens."
+description: "A real-time collaborative whiteboard: infinite canvas, sticky notes, shapes, connectors and freehand ink, synced over Socket.IO with optimistic local updates and roles enforced on the server."
 date: 2025-10-18
 published: true
+order: 1
+caseStudy: true
+
+role: "Solo — product, client, server, schema"
+timeline: "2025 — ongoing"
+status: "Live"
+
 tags:
+  - React 19
   - Socket.IO
-  - Konva.js
-  - Tailwind CSS
+  - react-konva
+  - Express 5
   - Prisma
   - PostgreSQL
-image: "/images/projects/thinkspace-laptop.png"
-imageLaptopView: "/images/projects/thinkspace-laptop.png"
-imageMultiView: "/images/projects/thinkspace-multidevice.png"
+
+image: "/images/projects/think-space/laptop.png"
+imageLaptopView: "/images/projects/think-space/laptop.png"
 
 github: https://github.com/farianbr/think-space
 demo: https://think-space.onrender.com/
+
+stack:
+  - group: Canvas & client
+    items: ["React 19", "Vite", "react-konva", "Tailwind v4", "TanStack Query"]
+  - group: Server
+    items: ["Node", "Express 5", "Socket.IO", "Zod", "JWT"]
+  - group: Data
+    items: ["PostgreSQL (Supabase)", "Prisma"]
+  - group: Services
+    items: ["Stripe", "Nodemailer", "otplib (TOTP)", "WebRTC"]
+
+features:
+  - name: One selection model
+    detail: "Notes, text, four shapes, lines, arrows and pen strokes are rows in one `BoardItem` table, so a marquee catches mixed types and drags, resizes, restacks and undoes them as one group."
+
+  - name: Optimistic sync
+    detail: "Edits render locally and reconcile with the server's ack. A new item carries a `clientKey` across the id swap, so a note being typed into isn't remounted and half a sentence isn't lost."
+
+  - name: Lossless resize
+    detail: "Strokes store their points in `data.points` as fractions of their own bounding box, so scaling never rewrites geometry through the integer coordinate columns."
+
+  - name: Roles enforced server-side
+    detail: "Admin, editor, commenter and viewer are resolved on join, cached per socket, and re-checked on every message — a disabled button is not the security model."
+
+  - name: Comments and reactions
+    detail: "Threaded comments and emoji anchor to any item and render as badges on the canvas itself, not in a side panel you have to go looking for."
+
+  - name: Export at 1:1
+    detail: "The whole board, the current selection, or any rectangle you drag — always rendered at true scale, whatever zoom you happen to be at."
+
+  - name: Keyboard-first tools
+    detail: "Sticky notes that auto-fit their text, text boxes, four shapes, lines, arrows and a freehand pen, each one keystroke away: `N` `T` `S` `L` `A` `P`."
+
+  - name: Eight templates
+    detail: "Retro, roadmap, user journey, mind map, flowchart and more — built from the same item types you'd draw by hand, so a template can be pulled apart like anything else."
+
+  - name: Accounts, invites, billing
+    detail: "Email invites with tokenised accept links for people without an account, TOTP two-factor, activity feed, command palette, WebRTC voice rooms and Stripe-backed plans."
+
+gallery:
+  - src: /images/projects/think-space/board-journey.png
+    alt: A user-journey board with stage chips, sticky notes, pain-point notes and a hand-drawn emotion curve
+    span: full
+    caption: "Five item types in one frame — the chips are shapes, the actions are notes, the red curve is a pen stroke — all rows in the same table, so one marquee catches the lot."
+    note: "one table, one marquee"
+
+  - src: /images/projects/think-space/dashboard.png
+    alt: The Think Space dashboard showing board stats, recent boards with previews, and an activity feed
+    span: full
+    ratio: "144 / 94"
+    caption: "Card previews are SVG drawn from each board's own items, so a preview can't drift from the board it advertises."
+
+  - src: /images/projects/think-space/board-flowchart.png
+    alt: A sign-in flowchart with ellipses, rectangles, a decision diamond and labelled yes/no branches
+    span: half
+    caption: "Branch labels are ordinary text items — no special label type to keep in sync when the arrow moves."
+
+  - src: /images/projects/think-space/templates.png
+    alt: The template gallery with eight starter boards grouped by category
+    span: half
+    ratio: "144 / 94"
+    caption: "Eight starters, built from the same item types you'd draw by hand."
 ---
-
-
-Think Space is a **full-stack real-time collaboration app** that allows users to create and share visual boards with team members. It combines Socket.IO real-time sync, PostgreSQL persistence, and a modern React + Tailwind interface built around Konva.js for canvas-based editing.
-
----
-
-
-
-## Core Features
-
-**1. Realtime Collaboration**
-- Users can create, move, edit, and delete sticky notes on a shared board.
-- All actions propagate instantly to all connected clients via Socket.IO events.
-- Includes event throttling and acknowledgment handling for smoother UX.
-
-**2. Presence Tracking**
-- Tracks user presence in real time.
-
-**3. Persistent Boards & Notes**
-- Each board and its notes are stored in a **PostgreSQL** database via **Prisma**.
-- Users can create and delete boards dynamically.
-- Membership and access handled with invite-based logic.
-
-**4. Modular Socket Architecture**
-- Dedicated namespaces for boards and notes (`boardsSocket` and `notesSocket`).
-- Listeners and emitters modularized per feature for better scalability.
-
-**5. Authentication & Access**
-- JWT-based authentication flow for secure user sessions.
-- `requireAuth` middleware ensures protected endpoints.
-- Invite members by email (with feedback if user not found).
-
----
-
-## Tech Stack
-
-**Frontend:**
-- React (Vite), Tanstack Query, Axios, TailwindCSS, Konva.js (for canvas rendering)
-
-**Backend:** 
-- Node.js, Express, Prisma (ORM), node-cron (Scheduled task), Zod (Validation)
-
-**Realtime:** 
-- Socket.IO with event-based updates
-
-**Database:**
-- PostgreSQL (Supabase)
-
----
-
-> “Code can connect machines, but great system connects minds.”

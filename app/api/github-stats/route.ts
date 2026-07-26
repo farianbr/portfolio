@@ -11,7 +11,7 @@ const FALLBACK_DURATION = 86400000 * 30;
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const type = searchParams.get('type'); // 'stats', 'streak', or 'chart'
+  const type = searchParams.get('type'); // 'streak' or 'chart'
   const theme = searchParams.get('theme') || 'light';
 
   if (!type) {
@@ -21,14 +21,12 @@ export async function GET(request: NextRequest) {
   const username = 'farianbr';
   let imageUrl: string;
 
-  // Construct the appropriate URL based on type and theme
+  // Construct the appropriate URL based on type and theme.
+  //
+  // There used to be a `stats` card from github-readme-stats.vercel.app. That
+  // deployment is paused indefinitely (it answers DEPLOYMENT_PAUSED, not a
+  // transient 5xx), so the card was removed rather than left spinning.
   switch (type) {
-    case 'stats':
-      imageUrl =
-        theme === 'light'
-          ? `https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&count_private=true&theme=default&hide_border=true&bg_color=00000000&title_color=a9432b&icon_color=a9432b&text_color=7a6e5f`
-          : `https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&count_private=true&theme=dark&hide_border=true&bg_color=00000000&title_color=d87c52&icon_color=d87c52&text_color=ebe2d1`;
-      break;
     case 'streak':
       imageUrl =
         theme === 'light'

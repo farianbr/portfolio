@@ -92,6 +92,53 @@ export const Project = defineDocumentType(() => ({
     demo: {
       type: 'string',
     },
+
+    /* ---- Case-study fields -------------------------------------------------
+     * A project with `caseStudy: true` renders the structured template: spec
+     * strip, features, annotated walkthrough, stack. Projects without these
+     * fields fall back to the plain MDX write-up, so the ones that haven't
+     * been migrated yet keep working.
+     */
+    caseStudy: {
+      type: 'boolean',
+      default: false,
+    },
+    /**
+     * Display position, lowest first. Strongest work leads regardless of when
+     * it was built — a recruiter reads the first two and leaves. Anything
+     * without an explicit order falls to the end, newest first.
+     */
+    order: {
+      type: 'number',
+      default: 999,
+    },
+    /** One line, in my own words — the thing the description can't be. */
+    tagline: {
+      type: 'string',
+    },
+    /** e.g. "Solo — product, client, server, schema" */
+    role: {
+      type: 'string',
+    },
+    timeline: {
+      type: 'string',
+    },
+    /** Free text: "Live", "Archived", "In progress". */
+    status: {
+      type: 'string',
+    },
+    /** [{ group, items[] }] */
+    stack: {
+      type: 'json',
+    },
+    /** [{ name, detail }] — the feature and the mechanism behind it. */
+    features: {
+      type: 'json',
+    },
+    /** [{ src, alt, caption, note, span, frame, ratio }] */
+    gallery: {
+      type: 'json',
+    },
   },
   computedFields: {
     slug: {

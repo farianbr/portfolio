@@ -59,15 +59,12 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="relative border-t border-line/15 bg-canvas">
-      <div className="container-wide py-14">
+    <footer className="relative border-t-2 border-line/20 bg-canvas">
+      <div className="container-wide py-12">
         <div className="grid gap-10 md:grid-cols-12">
           {/* Brand + visitor count */}
           <div className="md:col-span-5">
-            <Link
-              href="/"
-              className="font-serif text-2xl italic text-ink"
-            >
+            <Link href="/" className="font-display text-2xl text-ink">
               {siteConfig.shortName}
               <span className="text-accent">.</span>
             </Link>
@@ -76,7 +73,7 @@ export default function Footer() {
             </p>
 
             {visitorCount !== null && (
-              <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-line/15 bg-surface/60 px-3.5 py-1.5">
+              <div className="mt-6 inline-flex items-center gap-2 rounded-full border-2 border-line/20 bg-surface/60 px-3.5 py-1.5">
                 <FiEye className="h-4 w-4 text-accent" />
                 <span className="label !text-muted">
                   <span className="text-ink">
@@ -117,7 +114,7 @@ export default function Footer() {
                     href={social.href}
                     target={external ? '_blank' : undefined}
                     rel={external ? 'noopener noreferrer' : undefined}
-                    className="group flex items-center gap-2.5 rounded-lg border border-line/15 bg-surface/50 px-3 py-2.5 transition-colors hover:border-accent/40"
+                    className="group flex items-center gap-2.5 rounded-lg border-2 border-line/20 bg-surface/50 px-3 py-2.5 transition-colors hover:border-accent/40"
                     aria-label={social.name}
                   >
                     <social.icon className="h-4 w-4 text-muted transition-colors group-hover:text-accent" />
@@ -132,7 +129,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-line/15 pt-6 text-center md:flex-row">
+        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t-2 border-line/20 pt-6 text-center md:flex-row">
           <p className="label">
             © {currentYear} {siteConfig.name}
           </p>

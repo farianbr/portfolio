@@ -71,16 +71,16 @@ const buildSearchItems = (): SearchItem[] => {
       category: "Portfolio",
     },
     {
-      title: "About",
-      description: "Learn more about me",
-      url: "/#about",
+      title: "Projects",
+      description: "Featured projects showcase",
+      url: "/#projects",
       type: "section",
       category: "Portfolio",
     },
     {
-      title: "Projects",
-      description: "Featured projects showcase",
-      url: "/#projects",
+      title: "Stack",
+      description: "Tools I build with, and recent activity",
+      url: "/#stack",
       type: "section",
       category: "Portfolio",
     },
@@ -227,8 +227,7 @@ export default function CommandPalette() {
         if (isExternal) {
           window.open(url, "_blank", "noopener,noreferrer");
         } else {
-          const convertedUrl = url.replace("/projects/", "/projects?project=");
-          router.push(convertedUrl);
+          router.push(url);
         }
         close();
         setQuery("");
@@ -245,8 +244,7 @@ export default function CommandPalette() {
     if (isExternal) {
       window.open(url, "_blank", "noopener,noreferrer");
     } else {
-      const convertedUrl = url.replace("/projects/", "/projects?project=");
-      router.push(convertedUrl);
+      router.push(url);
     }
     close();
     setQuery("");
@@ -263,7 +261,7 @@ export default function CommandPalette() {
         role="dialog"
         aria-modal="true"
         aria-label="Command palette"
-        className="w-full max-w-2xl overflow-hidden rounded-xl border border-line/15 bg-canvas/95 shadow-soft-lg backdrop-blur-xl"
+        className="w-full max-w-2xl overflow-hidden rounded-xl border-2 border-line bg-canvas shadow-hard-lg"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input */}
@@ -348,7 +346,7 @@ export default function CommandPalette() {
                                   <FiZap className="h-5 w-5 text-muted" />
                                 )}
                               {item.type === "section" &&
-                                item.title === "About" && (
+                                item.title === "Stack" && (
                                   <FiUser className="h-5 w-5 text-muted" />
                                 )}
                               {item.type === "section" &&

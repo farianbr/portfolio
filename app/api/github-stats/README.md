@@ -19,7 +19,6 @@ This API route provides a robust caching solution for GitHub stats images from t
 
 **Query Parameters:**
 - `type` (required): The type of GitHub stats image
-  - `stats`: GitHub profile statistics
   - `streak`: Commit streak information
   - `chart`: Contribution graph
 - `theme` (optional): Theme variant (default: `light`)
@@ -28,10 +27,15 @@ This API route provides a robust caching solution for GitHub stats images from t
 
 **Examples:**
 ```
-/api/github-stats?type=stats&theme=light
 /api/github-stats?type=streak&theme=dark
 /api/github-stats?type=chart&theme=light
 ```
+
+> A third card, `stats`, came from `github-readme-stats.vercel.app`. That
+> deployment is paused indefinitely, so the card and its route case were
+> removed. The client also hides any card whose image errors, so a future
+> upstream outage degrades to nothing rather than to a spinner that never
+> stops.
 
 ## Cache Strategy
 

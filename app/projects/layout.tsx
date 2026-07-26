@@ -1,15 +1,16 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Projects',
-  description: 'Explore my portfolio of web development projects, including full-stack applications, AI integrations, and modern web experiences.',
+  title: 'Work',
+  description:
+    'Full-stack projects built end to end, written up as case studies — the data-model and realtime decisions behind each one, and what they cost.',
   keywords: [
-    'Projects',
-    'Portfolio',
-    'Web Development',
-    'Full-Stack',
+    'Case studies',
+    'Full-stack projects',
+    'Realtime',
     'React',
-    'Next.js',
+    'Node',
+    'PostgreSQL',
     'TypeScript',
   ],
 };

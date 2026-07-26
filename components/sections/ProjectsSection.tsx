@@ -1,138 +1,178 @@
-import { allProjects, type Project } from '@/.contentlayer/generated';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FiGithub, FiExternalLink, FiArrowUpRight } from 'react-icons/fi';
+import { FiArrowUpRight, FiExternalLink } from 'react-icons/fi';
+
+import { publishedProjects, featuresOf, galleryOf, stackSummary } from '@/lib/projects';
 import Reveal from '@/components/ui/Reveal';
 
-function getFeaturedProjects(): Project[] {
-  return allProjects
-    .filter((project) => project.published)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    .slice(0, 3);
-}
-
+/**
+ * Home-page work section.
+ *
+ * Three equal cards say "pick one at random". This gives the lead project the
+ * room to make its case — including the titles of the decisions inside it,
+ * which is the actual reason to click — and lists the rest by name. Hierarchy
+ * is the recommendation.
+ */
 export default function ProjectsSection() {
-  const projects = getFeaturedProjects();
-  const totalPublished = allProjects.filter((p) => p.published).length;
+  const projects = publishedProjects();
+
+  if (projects.length === 0) return null;
+
+  const [lead, ...rest] = projects;
+  const leadShot = galleryOf(lead)[0];
+  const leadImage = leadShot?.src ?? lead.imageLaptopView ?? lead.image;
+  const leadFeatures = featuresOf(lead).slice(0, 3);
 
   return (
     <section id="projects" className="section scroll-mt-24">
       <div className="container-wide">
         <Reveal>
-          <p className="eyebrow mb-3">some things I&apos;ve built</p>
-          <h2 className="font-display text-4xl text-ink sm:text-5xl md:text-6xl">
-            Selected work
+          <p className="eyebrow mb-2">selected work</p>
+          <h2 className="font-display text-3xl text-ink sm:text-4xl md:text-5xl">
+            Built end to end
           </h2>
         </Reveal>
 
-        <div className="mt-12 space-y-8">
-          {projects.map((project, index) => (
-            <Reveal key={project.slug} as="article" delay={index * 0.05}>
-              <div className="card group grid gap-0 overflow-hidden p-0 md:grid-cols-5">
-                {/* Visual */}
-                {project.image && (
-                  <Link
-                    href={`/projects?project=${project.slug}`}
-                    className="relative flex items-center justify-center overflow-hidden border-b border-line/10 bg-canvas p-6 md:col-span-2 md:border-b-0 md:border-r"
-                    aria-label={`View ${project.title}`}
-                  >
-                    <div className="relative aspect-[5/3] w-full">
+        {/* Lead project */}
+        <Reveal delay={0.05} className="mt-10">
+          <div className="grid items-center gap-8 lg:grid-cols-12 lg:gap-12">
+            <div className="lg:col-span-7">
+              <Link
+                href={lead.url}
+                className="group block"
+                aria-label={`${lead.title} — read the write-up`}
+                tabIndex={-1}
+              >
+                {leadShot ? (
+                  <div className="overflow-hidden rounded-xl border-2 border-line/20 bg-surface shadow-hard transition-shadow duration-500 ease-spring group-hover:shadow-hard-lg">
+                    <div className="flex items-center gap-1.5 border-b-2 border-line/20 px-3.5 py-2.5">
+                      <span className="h-2 w-2 rounded-full bg-ink/15" />
+                      <span className="h-2 w-2 rounded-full bg-ink/15" />
+                      <span className="h-2 w-2 rounded-full bg-ink/15" />
+                    </div>
+                    <div className="relative aspect-[16/10] w-full">
                       <Image
-                        src={project.imageLaptopView || project.image}
-                        alt={`${project.title} preview`}
+                        src={leadShot.src}
+                        alt={leadShot.alt}
                         fill
-                        sizes="(min-width: 768px) 40vw, 90vw"
-                        className="object-contain transition-transform duration-500 ease-spring group-hover:scale-[1.03]"
+                        sizes="(min-width: 1024px) 780px, 100vw"
+                        className="object-cover object-top"
                       />
                     </div>
-                    <span className="hand absolute left-4 top-3 text-2xl text-accent">
-                      {String(index + 1).padStart(2, '0')}
-                    </span>
-                  </Link>
-                )}
-
-                {/* Content */}
-                <div
-                  className={`flex flex-col justify-center p-6 sm:p-8 ${
-                    project.image ? 'md:col-span-3' : 'md:col-span-5'
-                  }`}
-                >
-                  <Link
-                    href={`/projects?project=${project.slug}`}
-                    className="group/title"
-                  >
-                    <h3 className="flex items-start gap-2 font-display text-2xl text-ink transition-colors group-hover/title:text-accent md:text-3xl">
-                      {project.title}
-                      <FiArrowUpRight className="mt-1 h-5 w-5 shrink-0 text-accent opacity-0 transition-all duration-300 ease-spring group-hover:opacity-100" />
-                    </h3>
-                  </Link>
-
-                  <p className="mt-3 leading-relaxed text-muted">
-                    {project.description}
-                  </p>
-
-                  {project.tags?.length > 0 && (
-                    <ul className="mt-5 flex flex-wrap gap-x-3 gap-y-1.5">
-                      {project.tags.map((tag) => (
-                        <li key={tag} className="label !text-accent/80">
-                          #{tag}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-
-                  <div className="mt-6 flex flex-wrap gap-3">
-                    <Link
-                      href={`/projects?project=${project.slug}`}
-                      className="btn-primary"
-                    >
-                      Read more
-                      <FiArrowUpRight className="h-4 w-4" />
-                    </Link>
-                    {project.github && (
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-secondary"
-                        aria-label={`${project.title} source on GitHub`}
-                      >
-                        <FiGithub className="h-4 w-4" />
-                        Code
-                      </a>
-                    )}
-                    {project.demo && (
-                      <a
-                        href={project.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-secondary"
-                        aria-label={`${project.title} live demo`}
-                      >
-                        <FiExternalLink className="h-4 w-4" />
-                        Live
-                      </a>
-                    )}
                   </div>
-                </div>
+                ) : (
+                  leadImage && (
+                    <div className="relative aspect-[16/10] w-full">
+                      <Image
+                        src={leadImage}
+                        alt={`${lead.title} preview`}
+                        fill
+                        sizes="(min-width: 1024px) 780px, 100vw"
+                        className="object-contain"
+                      />
+                    </div>
+                  )
+                )}
+              </Link>
+            </div>
+
+            <div className="lg:col-span-5">
+              <p className="label mb-3 !text-accent/90">
+                {lead.caseStudy ? 'case study' : 'write-up'}
+              </p>
+
+              <h3 className="font-display text-3xl text-ink md:text-[2.75rem]">
+                <Link href={lead.url} className="group inline-flex items-start gap-2 transition-colors hover:text-accent">
+                  {lead.title}
+                  <FiArrowUpRight className="mt-1.5 h-5 w-5 shrink-0 text-accent opacity-0 transition-all duration-300 ease-spring group-hover:translate-x-0.5 group-hover:opacity-100" />
+                </Link>
+              </h3>
+
+              <p className="mt-4 leading-relaxed text-muted">
+                {lead.tagline || lead.description}
+              </p>
+
+              {leadFeatures.length > 0 && (
+                <ul className="mt-6 space-y-2.5">
+                  {leadFeatures.map((feature) => (
+                    <li
+                      key={feature.name}
+                      className="flex gap-3 font-medium text-[1.02rem] leading-snug text-ink/85"
+                    >
+                      <span aria-hidden="true" className="text-accent">
+                        —
+                      </span>
+                      {feature.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              <ul className="mt-7 flex flex-wrap gap-x-2 gap-y-2">
+                {stackSummary(lead, 5).map((item) => (
+                  <li
+                    key={item}
+                    className="chip !text-[0.7rem] font-mono"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link href={lead.url} className="btn-primary">
+                  Read the write-up
+                  <FiArrowUpRight className="h-4 w-4" />
+                </Link>
+                {lead.demo && (
+                  <a
+                    href={lead.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-secondary"
+                  >
+                    <FiExternalLink className="h-4 w-4" />
+                    Try it
+                  </a>
+                )}
               </div>
+            </div>
+          </div>
+        </Reveal>
+
+        {/* The rest, by name */}
+        {rest.length > 0 && (
+          <div className="mt-14">
+            <p className="eyebrow mb-2">also on the shelf</p>
+            <ul>
+              {rest.map((project, index) => (
+                <Reveal as="li" key={project.slug} delay={index * 0.04}>
+                  <Link
+                    href={project.url}
+                    className="group grid items-baseline gap-x-6 gap-y-2 border-b-2 border-line/20 py-6 md:grid-cols-12"
+                  >
+                    <span className="hand text-xl text-accent md:col-span-1">
+                      {String(index + 2).padStart(2, '0')}
+                    </span>
+                    <h3 className="font-display text-2xl text-ink transition-colors duration-300 group-hover:text-accent md:col-span-4 md:text-[1.75rem]">
+                      {project.title}
+                    </h3>
+                    <p className="text-[0.95rem] leading-relaxed text-muted md:col-span-6">
+                      {project.tagline || project.description}
+                    </p>
+                    <FiArrowUpRight className="hidden h-5 w-5 justify-self-end text-accent opacity-0 transition-all duration-300 ease-spring group-hover:translate-x-0.5 group-hover:opacity-100 md:col-span-1 md:block" />
+                  </Link>
+                </Reveal>
+              ))}
+            </ul>
+
+            <Reveal className="mt-8">
+              <Link href="/projects" className="btn-secondary">
+                All work
+                <FiArrowUpRight className="h-4 w-4" />
+              </Link>
             </Reveal>
-          ))}
-        </div>
-
-        {totalPublished > projects.length && (
-          <Reveal className="mt-10 text-center">
-            <Link href="/projects" className="btn-secondary">
-              See all projects
-              <FiArrowUpRight className="h-4 w-4" />
-            </Link>
-          </Reveal>
-        )}
-
-        {projects.length === 0 && (
-          <p className="py-12 text-center text-muted">
-            Nothing here yet — check back soon.
-          </p>
+          </div>
         )}
       </div>
     </section>

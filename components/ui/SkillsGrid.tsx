@@ -53,16 +53,16 @@ const skills: Skill[] = [
 
 export default function SkillsGrid() {
   return (
-    <ul className="mx-auto flex max-w-3xl flex-wrap justify-center gap-2 sm:gap-2.5">
+    <ul className="mx-auto flex max-w-3xl flex-wrap justify-center gap-1.5 sm:gap-2.5">
       {skills.map(({ name, icon: Icon, color }) => (
         <li key={name}>
           <span
             title={name}
-            className="group flex items-center gap-2 rounded-full border border-line/15 bg-surface/60 px-4 py-2 text-sm font-medium text-muted transition-all duration-300 ease-spring hover:-translate-y-0.5 hover:border-accent/40 hover:text-ink"
+            className="group flex items-center gap-1.5 rounded-full border-2 border-line bg-surface px-2.5 py-1 text-[0.7rem] font-bold text-ink transition-all duration-150 hover:-translate-y-0.5 hover:shadow-hard-sm sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
           >
             <Icon
               aria-hidden
-              className="h-4 w-4 text-muted transition-colors duration-300 group-hover:text-[var(--brand)]"
+              className="h-3 w-3 text-muted transition-colors duration-300 group-hover:text-[var(--brand)] sm:h-4 sm:w-4"
               style={{ '--brand': color } as React.CSSProperties}
             />
             {name}

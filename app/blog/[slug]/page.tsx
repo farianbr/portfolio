@@ -57,7 +57,7 @@ export default function PostPage({ params }: PostPageProps) {
         </Link>
 
         {/* Header */}
-        <header className="mb-8 border-b border-line/15 pb-8">
+        <header className="mb-8 border-b-2 border-line/20 pb-8">
           <h1 className="mb-4 text-balance font-display text-4xl text-ink md:text-5xl">
             {post.title}
           </h1>
@@ -85,7 +85,7 @@ export default function PostPage({ params }: PostPageProps) {
         </header>
 
         {/* Content */}
-        <div className="prose prose-lg dark:prose-invert max-w-none">
+        <div className="prose prose-lg max-w-none">
           <MDXContent />
         </div>
       </div>

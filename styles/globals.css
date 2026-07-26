@@ -3,27 +3,29 @@
 @tailwind utilities;
 
 @layer base {
+  /**
+   * Forest & lime — flat colour, heavy borders, hard shadows. Single theme by
+   * design; there is no dark variant and no toggle.
+   *
+   * Two tokens exist because bright lime can't do both jobs: `--accent` is
+   * what's legible as *text* on the page (AA+), while `--zing` is the bright
+   * fill that only ever appears as a background with `--zing-ink` on top. Use
+   * lime for link text and it fails contrast immediately.
+   */
   :root {
-    /* Daylight — warm paper journal */
-    --bg: 244 238 225; /* cream paper #F4EEE1 */
-    --bg-2: 236 228 210; /* deeper paper for cards / insets */
-    --fg: 38 33 27; /* warm ink #26211B */
-    --muted: 122 110 95; /* faded pencil #7A6E5F */
-    --line: 38 33 27; /* ruled lines = ink at low alpha */
-    --accent: 169 67 43; /* terracotta / brick red #A9432B (AA on cream) */
-    --thread: 99 120 110; /* muted sage thread, used sparingly */
+    --bg: 245 250 240; /* pale mint paper #F5FAF0 */
+    --bg-2: 255 255 255; /* pure white cards */
+    --fg: 6 48 30; /* deep forest ink #06301E */
+    --muted: 74 107 88; /* #4A6B58 — 5.3:1 on paper */
+    --line: 6 48 30; /* borders are the ink colour */
+    --accent: 21 105 60; /* #15693C — 5.6:1 on paper */
+    --zing: 163 230 53; /* lime fill #A3E635 */
+    --zing-ink: 6 48 30; /* text on lime */
+    --pop: 253 224 71; /* yellow fill #FDE047 */
+    --pop-ink: 6 48 30;
+    --shadow: 6 48 30; /* hard shadow = ink */
   }
 
-  .dark {
-    /* Night writing — warm dark paper */
-    --bg: 26 22 18; /* #1A1612 */
-    --bg-2: 35 30 24; /* #231E18 */
-    --fg: 235 226 209; /* warm paper-white #EBE2D1 */
-    --muted: 154 142 122; /* #9A8E7A */
-    --line: 235 226 209;
-    --accent: 216 124 82; /* warm terracotta #D87C52 */
-    --thread: 138 160 146;
-  }
 
   html {
     scroll-behavior: smooth;
@@ -35,16 +37,20 @@
 
   body {
     @apply bg-canvas text-ink antialiased;
+    /* Safety net against a stray wide child causing sideways scroll on
+       phones. `clip` rather than `hidden` on purpose — `hidden` makes this a
+       scroll container, which would break the sticky header. */
+    overflow-x: clip;
   }
 
-  /* Headings read as a journal — serif by default */
   h1,
   h2,
   h3,
   h4 {
-    font-family: var(--font-serif), Georgia, serif;
+    font-family: var(--font-display), 'Arial Black', sans-serif;
     @apply font-normal;
     text-wrap: balance;
+    letter-spacing: -0.02em;
   }
 
   p {
@@ -66,7 +72,43 @@
   }
 
   ::selection {
-    @apply bg-accent/85 text-canvas;
+    background-color: rgb(var(--zing));
+    color: rgb(var(--zing-ink));
+  }
+
+  /**
+   * Custom pointer — one outlined arrow, everywhere. It deliberately does not
+   * swap on hover: the buttons already lift and press, so a second signal is
+   * noise.
+   *
+   * Gated behind `pointer: fine` so touch devices are untouched, and the rule
+   * keeps `auto` as a fallback in case the data URI ever fails to load — a
+   * missing cursor image otherwise leaves the visitor with no pointer at all.
+   * Text inputs keep the system caret, where the I-beam is doing real work.
+   */
+  @media (pointer: fine) {
+    body,
+    a,
+    button,
+    summary,
+    [role="button"],
+    [role="tab"],
+    label[for],
+    select,
+    .cursor-pointer {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 24 24'%3E%3Cpath d='M4 3 L4 20 L8.2 16.2 L11 22 L13.6 20.8 L10.9 15.3 L16.5 15.3 Z' fill='%23A3E635' stroke='%2306301E' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E")
+          4 3,
+        auto;
+    }
+
+    input:not([type="button"]):not([type="submit"]):not([type="checkbox"]):not([type="radio"]),
+    textarea {
+      cursor: text;
+    }
+
+    :disabled {
+      cursor: not-allowed;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -89,11 +131,14 @@
     @apply mx-auto w-full max-w-[1400px] px-5 sm:px-8 lg:px-12;
   }
 
+  /* Mobile-first vertical rhythm, kept tight — sections are separated by
+     colour, borders and type weight here, so they don't also need a screenful
+     of air between them. */
   .section {
-    @apply py-20 md:py-28;
+    @apply py-12 sm:py-14 md:py-16;
   }
 
-  /* Handwritten chapter marker / aside */
+  /* Handwritten aside */
   .hand {
     font-family: var(--font-hand), "Comic Sans MS", cursive;
   }
@@ -101,88 +146,63 @@
     @apply hand text-xl leading-none text-accent sm:text-2xl;
   }
 
-  /* Small printed meta — dates, tags, page numbers */
+  /* Small meta — dates, tags, counters */
   .label {
-    @apply text-[0.72rem] font-medium uppercase tracking-[0.2em] text-muted;
+    @apply text-[0.7rem] font-bold uppercase tracking-[0.16em] text-muted;
   }
 
-  /* Big serif display */
+  /* Heavy display */
   .font-display {
-    font-family: var(--font-serif), Georgia, serif;
+    font-family: var(--font-display), "Arial Black", sans-serif;
     font-weight: 400;
-    letter-spacing: -0.015em;
-    line-height: 0.95;
+    letter-spacing: -0.03em;
+    line-height: 0.92;
   }
 
-  /* Buttons — ink stamp + paper outline */
+  /**
+   * Buttons — thick border, flat fill, hard offset shadow. Hover presses the
+   * button into its own shadow (translate + shrink the offset) instead of
+   * fading a colour, which is what makes the style feel physical.
+   */
+  .btn-base {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-line px-6 py-3 text-sm font-bold shadow-hard transition-all duration-150 hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent/40 active:translate-x-[4px] active:translate-y-[4px] active:shadow-none;
+  }
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink px-7 py-3 text-sm font-medium text-canvas transition-all duration-300 ease-spring hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-canvas;
+    @apply btn-base;
+    background-color: rgb(var(--zing));
+    color: rgb(var(--zing-ink));
   }
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border border-ink/25 bg-transparent px-7 py-3 text-sm font-medium text-ink transition-all duration-300 ease-spring hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-canvas;
+    @apply btn-base bg-surface text-ink;
   }
   .btn-ghost {
-    @apply inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors duration-200 hover:text-accent;
+    @apply inline-flex items-center gap-2 text-sm font-bold text-muted transition-colors duration-200 hover:text-accent;
   }
 
-  /* Paper card with a soft, printed shadow */
+  /* Card — flat surface, thick border, hard shadow */
   .card {
-    @apply rounded-lg border border-line/15 bg-surface/60 p-6 shadow-soft transition-all duration-300 ease-spring hover:border-accent/40 hover:shadow-soft-lg;
+    @apply rounded-2xl border-2 border-line bg-surface p-6 shadow-hard transition-all duration-200;
   }
 
-  /* Form fields — ruled, understated */
+  /* Pill for tags, stack items, counters */
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border-2 border-line bg-surface px-3 py-1 text-xs font-bold text-ink;
+  }
+
   .input {
-    @apply w-full rounded-md border border-line/25 bg-surface/50 px-4 py-2.5 text-ink transition-colors duration-200 placeholder:text-muted/60 focus:border-accent/60 focus:outline-none focus:ring-2 focus:ring-accent/20;
+    @apply w-full rounded-xl border-2 border-line bg-surface px-4 py-3 font-medium text-ink transition-all duration-150 placeholder:font-normal placeholder:text-muted/70 focus:outline-none focus:ring-4 focus:ring-accent/30;
   }
 
-  .hairline {
-    @apply border-line/15;
-  }
-
-  /* Hand-inked underline that draws on hover */
+  /* Link with an underline that sweeps in */
   .ink-link {
-    @apply relative inline-block text-ink no-underline transition-colors hover:text-accent;
+    @apply relative inline-block font-bold text-ink no-underline transition-colors hover:text-accent;
   }
   .ink-link::after {
     content: "";
-    @apply absolute -bottom-0.5 left-0 h-px w-full origin-right scale-x-0 bg-accent transition-transform duration-500 ease-spring;
+    @apply absolute -bottom-0.5 left-0 h-[2px] w-full origin-right scale-x-0 bg-accent transition-transform duration-300 ease-spring;
   }
   .ink-link:hover::after {
     @apply origin-left scale-x-100;
-  }
-
-  /* Outlined "stroke" serif for oversized type */
-  .text-stroke {
-    -webkit-text-stroke: 1px rgb(var(--fg) / 0.4);
-    color: transparent;
-  }
-
-  /* Ruled-notebook background (faint horizontal lines) */
-  .ruled {
-    background-image: repeating-linear-gradient(
-      to bottom,
-      transparent 0,
-      transparent 2.1rem,
-      rgb(var(--line) / 0.07) 2.1rem,
-      rgb(var(--line) / 0.07) calc(2.1rem + 1px)
-    );
-  }
-
-  /* Margin rule — the red line down a notebook page */
-  .margin-rule {
-    background-image: linear-gradient(
-      to right,
-      transparent calc(var(--margin, 3.5rem) - 1px),
-      rgb(var(--accent) / 0.28) calc(var(--margin, 3.5rem) - 1px),
-      rgb(var(--accent) / 0.28) var(--margin),
-      transparent var(--margin)
-    );
-  }
-
-  /* Washi-tape strip (decorative) */
-  .tape {
-    @apply relative bg-accent/15;
-    box-shadow: 0 1px 6px rgb(var(--fg) / 0.08);
   }
 }
 
@@ -192,15 +212,15 @@
 }
 .prose h1 {
   @apply mb-4 mt-8 border-b border-line/15 pb-3 text-3xl text-ink md:text-4xl;
-  font-family: var(--font-serif), Georgia, serif;
+  font-family: var(--font-display), 'Arial Black', sans-serif;
 }
 .prose h2 {
   @apply mb-4 mt-8 text-2xl text-ink md:text-3xl;
-  font-family: var(--font-serif), Georgia, serif;
+  font-family: var(--font-display), 'Arial Black', sans-serif;
 }
 .prose h3 {
   @apply mb-3 mt-6 text-xl text-ink/90 md:text-2xl;
-  font-family: var(--font-serif), Georgia, serif;
+  font-family: var(--font-display), 'Arial Black', sans-serif;
 }
 .prose h4 {
   @apply mb-2 mt-4 text-lg font-semibold text-ink/90;
@@ -237,16 +257,16 @@
   @apply font-medium text-accent underline decoration-accent/40 underline-offset-2 transition-colors hover:decoration-accent;
 }
 .prose blockquote {
-  @apply my-5 border-l-2 border-accent/60 bg-surface/50 py-3 pl-4 pr-4 font-serif text-lg italic text-muted;
+  @apply my-5 rounded-xl border-2 border-line bg-surface px-5 py-4 text-lg font-medium text-ink;
 }
 .prose blockquote > p {
   @apply mb-0;
 }
 .prose pre {
-  @apply my-6 overflow-x-auto rounded-lg border border-line/15 bg-ink/[0.05] p-4 text-sm dark:bg-black/30;
+  @apply my-6 overflow-x-auto rounded-lg border border-line/15 bg-ink/[0.05] p-4 text-sm;
 }
 .prose code {
-  @apply rounded bg-ink/[0.06] px-1.5 py-0.5 font-mono text-[0.85em] text-accent dark:bg-accent/10;
+  @apply rounded bg-ink/[0.06] px-1.5 py-0.5 font-mono text-[0.85em] text-accent;
 }
 .prose pre code {
   @apply bg-transparent p-0 text-ink/90;
@@ -276,26 +296,4 @@
 
 .skip-to-main {
   @apply sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-canvas;
-}
-
-/* Paper grain overlay (very subtle) */
-.paper-grain {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.5;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
-}
-.dark .paper-grain {
-  mix-blend-mode: screen;
-  opacity: 0.06;
-}
-
-/* Marquee row: duplicate children inside for a seamless loop */
-.marquee {
-  display: flex;
-  width: max-content;
-  flex-wrap: nowrap;
 }

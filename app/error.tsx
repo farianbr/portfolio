@@ -20,7 +20,7 @@ export default function Error({
       <h1 className="font-display text-4xl text-ink sm:text-5xl">
         Something broke
       </h1>
-      <p className="mt-5 max-w-md font-serif text-lg text-muted">
+      <p className="mt-5 max-w-md font-medium text-lg text-muted">
         An unexpected error crept in. Try again — and if it keeps happening,
         please reach out.
       </p>

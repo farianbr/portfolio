@@ -15,7 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const projects = allProjects
     .filter((p) => p.published)
     .map((p) => ({
-      url: `${base}/projects?project=${p.slug}`,
+      url: `${base}${p.url}`,
       lastModified: new Date(p.date),
       changeFrequency: 'yearly' as const,
       priority: 0.6,

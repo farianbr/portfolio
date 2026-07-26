@@ -1,7 +1,11 @@
 import '@/styles/globals.css';
 import type { Metadata, Viewport } from 'next';
-import { Fraunces, Work_Sans, Caveat, JetBrains_Mono } from 'next/font/google';
-import { ThemeProvider } from '@/components/providers/ThemeProvider';
+import {
+  Archivo_Black,
+  Space_Grotesk,
+  Caveat,
+  JetBrains_Mono,
+} from 'next/font/google';
 import { CommandPaletteProvider } from '@/components/providers/CommandPaletteProvider';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -9,22 +13,22 @@ import CommandPalette from '@/components/ui/CommandPalette';
 import ScrollToTop from '@/components/ui/ScrollToTop';
 import { siteConfig, socialLinks } from '@/lib/site.config';
 
-// Display & headings — a literary serif with character
-const serif = Fraunces({
+// Display & headings — heavy, wide, unapologetic
+const display = Archivo_Black({
   subsets: ['latin'],
-  variable: '--font-serif',
+  variable: '--font-display',
   display: 'swap',
-  style: ['normal', 'italic'],
+  weight: ['400'],
 });
 
-// Body & UI — a warm, readable humanist sans
-const sans = Work_Sans({
+// Body & UI — a geometric grotesk with enough personality to sit next to it
+const sans = Space_Grotesk({
   subsets: ['latin'],
   variable: '--font-sans',
   display: 'swap',
 });
 
-// Handwritten margin notes & chapter markers
+// Handwritten asides
 const hand = Caveat({
   subsets: ['latin'],
   variable: '--font-hand',
@@ -92,10 +96,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f4eee1' },
-    { media: '(prefers-color-scheme: dark)', color: '#1a1612' },
-  ],
+  themeColor: '#f5faf0',
 };
 
 // JSON-LD structured data — helps search engines & rich results.
@@ -119,7 +120,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${serif.variable} ${sans.variable} ${hand.variable} ${jetbrainsMono.variable} font-sans`}
+        className={`${display.variable} ${sans.variable} ${hand.variable} ${jetbrainsMono.variable} font-sans`}
       >
         <script
           type="application/ld+json"
@@ -128,9 +129,7 @@ export default function RootLayout({
         <a href="#main-content" className="skip-to-main">
           Skip to main content
         </a>
-        <ThemeProvider>
           <CommandPaletteProvider>
-            <div aria-hidden="true" className="paper-grain" />
             <div className="relative z-[1] flex min-h-screen flex-col">
               <Header />
               <main id="main-content" className="flex-1">
@@ -141,7 +140,6 @@ export default function RootLayout({
             <CommandPalette />
             <ScrollToTop />
           </CommandPaletteProvider>
-        </ThemeProvider>
       </body>
     </html>
   );

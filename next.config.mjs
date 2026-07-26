@@ -10,7 +10,6 @@ const nextConfig = {
     // Scope remote images to the hosts actually used (GitHub stat embeds),
     // instead of allowing every https host.
     remotePatterns: [
-      { protocol: 'https', hostname: 'github-readme-stats.vercel.app' },
       { protocol: 'https', hostname: 'github-readme-streak-stats.herokuapp.com' },
       { protocol: 'https', hostname: 'ghchart.rshah.org' },
     ],

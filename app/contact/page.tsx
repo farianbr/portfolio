@@ -94,7 +94,7 @@ export default function ContactPage() {
   };
 
   const fieldClass = (field: keyof ContactFormData) =>
-    `input ${errors[field] ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30 dark:border-red-500/60' : ''}`;
+    `input ${errors[field] ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}`;
 
   return (
     <div className="container-wide py-16 md:py-24">
@@ -110,7 +110,7 @@ export default function ContactPage() {
           <h1 className="font-display text-4xl text-ink md:text-6xl">
             Let&apos;s talk
           </h1>
-          <p className="mx-auto mt-4 max-w-xl font-serif text-lg text-muted">
+          <p className="mx-auto mt-4 max-w-xl font-medium text-lg text-muted">
             Have a project in mind, a role to fill, or just want to say hi?
             Drop me a line — I read everything.
           </p>
@@ -153,7 +153,7 @@ export default function ContactPage() {
                 className={fieldClass('name')}
               />
               {errors.name && (
-                <p id="name-error" className="mt-1.5 text-sm text-red-600 dark:text-red-400">
+                <p id="name-error" className="mt-1.5 text-sm text-red-600">
                   {errors.name}
                 </p>
               )}
@@ -179,7 +179,7 @@ export default function ContactPage() {
                 className={fieldClass('email')}
               />
               {errors.email && (
-                <p id="email-error" className="mt-1.5 text-sm text-red-600 dark:text-red-400">
+                <p id="email-error" className="mt-1.5 text-sm text-red-600">
                   {errors.email}
                 </p>
               )}
@@ -204,7 +204,7 @@ export default function ContactPage() {
                 className={fieldClass('subject')}
               />
               {errors.subject && (
-                <p id="subject-error" className="mt-1.5 text-sm text-red-600 dark:text-red-400">
+                <p id="subject-error" className="mt-1.5 text-sm text-red-600">
                   {errors.subject}
                 </p>
               )}
@@ -229,7 +229,7 @@ export default function ContactPage() {
                 className={`${fieldClass('message')} resize-none`}
               />
               {errors.message && (
-                <p id="message-error" className="mt-1.5 text-sm text-red-600 dark:text-red-400">
+                <p id="message-error" className="mt-1.5 text-sm text-red-600">
                   {errors.message}
                 </p>
               )}
@@ -252,7 +252,7 @@ export default function ContactPage() {
                 </p>
               )}
               {submitStatus === 'error' && (
-                <p className="flex items-center justify-center gap-2 text-sm font-medium text-red-500 dark:text-red-400">
+                <p className="flex items-center justify-center gap-2 text-sm font-medium text-red-500">
                   <FiAlertCircle className="h-4 w-4" />
                   Something went wrong — try again, or email me directly.
                 </p>
@@ -284,7 +284,7 @@ export default function ContactPage() {
                       href={social.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex h-11 w-11 items-center justify-center rounded-full border border-line/15 bg-surface/50 text-muted transition-colors hover:border-accent/40 hover:text-accent"
+                      className="flex h-11 w-11 items-center justify-center rounded-full border-2 border-line/20 bg-surface/50 text-muted transition-colors hover:border-accent/40 hover:text-accent"
                       aria-label={social.name}
                     >
                       <social.icon className="h-5 w-5" />
