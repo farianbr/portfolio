@@ -1,61 +1,118 @@
-# Farian Bin Rahman - Portfolio Website
+# Farian Bin Rahman — Portfolio
 
-A modern, production-ready portfolio website built with Next.js 14, TypeScript, Tailwind CSS, and Framer Motion.
+My personal site: a work index, long-form project write-ups, and a small blog.
+Built with Next.js 14 (App Router), TypeScript, Tailwind and Contentlayer.
 
-## ✨ Features
+**Live:** [farian.me](https://farian.me)
 
-- **🎨 Modern Design**: Clean, minimal design with generous whitespace and smooth animations
-- **🌓 Dark Mode**: Automatic theme switching with system preference detection
-- **⚡ Performance**: Optimized images, code-splitting, and lazy loading
-- **♿ Accessibility**: WCAG compliant with semantic HTML and keyboard navigation
-- **🔍 Command Palette**: Quick navigation with Cmd/Ctrl+K
-- **📝 Blog**: MDX-based blog with syntax highlighting
-- **🚀 SEO Optimized**: Server-side rendering with Next.js App Router
-- **📊 Visitor Tracking**: Persistent visitor counter with MongoDB analytics
-- **📱 Responsive**: Mobile-first design that works on all devices
+![Home](docs/screenshots/01-home.png)
 
-## 🛠️ Tech Stack
+---
 
-- **Framework**: [Next.js 14](https://nextjs.org/) with App Router
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Animations**: [Framer Motion](https://www.framer.com/motion/)
-- **Content**: [Contentlayer](https://contentlayer.dev/) for MDX
-- **Database**: [MongoDB](https://www.mongodb.com/) with Mongoose for visitor tracking
-- **Command Palette**: [Fuse.js](https://fusejs.io/) for fuzzy search
-- **Email**: [Resend](https://resend.com/) for contact form
+## The design
 
-## 🚀 Quick Start
+Neo-brutalist, single theme — flat colour, 2px borders, hard offset shadows with
+no blur, and heavy display type. Buttons press into their own shadow instead of
+fading a colour, which is what makes the style feel physical rather than
+decorative.
 
-1. **Clone and install**:
-   ```bash
-   git clone https://github.com/farianbr/portfolio.git
-   cd portfolio
-   npm install
-   ```
+The palette lives entirely in CSS variables in [`styles/globals.css`](styles/globals.css),
+so the whole site re-skins from one block. Two fill tokens exist on purpose:
+`--accent` is whatever is legible as *text*, while `--zing` (lime) and `--pop`
+(yellow) are background-only and always carry their own ink colour — use lime for
+link text and it fails contrast immediately.
 
-2. **Set up MongoDB** (see [QUICKSTART.md](QUICKSTART.md) for 5-min setup)
+| | |
+|---|---|
+| **Display** | Archivo Black |
+| **Body / UI** | Space Grotesk |
+| **Asides** | Caveat |
+| **Code** | JetBrains Mono |
 
-3. **Create `.env.local`**:
-   ```bash
-   MONGODB_URI=your_mongodb_connection_string
-   RESEND_API_KEY=your_resend_api_key
-   ```
+## The work index
 
-4. **Run development server**:
-   ```bash
-   npm run dev
-   ```
+Projects are ordered by an explicit `order` field rather than by date — the
+strongest work leads regardless of when it was built.
 
-5. **Deploy to Vercel** (see [DEPLOYMENT.md](DEPLOYMENT.md))
+![Work index](docs/screenshots/02-work.png)
 
-## 📚 Documentation
+## Case studies
 
-- **[QUICKSTART.md](QUICKSTART.md)** - Get MongoDB visitor tracking running in 5 minutes
-- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Complete Vercel deployment guide
-- **[docs/MONGODB_SETUP.md](docs/MONGODB_SETUP.md)** - MongoDB architecture and analytics
-- **[MONGODB_IMPLEMENTATION.md](MONGODB_IMPLEMENTATION.md)** - Implementation details
+Projects marked `caseStudy: true` render a longer template: masthead, a features
+grid where every line names its *mechanism*, a captioned screenshot walkthrough,
+and the stack. Everything is structured frontmatter, typed in
+[`lib/projects.ts`](lib/projects.ts) — the MDX body is only used for projects that
+haven't been migrated to the format yet.
 
+![Case study](docs/screenshots/03-case-study.png)
+
+## Mobile
+
+Mobile-first throughout: the hero ring scales by percentage so it holds together
+without JS, the nav collapses to bordered cards, and the skills chips step down a
+size.
+
+<img src="docs/screenshots/04-mobile.png" width="380" alt="Mobile home page">
+
+## Tech
+
+| | |
+|---|---|
+| **Framework** | Next.js 14, App Router |
+| **Language** | TypeScript |
+| **Styling** | Tailwind CSS |
+| **Animation** | Framer Motion |
+| **Content** | Contentlayer (MDX for projects and posts) |
+| **Search** | Fuse.js, behind a `Ctrl/Cmd+K` command palette |
+| **Data** | MongoDB via Mongoose, for the visitor counter |
+| **Email** | Resend, for the contact form |
+
+## Running it
+
+**Requires:** Node 18+, and a MongoDB connection string if you want the visitor
+counter to work.
+
+```bash
+git clone https://github.com/farianbr/portfolio.git
+cd portfolio
+npm install
+cp .env.example .env.local   # then fill in the two values below
+npm run dev                  # http://localhost:3000
+```
+
+```bash
+MONGODB_URI=...     # visitor counter; the site runs without it, the count won't
+RESEND_API_KEY=...  # contact form; submissions fail without it
+```
+
+Deploys to Vercel with no extra configuration — set the same two environment
+variables in the project settings.
+
+## Layout
+
+```
+app/
+  projects/[slug]/   case-study template
+  blog/[slug]/       post template
+  api/               contact, visitors, github-stats proxy
+components/
+  projects/          case-study pieces — masthead, features, walkthrough, stack
+  sections/          home-page sections
+  ui/                command palette, skills grid, reveal-on-scroll
+content/
+  projects/*.mdx     frontmatter-driven case studies
+  blog/*.mdx
+lib/projects.ts      types and accessors for the case-study frontmatter
+styles/globals.css   the entire palette, plus button/card/chip primitives
+```
+
+### Adding a project
+
+Drop an `.mdx` file in `content/projects/`. The fields that drive the case-study
+template — `features`, `gallery`, `stack`, `role`, `timeline`, `order` — are
+defined in [`contentlayer.config.ts`](contentlayer.config.ts) and typed in
+[`lib/projects.ts`](lib/projects.ts). Set `caseStudy: true` to opt into the full
+template; without it the page renders the MDX body instead.
 
 ---
 

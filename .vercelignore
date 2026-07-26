@@ -7,8 +7,8 @@ node_modules
 .env.test.local
 .env.production.local
 
-# Data files (not needed for deployment)
-data
+# README screenshots — repo documentation, never served by the app
+docs
 
 # Contentlayer cache
 .contentlayer
