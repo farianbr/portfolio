@@ -20,15 +20,15 @@ export default function ProjectMasthead({ project }: { project: Project }) {
 
   return (
     <header className="container-wide relative pt-16 md:pt-20">
-      <Link href="/projects" className="btn-ghost mb-6">
-        <FiArrowLeft className="h-4 w-4" />
+      <Link href="/projects" className="btn-ghost mb-5 !text-[0.8rem]">
+        <FiArrowLeft className="h-3.5 w-3.5" />
         All work
       </Link>
 
-      <div className="grid gap-6 lg:grid-cols-12 lg:gap-12">
+      <div className="grid gap-5 lg:grid-cols-12 lg:gap-10">
         <div className="lg:col-span-8">
           <div className="mb-2 flex items-center gap-4">
-            <p className="eyebrow">case study</p>
+            <p className="eyebrow">the build</p>
             {project.status && (
               <span className="label flex items-center gap-2 !text-ink/70">
                 {live && (
@@ -44,13 +44,13 @@ export default function ProjectMasthead({ project }: { project: Project }) {
 
           <h1
             className="font-display text-ink"
-            style={{ fontSize: 'clamp(2.5rem, 6.5vw, 4.5rem)', lineHeight: 0.96 }}
+            style={{ fontSize: 'clamp(2.25rem, 6vw, 4rem)', lineHeight: 0.96 }}
           >
             {project.title}
           </h1>
 
           {project.tagline && (
-            <p className="mt-4 max-w-2xl font-medium text-base leading-relaxed text-muted md:text-lg">
+            <p className="mt-3 max-w-2xl text-[0.95rem] leading-relaxed text-muted md:text-base">
               {project.tagline}
             </p>
           )}
@@ -83,11 +83,11 @@ export default function ProjectMasthead({ project }: { project: Project }) {
       </div>
 
       {specs.length > 0 && (
-        <dl className="mt-7 grid gap-x-8 gap-y-4 border-t-2 border-line/20 pt-5 sm:grid-cols-3">
+        <dl className="mt-5 grid gap-x-8 gap-y-3 border-t-2 border-line/20 pt-4 sm:grid-cols-3">
           {specs.map((spec) => (
             <div key={spec.k}>
-              <dt className="label mb-1">{spec.k}</dt>
-              <dd className="font-medium text-[0.95rem] text-ink md:text-base">
+              <dt className="label mb-0.5">{spec.k}</dt>
+              <dd className="font-medium text-[0.9rem] text-ink">
                 {spec.v}
               </dd>
             </div>

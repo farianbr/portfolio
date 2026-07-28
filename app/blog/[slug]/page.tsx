@@ -45,20 +45,23 @@ export default function PostPage({ params }: PostPageProps) {
   const MDXContent = useMDXComponent(post.body.code);
 
   return (
-    <article className="container-custom py-16 md:py-24">
+    <article className="container-wide pb-16 pt-16 md:pb-20 md:pt-20">
       <div className="mx-auto max-w-3xl">
         {/* Back Button */}
         <Link
           href="/blog"
-          className="btn-ghost mb-8"
+          className="btn-ghost mb-5 !text-[0.8rem]"
         >
-          <FiArrowLeft className="h-4 w-4" />
+          <FiArrowLeft className="h-3.5 w-3.5" />
           All posts
         </Link>
 
         {/* Header */}
-        <header className="mb-8 border-b-2 border-line/20 pb-8">
-          <h1 className="mb-4 text-balance font-display text-4xl text-ink md:text-5xl">
+        <header className="mb-8 border-b-2 border-line/20 pb-6">
+          <h1
+            className="mb-4 text-balance font-display text-ink"
+            style={{ fontSize: 'clamp(2.25rem, 6vw, 4rem)', lineHeight: 0.96 }}
+          >
             {post.title}
           </h1>
 

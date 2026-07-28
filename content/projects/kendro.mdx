@@ -1,0 +1,108 @@
+---
+title: "Kendro"
+tagline: "A virtual co-working space — take a desk, say what you're working on, and work the block alongside your team, your friends, or whoever else is in the room."
+description: "A virtual co-working app: solo or shared sessions with real timers, rooms rendered as a floor of desks rather than a video grid, presence resolved in one query, and chat channels reconciled from the database."
+date: 2025-11-05
+published: true
+order: 4
+caseStudy: true
+
+role: "Solo — product, client, server, schema"
+timeline: "2025 — ongoing"
+status: "Live"
+
+tags:
+  - React 18
+  - Stream
+  - TanStack Query
+  - Zustand
+  - Express 4
+  - MongoDB
+
+image: "/images/projects/kendro/laptop.png"
+imageLaptopView: "/images/projects/kendro/laptop.png"
+
+github: https://github.com/farianbr/kendro
+demo: https://kendro-hq.vercel.app
+
+stack:
+  - group: Client
+    items: ["React 18", "Vite", "Tailwind v4", "DaisyUI 5", "TanStack Query", "Zustand", "React Router 7"]
+  - group: Server
+    items: ["Node", "Express 4", "Mongoose", "JWT", "bcrypt"]
+  - group: Data
+    items: ["MongoDB (Atlas)"]
+  - group: Services
+    items: ["Stream (chat + video)", "Nodemailer over Gmail", "ImgBB"]
+
+features:
+  - name: Sessions are the unit, rooms are optional
+    detail: "A `Session` can have `room: null`. That one nullable field is the difference between 'sign up and start working' and 'sign up, find a room, request to join, wait for a stranger to approve you' — and the grid, stats and presence all read the same collection either way."
+
+  - name: A floor of desks, not a call
+    detail: "Every person is a nameplate carrying their name, their work topic and a clock since they sat down; video fills the desk only when the camera is on. Camera-off is the common case in co-working, so it gets a real state instead of a black rectangle."
+
+  - name: Presence is one query
+    detail: "`GET /sessions/live` resolves everyone you share a team, room or friendship with and returns their open sessions with the connection labelled, so the dashboard can't drift from what the team page shows."
+
+  - name: Chat channels are reconciled, not hooked
+    detail: "`POST /chat/sync` diffs your rooms and teams against your Stream channels and fixes the difference. Hooking eight mutation sites instead means any one failing quietly strands you in a channel for a room you left; the reconcile is idempotent and heals rooms that predate chat."
+
+  - name: Durations are never trusted from the wire
+    detail: "`actualDuration` is derived server-side, has break time subtracted and is capped at twice the session's own target. A throttled sweep closes anything that stops sending a heartbeat, flags it `abandoned`, and abandoned rows are excluded from every aggregate."
+
+  - name: The paywall is one line, in one place
+    detail: "`createTeam` checks `user.plan`. Nothing else does — so an invited member gets the whole team experience without an upgrade, and a pricing change touches a single function."
+
+  - name: Team rooms are private by construction
+    detail: "`getAllRooms` only returns rooms whose `team` is null or one of yours, and `requestToJoinRoom` re-checks membership before admitting anyone. Visibility and access are enforced separately, so neither is the only thing between a stranger and a company room."
+
+  - name: 'One hook owns "in session"'
+    detail: "The dashboard, sidebar and session page all read `useActiveSession`, so they can't disagree — the dashboard used to offer 'take a desk' to someone already mid-session."
+
+  - name: A record that buckets by your calendar
+    detail: "Every finished session fills a square on a contribution grid, bucketed by the user's local date, so a session closed at 11pm lands on the day it felt like."
+
+  - name: Invites that degrade instead of failing
+    detail: "Team invites go out over Gmail SMTP; with the credentials unset — or the send failing — the invite is still created and the toast offers a shareable link, so a mail outage can't stop a team being built."
+
+gallery:
+  - src: /images/projects/kendro/room-session.png
+    alt: A room with two desks, each showing a person, their current task and a running clock, with a session panel alongside
+    span: full
+    caption: "Two people at their desks with a task list and clock beside them. Desks lay out with `auto-fill` rather than viewport breakpoints, because the session panel takes 384px out of the column those breakpoints assume."
+    note: "presence is the point"
+
+  - src: /images/projects/kendro/dashboard.png
+    alt: The dashboard with weekly hours, a contribution grid, live presence and the rooms and teams you belong to
+    span: half
+    caption: "Hours and a year of squares first, then who else is at a desk right now — one `/sessions/live` call across teams, rooms and friends."
+
+  - src: /images/projects/kendro/session-running.png
+    alt: A running session with a countdown, task checklist and a note field for how it went
+    span: half
+    caption: "Breaks come off the clock, so \"49 minutes worked\" means work, not the timer being open."
+
+  - src: /images/projects/kendro/chats.png
+    alt: The conversations list with a channel per room and per team, plus direct messages
+    span: half
+    caption: "A channel per room and per team, created from the database rather than by hand — joining a room adds its conversation, leaving takes it away."
+
+  - src: /images/projects/kendro/team-detail.png
+    alt: A team page showing live presence, team rooms and members with hours and roles
+    span: half
+    caption: "Who's at a desk, hours logged this week per person, and the rooms only members can open. Creating a team is the paid part; joining one never is."
+
+  - src: /images/projects/kendro/mobile-dashboard.png
+    alt: The dashboard on a phone with stats, contribution grid and rooms stacked
+    span: half
+    frame: phone
+    caption: "The stat row and the grid fold to one column; nothing is hidden behind a 'view on desktop' notice."
+    note: "same room, one hand"
+
+  - src: /images/projects/kendro/mobile-room.png
+    alt: A room floor on a phone with one desk and the call controls docked at the bottom
+    span: half
+    frame: phone
+    caption: "The floor keeps its desk nameplates on a phone, with the call controls docked where a thumb already is."
+---

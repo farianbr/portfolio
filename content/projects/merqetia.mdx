@@ -1,0 +1,104 @@
+---
+title: "merQetia"
+tagline: "A managed service agency in one app — clients order work, admins price and assign it, employees deliver it, and all three watch the same order move through the same lifecycle in real time."
+description: "An agency operations platform with three role-specific products over one order model: a checked status lifecycle, socket updates on the same JWT as the REST API, invoicing that can't exceed an order's price, and P&L built from each service's internal cost."
+date: 2026-06-20
+published: true
+order: 2
+caseStudy: true
+
+role: "Solo — product, client, server, schema"
+timeline: "2026 — ongoing"
+status: "In progress"
+
+tags:
+  - React 19
+  - Socket.IO
+  - Express 5
+  - MongoDB
+  - Cloudflare R2
+  - Puppeteer
+
+image: "/images/projects/merqetia/laptop.png"
+imageLaptopView: "/images/projects/merqetia/laptop.png"
+
+github: https://github.com/farianbr/merQetia
+
+stack:
+  - group: Client
+    items: ["React 19", "Vite", "React Router", "react-hook-form", "socket.io-client", "CSS design tokens"]
+  - group: Server
+    items: ["Node", "Express 5", "Socket.IO", "JWT", "Helmet", "express-rate-limit", "express-mongo-sanitize"]
+  - group: Data
+    items: ["MongoDB (Atlas)", "Mongoose 9"]
+  - group: Services
+    items: ["Cloudflare R2", "Google Calendar + Meet", "Nodemailer", "OpenAI-compatible API", "Puppeteer"]
+
+features:
+  - name: The role is the layout
+    detail: "`App.jsx` wraps every route in `ProtectedRoute roles={[...]}` plus one of three layouts, each owning its nav, command-palette index and notification bell. The same order is a project to a client, a job to an employee and a line item to an admin — no shared page bending into three shapes."
+
+  - name: One lifecycle, checked at every hop
+    detail: "`placed → assigned → accepted → review → completed`, with `rejected` as the escape hatch. Each transition is its own endpoint that reads the current status first, so an employee can only accept what was assigned to them and only the client confirms completion."
+
+  - name: Real time on the same key as the API
+    detail: "Socket.IO shares the HTTP server and authenticates on the handshake with the JWT the REST routes already use, then puts each user in a private room plus the broadcast rooms their role qualifies for — new orders reach every admin, an assignment reaches exactly one employee."
+
+  - name: Invoices that can't over-bill
+    detail: "Numbers come from an atomic counter; full, advance and partial invoices are each capped at the order's *remaining* balance, so however the work is split across deposits and instalments the total can never exceed the price."
+
+  - name: Services carry their own questions
+    detail: "A service is a price, an internal cost, a department and a list of questions. The answers ride on the order keyed by service id — the department routes the work, the internal cost feeds the P&L, and the answers feed the AI-written brief."
+
+  - name: Conversation where the work is
+    detail: "Change requests and review submissions render as events rather than plain messages, attachments open in a lightbox, a staff-only thread carries @mentions scoped to the order's participants, and a completed order locks its thread read-only."
+
+  - name: Meetings are one embedded schema
+    detail: "`meetingSchema` is shared by orders, support tickets and team messages, so a call booked from any of the three behaves identically — a Calendar event with a Meet link, rendered inline, cancellable without being deleted so the history survives."
+
+  - name: Private files stay private
+    detail: "Order and chat attachments live in a non-public R2 bucket and stream through a route that first checks the caller is on that order, which is why images render through an `AuthedImage` component rather than a plain `<img src>`. Only avatars sit in the public bucket."
+
+  - name: A P&L, not a revenue number
+    detail: "Reports fold paid invoices against manual expenses and the internal cost of completed orders over any date range, then break out order volume by status and top services by revenue."
+
+  - name: Degrades instead of failing
+    detail: "Without the AI keys the order brief is skipped, without mail credentials nothing is sent, without Google credentials meetings can't be booked — each optional service is absent, not fatal. Invoice PDFs render through Puppeteer against a pinned Chromium so the same template serves the download and the email."
+
+gallery:
+  - src: /images/projects/merqetia/admin-board.png
+    alt: The admin order board grouped into new and active orders with status, payment and due-date columns
+    span: full
+    caption: "The admin board groups by lifecycle stage rather than listing everything — new orders need a decision, active ones need watching, and the two never compete for the same row."
+    note: "one order, three products"
+
+  - src: /images/projects/merqetia/order-detail.png
+    alt: An order page with core information, project brief, questionnaire answers and a lifecycle tracker
+    span: half
+    caption: "The lifecycle tracker is the transition log itself, so every hop carries the timestamp it actually happened at — including the loops back to In Progress."
+
+  - src: /images/projects/merqetia/client-dashboard.png
+    alt: The client dashboard with an attention banner, active projects and quick actions
+    span: half
+    caption: "The client sees projects and what needs paying, not the agency's machinery — same order record, different product."
+
+  - src: /images/projects/merqetia/employee-board.png
+    alt: The employee My Work board with new requests, active orders, completed and declined groups
+    span: half
+    caption: "An employee gets only the orders assigned to them, enforced on every REST route and socket message rather than by hiding a nav item."
+
+  - src: /images/projects/merqetia/reports.png
+    alt: A profit and loss summary with expense breakdown, orders by status and top services
+    span: half
+    caption: "Profit comes out of the same records the work runs on: paid invoices minus manual expenses and the internal cost attached to each completed service."
+
+  - src: /images/projects/merqetia/invoices.png
+    alt: The invoice list with full, advance and partial invoices and their payment status
+    span: half
+    caption: "Three invoice shapes against one order — an advance, a partial and the balance — all sharing the template that renders to PDF."
+
+  - src: /images/projects/merqetia/support.png
+    alt: The support centre with tickets, a threaded conversation and inline scheduled meetings
+    span: half
+    caption: "Tickets get a readable tracking code, and a call can be scheduled inside the thread — cancelled meetings stay visible instead of disappearing from the record."
+---

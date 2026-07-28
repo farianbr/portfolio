@@ -1,9 +1,9 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { FiMail, FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
 import { siteConfig, socialLinks } from '@/lib/site.config';
+import PageHeader from '@/components/ui/PageHeader';
 
 type ContactFormData = {
   name: string;
@@ -97,25 +97,15 @@ export default function ContactPage() {
     `input ${errors[field] ? 'border-red-400 focus:border-red-400 focus:ring-red-400/30' : ''}`;
 
   return (
-    <div className="container-wide py-16 md:py-24">
-      <div className="mx-auto max-w-4xl">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-12 text-center"
-        >
-          <p className="eyebrow mb-3">don&apos;t be a stranger</p>
-          <h1 className="font-display text-4xl text-ink md:text-6xl">
-            Let&apos;s talk
-          </h1>
-          <p className="mx-auto mt-4 max-w-xl font-medium text-lg text-muted">
-            Have a project in mind, a role to fill, or just want to say hi?
-            Drop me a line — I read everything.
-          </p>
-        </motion.div>
+    <div className="min-h-screen">
+      <PageHeader
+        eyebrow="don't be a stranger"
+        title="Let's talk"
+        lead="Have a project in mind, a role to fill, or just want to say hi? Drop me a line — I read everything."
+      />
 
+      <div className="container-wide pb-16 md:pb-20">
+        <div className="max-w-4xl">
         <div className="grid gap-12 lg:grid-cols-2">
           {/* Form */}
           <form onSubmit={handleSubmit} noValidate className="space-y-5">
@@ -301,6 +291,7 @@ export default function ContactPage() {
               </p>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div>

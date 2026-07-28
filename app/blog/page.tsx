@@ -12,6 +12,7 @@ import {
 } from "react-icons/fi";
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
+import PageHeader from "@/components/ui/PageHeader";
 
 const POSTS_PER_PAGE = 10;
 
@@ -45,26 +46,15 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen">
-      <div className="container-wide pb-12 pt-12 md:pt-16 md:pb-16">
-        {/* Header Section */}
-        <motion.div
-          initial={{ opacity: 0, y: -16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-10 border-b-2 border-line/20 pb-6"
-        >
-          <p className="eyebrow mb-3">things worth writing down</p>
-          <h1 className="font-display text-4xl text-ink md:text-6xl">
-            The journal
-          </h1>
-          <p className="mt-4 max-w-2xl font-medium text-lg leading-relaxed text-muted">
-            Articles, tutorials, and half-formed thoughts on web development,
-            the craft of building, and whatever I&apos;m currently exploring.
-          </p>
-        </motion.div>
+      <PageHeader
+        eyebrow="things worth writing down"
+        title="The journal"
+        lead="Articles, tutorials, and half-formed thoughts on web development, the craft of building, and whatever I'm currently exploring."
+      />
 
+      <div className="container-wide pb-12 md:pb-16">
         {/* Sort Controls */}
-        <div className="mx-auto mb-8 flex flex-col gap-4 border-b-2 border-line/20 pb-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-6 flex max-w-4xl flex-col gap-4 border-b-2 border-line/20 pb-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="label">
             {String(publishedPosts.length).padStart(2, '0')}{" "}
             {publishedPosts.length === 1 ? "entry" : "entries"}
@@ -88,7 +78,7 @@ export default function BlogPage() {
         </div>
 
         {/* Posts List */}
-        <div className="mx-auto max-w-4xl">
+        <div className="max-w-4xl">
           <div className="divide-y divide-line/10 border-b-2 border-line/20">
             {paginatedPosts.map((post, index) => (
               <motion.article

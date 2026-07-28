@@ -63,7 +63,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
 
       {/* Opening object — the app as a thing on a desk, before any prose. */}
       {hero && (
-        <div className="container-wide relative pt-8 md:pt-10">
+        <div className="container-wide relative pt-6 md:pt-8">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute left-1/2 top-1/3 h-[30vmin] w-[60vmin] -translate-x-1/2 rounded-full opacity-[0.07] blur-3xl"
@@ -72,13 +72,13 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                 'radial-gradient(ellipse, rgb(var(--accent)), transparent 70%)',
             }}
           />
-          <Reveal className="relative mx-auto max-w-2xl">
+          <Reveal className="relative mx-auto max-w-xl">
             <Image
               src={hero}
               alt={`${project.title} running on a laptop`}
               width={1506}
               height={900}
-              sizes="(min-width: 768px) 672px, 100vw"
+              sizes="(min-width: 768px) 576px, 100vw"
               className="h-auto w-full"
               priority
             />
@@ -95,10 +95,10 @@ export default function ProjectPage({ params }: ProjectPageProps) {
       ) : (
         /* Not migrated yet — render the MDX write-up and its tags. */
         <>
-          <section className="container-wide py-12 md:py-16">
-            <div className="mx-auto max-w-5xl lg:grid lg:grid-cols-12 lg:gap-12">
+          <section className="container-wide py-8 md:py-10">
+            <div className="mx-auto max-w-5xl lg:grid lg:grid-cols-12 lg:gap-10">
               <Reveal className="lg:col-span-3">
-                <p className="eyebrow mb-3 lg:sticky lg:top-28">what it is</p>
+                <p className="eyebrow mb-2 lg:sticky lg:top-28">what it is</p>
               </Reveal>
               <Reveal delay={0.05} className="lg:col-span-9">
                 <div className="prose max-w-[68ch]">

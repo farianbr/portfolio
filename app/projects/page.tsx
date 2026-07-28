@@ -5,122 +5,114 @@ import { FiArrowUpRight, FiGithub, FiExternalLink } from 'react-icons/fi';
 
 import { publishedProjects, stackSummary } from '@/lib/projects';
 import Reveal from '@/components/ui/Reveal';
+import PageHeader from '@/components/ui/PageHeader';
 
 /**
  * The work index — a ledger, not a card wall.
  *
- * Each project gets one row: number, name, the one-line version, what it's
- * built with, and a preview. Scanning the column of names should be enough to
- * pick one; everything else on the row is there to help you skip it.
+ * One row per project: number, name, the one-line version, what it's built
+ * with, and a small preview. Rows are kept tight enough that the whole list
+ * fits in a screen or two — scanning the column of names is the point, and a
+ * row that fills the viewport stops being a list.
  */
 export default function ProjectsPage() {
   const projects = publishedProjects();
 
   return (
     <div className="min-h-screen">
-      <header className="container-wide pb-4 pt-20 md:pt-28">
-        <p className="eyebrow mb-2">selected work</p>
-        <h1
-          className="font-display text-ink"
-          style={{ fontSize: 'clamp(2.5rem, 8vw, 5.5rem)', lineHeight: 0.96 }}
-        >
-          Work
-        </h1>
-        <p className="mt-5 max-w-2xl font-medium text-base leading-relaxed text-muted md:text-lg">
-          {projects.length} projects built end to end — the strongest first.
-        </p>
-      </header>
+      <PageHeader
+        eyebrow="selected work"
+        title="Work"
+        lead="Built end to end."
+      />
 
-      <div className="container-wide pb-8">
-        <ul>
+      <div className="container-wide pb-12">
+        <ul className="border-b-2 border-line/20">
           {projects.map((project, index) => {
             const preview = project.imageLaptopView || project.image;
 
             return (
-              <Reveal as="li" key={project.slug} delay={0.04}>
-                <div className="group relative border-t-2 border-line/20 py-7 md:py-10">
+              <Reveal as="li" key={project.slug} delay={0.03}>
+                <div className="group relative grid items-center gap-x-6 gap-y-3 border-t-2 border-line/20 py-4 md:grid-cols-12">
+                  {/* The whole row is the link. It's an overlay rather than a
+                      wrapper so the Live/Source anchors can sit above it —
+                      nesting them inside another <a> isn't valid. */}
                   <Link
                     href={project.url}
-                    className="grid items-center gap-4 md:grid-cols-12 md:gap-10"
                     aria-label={`${project.title} — read the write-up`}
-                  >
-                    {/* Preview leads on phones — a thumb-scroller reads the
-                        picture before the paragraph — and moves right at md. */}
-                    {preview && (
-                      <div className="order-first md:order-none md:col-span-5 md:col-start-8 md:row-start-1">
-                        <div className="relative aspect-[16/10] w-full">
-                          <Image
-                            src={preview}
-                            alt={`${project.title} preview`}
-                            fill
-                            sizes="(min-width: 768px) 40vw, 100vw"
-                            className="object-contain transition-transform duration-700 ease-spring group-hover:scale-[1.03]"
-                          />
-                        </div>
+                    className="absolute inset-0 z-0"
+                  />
+
+                  {/* Preview leads on phones — a thumb-scroller reads the
+                      picture before the paragraph — and moves right at md. */}
+                  {preview && (
+                    <div className="pointer-events-none order-first md:order-none md:col-span-3 md:col-start-10 md:row-start-1 md:justify-self-end">
+                      <div className="relative aspect-[16/10] w-full max-w-[220px] md:w-[240px]">
+                        <Image
+                          src={preview}
+                          alt=""
+                          fill
+                          sizes="(min-width: 768px) 22vw, 55vw"
+                          className="object-contain transition-transform duration-700 ease-spring group-hover:scale-[1.04]"
+                        />
                       </div>
-                    )}
-
-                    <div className="md:col-span-6 md:col-start-2 md:row-start-1">
-                      <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1">
-                        <span className="hand text-xl text-accent">
-                          {String(index + 1).padStart(2, '0')}
-                        </span>
-                        <span className="label">
-                          {format(new Date(project.date), 'MMM yyyy')}
-                        </span>
-                        {project.caseStudy && (
-                          <span className="label !text-accent/90">
-                            · case study
-                          </span>
-                        )}
-                      </div>
-
-                      <h2 className="flex items-start gap-2 font-display text-[1.75rem] text-ink transition-colors duration-300 group-hover:text-accent sm:text-3xl md:text-[2.4rem]">
-                        {project.title}
-                        <FiArrowUpRight className="mt-1.5 h-5 w-5 shrink-0 text-accent opacity-0 transition-all duration-300 ease-spring group-hover:translate-x-0.5 group-hover:opacity-100" />
-                      </h2>
-
-                      <p className="mt-2.5 max-w-xl text-[0.95rem] leading-relaxed text-muted sm:text-base">
-                        {project.tagline || project.description}
-                      </p>
-
-                      <ul className="mt-4 flex flex-wrap gap-x-2 gap-y-2">
-                        {stackSummary(project).map((item) => (
-                          <li
-                            key={item}
-                            className="chip !text-[0.7rem] font-mono"
-                          >
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
                     </div>
-                  </Link>
+                  )}
 
-                  {/* Outside the card link so these stay separately reachable. */}
-                  <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 md:ml-[8.333%] md:pl-4">
-                    {project.demo && (
-                      <a
-                        href={project.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-ghost"
-                      >
-                        <FiExternalLink className="h-3.5 w-3.5" />
-                        Live
-                      </a>
-                    )}
-                    {project.github && (
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-ghost"
-                      >
-                        <FiGithub className="h-3.5 w-3.5" />
-                        Source
-                      </a>
-                    )}
+                  <div className="pointer-events-none md:col-span-9 md:col-start-1 md:row-start-1">
+                    <div className="mb-0.5 flex flex-wrap items-center gap-x-3">
+                      <span className="hand text-base text-accent">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <span className="label">
+                        {format(new Date(project.date), 'MMM yyyy')}
+                      </span>
+
+                      {/* Lifted above the row link so they stay separately
+                          clickable and keyboard-reachable. */}
+                      {project.demo && (
+                        <a
+                          href={project.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-ghost pointer-events-auto relative z-10 !gap-1 !text-[0.7rem]"
+                        >
+                          <FiExternalLink className="h-3 w-3" />
+                          Live
+                        </a>
+                      )}
+                      {project.github && (
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-ghost pointer-events-auto relative z-10 !gap-1 !text-[0.7rem]"
+                        >
+                          <FiGithub className="h-3 w-3" />
+                          Source
+                        </a>
+                      )}
+                    </div>
+
+                    <h2 className="flex items-start gap-2 font-display text-[1.4rem] text-ink transition-colors duration-300 group-hover:text-accent sm:text-[1.6rem] md:text-[1.85rem]">
+                      {project.title}
+                      <FiArrowUpRight className="mt-1 h-4 w-4 shrink-0 text-accent opacity-0 transition-all duration-300 ease-spring group-hover:translate-x-0.5 group-hover:opacity-100" />
+                    </h2>
+
+                    <p className="mt-1 line-clamp-2 max-w-2xl text-[0.875rem] leading-relaxed text-muted">
+                      {project.tagline || project.description}
+                    </p>
+
+                    <ul className="mt-2 flex flex-wrap gap-1.5">
+                      {stackSummary(project, 3).map((item) => (
+                        <li
+                          key={item}
+                          className="chip !px-2.5 !py-0.5 !text-[0.65rem] font-mono"
+                        >
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               </Reveal>

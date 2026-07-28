@@ -30,15 +30,27 @@ function toRows(shots: Shot[]): Shot[][] {
 function Caption({ shot }: { shot: Shot }) {
   if (!shot.caption && !shot.note) return null;
 
+  /* Under a phone frame there's no room for a margin note beside the text, so
+     the caption stays a single column whatever the viewport is doing. */
+  const narrow = shot.frame === 'phone';
+
   return (
-    <figcaption className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
+    <figcaption
+      className={`mt-2.5 flex flex-col gap-2 ${
+        narrow ? '' : 'sm:flex-row sm:items-start sm:justify-between sm:gap-8'
+      }`}
+    >
       {shot.caption && (
-        <p className="max-w-[62ch] text-[0.9rem] leading-[1.65] text-muted">
+        <p className="max-w-[62ch] text-[0.85rem] leading-[1.6] text-muted">
           <RichText text={shot.caption} />
         </p>
       )}
       {shot.note && (
-        <p className="hand shrink-0 -rotate-1 text-xl leading-tight text-accent sm:pt-1 sm:text-right">
+        <p
+          className={`hand shrink-0 -rotate-1 text-lg leading-tight text-accent ${
+            narrow ? '' : 'sm:pt-0.5 sm:text-right'
+          }`}
+        >
           {shot.note}
         </p>
       )}
@@ -52,21 +64,29 @@ export default function Walkthrough({ shots }: { shots: Shot[] }) {
   const rows = toRows(shots);
 
   return (
-    <section className="container-wide py-10 md:py-14">
+    <section className="container-wide py-8 md:py-10">
       <Reveal className="mx-auto max-w-5xl">
-        <p className="eyebrow mb-2">a look around</p>
-        <h2 className="font-display text-3xl text-ink sm:text-4xl">
+        <p className="eyebrow mb-1.5">a look around</p>
+        <h2 className="font-display text-2xl text-ink sm:text-3xl">
           What it looks like in use
         </h2>
       </Reveal>
 
-      <div className="mx-auto mt-8 max-w-5xl space-y-10 md:space-y-12">
+      <div className="mx-auto mt-5 max-w-5xl space-y-7 md:space-y-9">
         {rows.map((row, rowIndex) => (
           <Reveal key={row[0].src} delay={0.05}>
             {row.length === 2 ? (
               <div className="grid gap-8 md:grid-cols-2 md:gap-6">
                 {row.map((shot) => (
-                  <figure key={shot.src}>
+                  /* A phone shot is much narrower than its column, so the
+                     figure narrows with it — otherwise the caption runs the
+                     full column and reads as belonging to nothing. */
+                  <figure
+                    key={shot.src}
+                    className={
+                      shot.frame === 'phone' ? 'mx-auto w-full max-w-[320px]' : ''
+                    }
+                  >
                     <Figure
                       src={shot.src}
                       alt={shot.alt}

@@ -77,9 +77,7 @@ export default function ProjectsSection() {
             </div>
 
             <div className="lg:col-span-5">
-              <p className="label mb-3 !text-accent/90">
-                {lead.caseStudy ? 'case study' : 'write-up'}
-              </p>
+              <p className="label mb-3 !text-accent/90">latest build</p>
 
               <h3 className="font-display text-3xl text-ink md:text-[2.75rem]">
                 <Link href={lead.url} className="group inline-flex items-start gap-2 transition-colors hover:text-accent">

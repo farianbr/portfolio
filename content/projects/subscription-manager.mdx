@@ -1,72 +1,105 @@
 ---
 title: "Subscription Manager"
-description: "A full-stack subscription manager built with GraphQL, Apollo, MongoDB, React, and TailwindCSS. It helps users keep track of their subscriptions, set alerts, and receive email reminders before renewals."
+tagline: "A tracker for the slow drip of recurring charges — Netflix, iCloud, broadband — that answers what you're spending this month, what's about to hit, and where the money actually goes."
+description: "A multi-currency subscription tracker: normalised amounts, a six-month renewal forecast built from real billing schedules, price-change detection, plan gating enforced in the resolvers, and reminders by email, in-app and Google Calendar."
 date: 2024-12-01
 published: true
-order: 2
+order: 3
+caseStudy: true
+
+role: "Solo — product, client, server, schema"
+timeline: "2024 — ongoing"
+status: "Live"
+
 tags:
-  - React
+  - React 19
   - Apollo GraphQL
-  - Tailwind CSS
-  - Passport.js
+  - Express 5
   - MongoDB
-image: "/images/desktop-view-subscriptionmanager.png"
-imageLaptopView: "/images/projects/subscription-manager-laptop.png"
+  - Tailwind v4
+  - Chart.js
+
+image: "/images/projects/subscription-manager/laptop.png"
+imageLaptopView: "/images/projects/subscription-manager/laptop.png"
+
 github: https://github.com/farianbr/subscription-manager
 demo: https://subscription-manager-qgi7.onrender.com/
+
+stack:
+  - group: Client
+    items: ["React 19", "Vite", "Tailwind v4", "Apollo Client", "Chart.js", "Framer Motion"]
+  - group: Server
+    items: ["Node", "Express 5", "Apollo Server 5", "GraphQL", "Passport (sessions)", "Helmet"]
+  - group: Data
+    items: ["MongoDB", "Mongoose"]
+  - group: Services
+    items: ["Nodemailer", "Google Calendar", "OpenAI-compatible API", "Stripe (seam)", "node-cron"]
+
+features:
+  - name: Every amount stored twice
+    detail: "A subscription keeps `originalAmount` / `originalCurrency` exactly as entered and `costInDollar` normalised at entry time, so a later rate move can never rewrite your history — and a ৳2,200 broadband bill stays addable to a $15.49 Netflix one."
+
+  - name: Nothing re-converts on the way to the screen
+    detail: "Totals, charts, forecasts and the AI prompt all read the normalised column. Live rates are fetched server-side, cached 12h with a static fallback, and touched exactly once — at write time."
+
+  - name: A forecast that walks the schedule
+    detail: "Six months of projected spend built by stepping each subscription's real billing cycle forward, so an annual renewal shows up as the spike it is instead of being smeared into a monthly average."
+
+  - name: Price-change detection
+    detail: "Reads the transaction history and surfaces which services quietly went up, by how much and when — YouTube Premium $12 → $14, Adobe $55 → $60."
+
+  - name: Gating that actually gates
+    detail: "The 10-subscription free cap and every premium feature are enforced in the resolvers through `requireFeature` and `assertWithinSubscriptionLimit`, reading the same `config/plans.js` table the client reads. A disabled button is not the security model."
+
+  - name: AI insights that regenerate themselves
+    detail: "A plain-language read on your spending, specific about your services and written in your own currency. Cached, and regenerated only when the underlying data changes — no 'generate' button to babysit."
+
+  - name: Renewals everywhere you look
+    detail: "A nightly cron rolls billing cycles forward and fires reminders — email plus in-app — at as many lead times as you pick. Google Calendar events add, update and remove themselves as you edit; there's a private `.ics` feed for Apple and Outlook."
+
+  - name: History you can correct by hand
+    detail: "Month-by-month transactions with per-provider and per-category breakdowns, editable in place, because a billing record that can't be fixed stops being trusted."
+
+  - name: One layout, phone to desktop
+    detail: "The stat grid folds to a single column rather than shrinking, and dark mode is a token swap on the same markup — no second stylesheet to keep in sync."
+
+gallery:
+  - src: /images/projects/subscription-manager/dashboard.png
+    alt: The Subscription Manager overview with a monthly outlook card, spend stats and upcoming payments
+    span: full
+    caption: "The overview answers three questions in one screen: what this month costs, what's charged next, and how that compares to last month. Upcoming payments are ordered by how soon they land, not alphabetically."
+    note: "three questions, one screen"
+
+  - src: /images/projects/subscription-manager/spending.png
+    alt: A billed-per-month line chart with top providers and a category breakdown bar
+    span: half
+    caption: "Every figure here reads the normalised USD column, so mixed-currency subscriptions add up without the chart layer touching an exchange rate."
+
+  - src: /images/projects/subscription-manager/forecast.png
+    alt: Renewal forecast bar chart for the next six months alongside detected price changes
+    span: half
+    caption: "The September spike is an annual renewal, not noise — the forecast walks each billing schedule forward rather than averaging."
+
+  - src: /images/projects/subscription-manager/ai-insights.png
+    alt: AI-generated insight cards covering productivity costs, duplicate services and spending variance
+    span: half
+    caption: "The model gets normalised amounts and real service names, so the advice names your services and your numbers."
+
+  - src: /images/projects/subscription-manager/subscriptions.png
+    alt: The full subscription table with category, amount, next renewal and per-row toggles
+    span: half
+    caption: "One table, filterable by category and cycle. Alerts toggle per row; renewal date is the sort everyone actually wants."
+
+  - src: /images/projects/subscription-manager/mobile-dashboard.png
+    alt: The overview on a phone, cards stacked into a single column
+    span: half
+    frame: phone
+    caption: "Same data, one column — the stat grid folds rather than shrinking to unreadable."
+    note: "built thumb-first"
+
+  - src: /images/projects/subscription-manager/mobile-history.png
+    alt: Month-by-month transaction history on a phone with edit and delete per row
+    span: half
+    frame: phone
+    caption: "History keeps its per-row edit and delete on a phone; correcting a bill is exactly where you are when you notice it's wrong."
 ---
-
-
-A full-stack **subscription manager** built with **GraphQL, Apollo, MongoDB, React, and TailwindCSS**.  
-It helps users keep track of their subscriptions, set alerts, and receive email reminders before renewals.
-
----
-
-## Core Features
-
-**1. Authentication & Authorization** 
-- User signup with email verification (via SendGrid SMTP). 
-- Secure password hashing with `bcrypt`. 
-- Login sessions using Passport.js.
-
-**2. Email Notifications**
-
-- Verification email during signup.
-- Subscription renewal alerts (1 day before end date).
-- Background jobs scheduled using `node-cron`.
-
-**3. Subscriptions Management**
-
-- Create, update, delete subscriptions.
-- Track provider, category, amount, payment type, and end date.
-- Toggle alerts on/off for each subscription.
-
-**4. Frontend (React + TailwindCSS)**
-
-- Responsive, modern UI.
-- Loading skeletons for smooth UX.
-- Toast notifications for success/error states.
-- Dashboard with subscription history and statistics.
-
-**5. GraphQL Backend**
-
-- Apollo Server with Express integration.
-- Modular schema (`typeDefs` + `resolvers`).
-- Queries: fetch users, transactions, statistics.
-- Mutations: signup, login, logout, create/update/delete transaction.
-
----
-
-## Tech Stack
-
-**Frontend:**
-
-- React (Vite), Apollo Client, React Router, TailwindCSS, React Hot Toast
-
-**Backend:**
-
-- Node.js + Express, Apollo Server (GraphQL), Passport.js (authentication), Bcrypt (password hashing), Nodemailer + SendGrid SMTP (emails), Node-cron (scheduled tasks)
-
-**Database:**
-
-- MongoDB (via Mongoose)

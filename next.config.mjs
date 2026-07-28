@@ -14,6 +14,12 @@ const nextConfig = {
       { protocol: 'https', hostname: 'ghchart.rshah.org' },
     ],
   },
+  /** Go Grind shipped as Kendro; the old slug is still in the sitemap and in links. */
+  async redirects() {
+    return [
+      { source: '/projects/go-grind', destination: '/projects/kendro', permanent: true },
+    ];
+  },
   async headers() {
     const securityHeaders = [
       { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
